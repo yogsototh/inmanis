@@ -28,8 +28,9 @@ header {
     background-color: #B2C2CA;
     text-align: center;
     top: 0;
-    margin: 0 0 2em 0;
-    padding: 1em;
+    margin: 0;
+    padding: 1em 1em 2em 1em;
+    border-bottom: solid 1px #889;
     h1 {
         color: #78888B;
         text-shadow: 1px 1px 1px #E4EEF2, -1px -1px 1px #000102;
@@ -43,4 +44,8 @@ header {
         text-shadow: 0.5px 0.5px 0.5px #E4EEF2, -0.5px -0.5px 0.5px #000102;
         margin: 0;
     }
+}
+#main {
+    margin-top: 0;
+    border-top: solid 1px #FFF;
 }
