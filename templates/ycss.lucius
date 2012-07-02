@@ -39,8 +39,8 @@ header {
     }
     h2 {
         font-size: 2em;
-        color: #E8F8FB;
-        text-shadow: 0 0px 2px #000102;
+        color: #78888B;
+        text-shadow: 0.5px 0.5px 0.5px #E4EEF2, -0.5px -0.5px 0.5px #000102;
         margin: 0;
     }
 }
