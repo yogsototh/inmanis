@@ -49,4 +49,5 @@ header {
 #main {
     margin-top: 0;
     border-top: solid 1px #FFF;
+    padding: 2em 0;
 }

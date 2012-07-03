@@ -7,5 +7,15 @@ Email
     user UserId Maybe
     verkey Text Maybe
     UniqueEmail email
+Entry
+    creator UserId Maybe
+    title Text
+    url Text
+    yeah Int
+    neah Int
+Comment
+    entry EntryId Maybe
+    content Text
+
 
  -- By default this file is used in Model.hs (which is imported by Foundation.hs)

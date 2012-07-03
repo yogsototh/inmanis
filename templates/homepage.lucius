@@ -1,3 +1,7 @@
-h2##{aDomId} {
-    color: #990
+.left {
+  float: left;
+}
+
+p:first-letter {
+    font-size: 3em;
 }
