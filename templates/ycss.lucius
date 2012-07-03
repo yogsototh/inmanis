@@ -25,7 +25,8 @@ ul, ol {
 }
 p { line-height: 1.5em; }
 header {
-    background-color: #B2C2CA;
+    background-color: #B2C2CA ;
+    /* background: url("@{StaticR img_skin_side_up_png}") repeat; */
     text-align: center;
     top: 0;
     margin: 0;
