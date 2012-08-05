@@ -8,8 +8,6 @@ where
 
 import Import
 import Yesod.Auth
-import Yesod.Auth.BrowserId
-import Yesod.Auth.GoogleEmail
 
 -- entryAForm :: AForm App App Entry
 -- entryAForm = Entry
