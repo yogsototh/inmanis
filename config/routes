@@ -4,5 +4,5 @@
 /favicon.ico FaviconR GET
 /robots.txt RobotsR GET
 
-/ HomeR GET
--- /#Text EntryR GET
+/ HomeR GET POST
+/y/#EntryId EntryR GET

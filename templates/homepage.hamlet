@@ -1,33 +1,10 @@
-<p>
-  What is your biggest dream?
-  \ Do you plan to make a lot of money? Become famous?
-  \ Sorry but these are shitty dreams!
-  \ Having money, be popular or famous.
-  \ These should be means, not goals.
-
-<p>
-  What were your child dreams?
-  \ Fly? 
-  \ Live almost eternally? 
-  \ Discover new life form?
-  \ Travel into space?
-  \ Create the first friendly AI?
-
-<p>
-  Of course all these dream are very naives.
-  \ Of course most won't be true soon or later.
-  \ But don't you see our greatest brain lose their energy 
-  \ toward making customer clicking on ads?
-  \ Isn't it sad?
-
-<p>
-  I propose to make this website to make find again great dreams. 
-  \ Even if the dream seems impossible to achieve. 
-  \ We will plan the necessary steps. 
-  \ And we will work to finish these step.
-
-<p>
-  This website is all about slow web. 
-  \ Our brain are constantly stimulated by new informations. 
-  \ You know which ones, lolcats, reddit pics, etc...
-
+$if null entries
+    <p> There is no entry. Sniff... I feel lonely.
+$else
+    <ul>
+        $forall Entity entryId entry <- entries
+            <li> #{entryTitle entry}
+<hr>
+<form method=post action=@{HomeR} enctype=#{enctype}>
+    ^{widget}
+    <input type=submit value="Post">
