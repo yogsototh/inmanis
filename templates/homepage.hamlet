@@ -5,6 +5,11 @@ $else
         $forall Entity entryId entry <- entries
             <li> #{entryTitle entry}
 <hr>
-<form method=post action=@{HomeR} enctype=#{enctype}>
-    ^{widget}
-    <input type=submit value="Post">
+$if isNothing currentUserId
+    <a href=@{AuthR LoginR}> Log in
+$else
+    <form method=post action=@{HomeR} enctype=#{enctype}>
+        ^{widget}
+        <input type=submit value="Post">
+    <hr>
+        <a href=@{AuthR LogoutR}>Log out

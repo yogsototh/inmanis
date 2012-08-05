@@ -37,12 +37,17 @@ entryForm = renderDivs  $ PersonRequest
 -- inclined, or create a single monolithic file.
 getHomeR :: Handler RepHtml
 getHomeR = do
+  currentUserId <- maybeAuthId
   (widget,enctype) <- generateFormPost entryForm
   entries <- runDB $ selectList [] [Desc EntryTitle]
   defaultLayout $ do
     aDomId <- lift newIdent
     setTitle "Inmanis"
     $(widgetFile "homepage")
+  where
+    isNothing :: Maybe a -> Bool
+    isNothing Nothing = True
+    isNothing _ = False
 
 errorPage :: Html -> Handler RepHtml
 errorPage errorMessage = do
