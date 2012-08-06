@@ -69,4 +69,10 @@ postHomeR = do
         _ -> errorPage "Please correct your entry form"
 
 getEntryR :: EntryId -> Handler RepHtml
-getEntryR = undefined
+getEntryR entryId = do
+  currentUserId <- maybeAuthId
+  maybeEntry <- runDB $ get entryId
+  let title = case maybeEntry of
+                Nothing -> ""
+                Just entry -> toHtml $ entryTitle entry
+  errorPage $ title
