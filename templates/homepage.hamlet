@@ -3,7 +3,7 @@ $if null entries
 $else
     <ul>
         $forall Entity entryId entry <- entries
-            <li> #{entryTitle entry}
+            <li> <a href=#{entryUrl entry}>#{entryTitle entry}</a>
 <hr>
 $if isNothing currentUserId
     <a href=@{AuthR LoginR}> Log in

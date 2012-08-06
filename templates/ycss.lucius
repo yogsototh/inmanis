@@ -59,4 +59,25 @@ form label {
     margin-right: 1em;
 }
 form div { margin: 1em auto; }
-form input { border-radius: 3px; background: #E0E8EC; box-shadow: 1px 1px 2px #000 inset; border: 0; }
+form input { 
+    border-radius: 3px; 
+    background: #E0E8EC;
+    box-shadow: 1px 1px 2px #000 inset;
+    border: 0; padding: .3em; width: 30em; }
+form input[type="submit"] { 
+    margin: 0 auto;
+    display: block;
+    width: 5em;
+    box-shadow: 1px 1px 2px #000;
+    font-weight: bold;
+    text-shadow: 0 1px #FFF;
+    border: solid 1px;}
+form input[type="submit"]:hover { 
+    color: #034;
+    background-color:#E3EBEE;
+    box-shadow: 1px 1px 4px #034;
+    }
+form input[type="submit"]:active { 
+    box-shadow: 1px 1px 1px #000;
+    background-color: #F4FAFF;
+    }
