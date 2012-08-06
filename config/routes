@@ -5,4 +5,4 @@
 /robots.txt RobotsR GET
 
 / HomeR GET POST
-/y/#EntryId EntryR GET
+/y/#EntryId EntryR GET POST PUT DELETE

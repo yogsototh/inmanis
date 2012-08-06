@@ -3,10 +3,14 @@ module Handler.Home
   ( getHomeR
   , postHomeR
   , getEntryR
+  , postEntryR
+  , putEntryR
+  , deleteEntryR
   )
 where
 
 import Import
+import Handler.Helper
 import Yesod.Auth
 
 -- entryAForm :: AForm App App Entry
@@ -47,11 +51,6 @@ getHomeR = do
     isNothing Nothing = True
     isNothing _ = False
 
-errorPage :: Html -> Handler RepHtml
-errorPage errorMessage = do
-  defaultLayout $ do
-    setTitle errorMessage
-    $(widgetFile "error")
 
 postHomeR :: Handler RepHtml
 postHomeR = do
@@ -64,15 +63,23 @@ postHomeR = do
         FormSuccess personRequest -> do
           let newEntry = Entry currentUserId (title personRequest) (url personRequest) 0 0
           entryId <- runDB $ insert newEntry
-          setMessage $ toHtml $ (title personRequest)
+          setMessage $ toHtml (title personRequest)
           redirect $ EntryR entryId
         _ -> errorPage "Please correct your entry form"
 
-getEntryR :: EntryId -> Handler RepHtml
+getEntryR :: EntryId -> Handler RepHtmlJson
 getEntryR entryId = do
   currentUserId <- maybeAuthId
   maybeEntry <- runDB $ get entryId
-  let title = case maybeEntry of
-                Nothing -> ""
-                Just entry -> toHtml $ entryTitle entry
-  errorPage $ title
+  -- maybe "" entryTitle maybeEntry
+  -- if maybeEntry is Nothing returns ""
+  -- else returns (entryTitle maybeEntry)
+  let title = maybe "" entryTitle maybeEntry
+  errorPageJson title
+
+postEntryR :: EntryId -> Handler RepHtmlJson
+postEntryR = undefined
+putEntryR :: EntryId -> Handler RepHtmlJson
+putEntryR = undefined
+deleteEntryR :: EntryId -> Handler RepHtmlJson
+deleteEntryR = undefined
