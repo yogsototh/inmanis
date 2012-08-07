@@ -74,8 +74,8 @@ getEntryR entryId = do
   currentUserId <- maybeAuthId
   maybeEntry <- runDB $ get entryId
   -- maybe "" entryTitle maybeEntry
-  -- if maybeEntry is Nothing returns ""
-  -- else returns (entryTitle maybeEntry)
+  --    if maybeEntry is Nothing returns ""
+  --    else returns (entryTitle maybeEntry)
   let titleEntry = maybe "" entryTitle maybeEntry
   errorPageJson titleEntry
 

@@ -1,1 +1,8 @@
-document.getElementById("#{aDomId}").innerHTML = "This text was added by the Javascript part of the homepage widget.";
+alert("I'm here");
+
+$(document).ready(function(){
+    $(".yeah").click(function(){
+        alert("Upvote"); });
+    $(".neah").click(function(){
+        alert("Downvote"); });
+        });

@@ -91,3 +91,18 @@ form input[type="submit"]:active {
     box-shadow: 1px 1px 1px #000;
     background-color: #F4FAFF;
     }
+.entryLine {
+    display: block;
+    line-height: 2em;
+    height: 2em; }
+.vote { width: 2.1em;
+    line-height: 1em;
+    margin-right: 1em;
+    text-align: center;
+    float:left; }
+.yeah, .neah {
+    border: solid 1px;
+    background: #CCC;
+    cursor: pointer;
+    width: 2em;
+    }
