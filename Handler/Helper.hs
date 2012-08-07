@@ -1,9 +1,17 @@
 module Handler.Helper 
   ( errorPage
-  , errorPageJson )
+  , errorPageJson
+  , showId )
 where
 
 import Import
+import Database.Persist.Store
+
+-- Show the id number from an entry
+-- Can be used inside HTML
+showId k = showInt64 $ unKey k
+  where showInt64 (PersistInt64 i) = show i
+        showInt64 _ = "unknow"
 
 errorPage :: Text -> Handler RepHtml
 errorPage errorText = do

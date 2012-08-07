@@ -1,8 +1,19 @@
-alert("I'm here");
+function log(msg) {
+    if (console && console.log) {
+        console.log(msg);
+    }
+}
+log("I'm here");
+
+function clicked(prefix) {
+    return function() {
+                var parentId = $(this).parent().attr('id');
+                log(prefix + parentId); 
+                };
+}
 
 $(document).ready(function(){
-    $(".yeah").click(function(){
-        alert("Upvote"); });
-    $(".neah").click(function(){
-        alert("Downvote"); });
-        });
+    $(".yeah").click(clicked("Yeah! for "));
+    $(".neah").click(clicked("Neah! for "));
+        
+});

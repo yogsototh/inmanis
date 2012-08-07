@@ -3,10 +3,10 @@ $if null entries
 $else
     <ul>
         $forall Entity entryId entry <- entries
-            <li class=entryLine> 
-                <div class=vote>
-                    <div class=yeah>#{entryYeah entry}
-                    <div class=neah>#{entryNeah entry}
+            <li .entryLine> 
+                <div .vote ##{showId entryId}>
+                    <div .yeah>#{entryYeah entry}
+                    <div .neah>#{entryNeah entry}
                 <a href=#{entryUrl entry}>#{entryTitle entry}</a>
                 \ [<a href=@{EntryR entryId}>comments</a>]
 <hr>
