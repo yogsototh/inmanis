@@ -1,11 +1,12 @@
 body {
     font-family: Georgia, Palatino, Serif;
-    background-color: #F2FAFF;
+    background-color: #B2C2CA ;
     color: #58686B;
     font-size: 18px;
 }
 a, a:hover {
   color: #3858AB;
+  text-decoration: none;
 }
 a:hover {
   text-shadow: 0 0 1px #8DE;
@@ -46,7 +47,16 @@ header {
         margin: 0;
     }
 }
+footer {
+    .content > div {font-size: .9em}
+    background-color: #B2C2CA ;
+    padding: 1em 1em 2em 1em;
+    border-top: solid 1px #889;
+    /* background: url("@{StaticR img_skin_side_up_png}") repeat; */
+    text-align: left;
+}
 #main {
+    background-color: #F2FAFF;
     margin-top: 0;
     border-top: solid 1px #FFF;
     padding: 2em 0;

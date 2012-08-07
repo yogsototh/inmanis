@@ -32,7 +32,7 @@
                 ^{pageBody pc}
             <footer>
               <div class="content">
-                #{extraCopyright $ appExtra $ settings master}
+                <div>#{extraCopyright $ appExtra $ settings master}
 
         $maybe analytics <- extraAnalytics $ appExtra $ settings master
             <script>
