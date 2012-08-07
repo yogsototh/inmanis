@@ -5,15 +5,41 @@ function log(msg) {
 }
 log("I'm here");
 
-function clicked(prefix) {
-    return function() {
-                var parentId = $(this).parent().attr('id');
-                log(prefix + parentId); 
-                };
+// replace Entry2 by 2
+function urlFromParentId(parentId) {
+    var id=parentId.substr(5);
+    return "/y/"+id;
 }
 
+function clicked() {
+    return function() {
+                var entryLine = $(this).parent();
+                log("entryLine = " + entryLine);
+                var param=$(this).attr("class");
+                log("param = "+param);
+                var parentId = entryLine.attr('id');
+                log("parentId = " +parentId);
+                var color="";
+                if (param=="yeah") {
+                    color="#CA6";
+                } else {
+                    color="#6AC";
+                }
+                log("color = "+color);
+                $(this).css({backgroundColor: color});
+                // $.ajax({
+                //     url: urlFromParentId($parentId)
+                // ,   type: "POST"
+                // ,   datatype: "json"
+                // ,   data: {type: param}
+                // ,   success: function(data){ log(data); }
+                // });
+            };
+}
+
+
 $(document).ready(function(){
-    $(".yeah").click(clicked("Yeah! for "));
-    $(".neah").click(clicked("Neah! for "));
+    $(".yeah").click(clicked("yeah"));
+    $(".neah").click(clicked("neah"));
         
 });

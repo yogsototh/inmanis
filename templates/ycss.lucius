@@ -104,5 +104,6 @@ form input[type="submit"]:active {
     border: solid 1px;
     background: #CCC;
     cursor: pointer;
-    width: 2em;
+    width: 3em;
+    font-size: .75em; 
     }
