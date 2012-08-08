@@ -10,6 +10,7 @@ module Handler.Home
 where
 
 import Import
+import Data.Text (pack)
 import Handler.Helper
 import Yesod.Auth
 import Data.Maybe (isNothing)
@@ -79,8 +80,27 @@ getEntryR entryId = do
   let titleEntry = maybe "" entryTitle maybeEntry
   errorPageJson titleEntry
 
+
+testLogged :: Handler RepHtmlJson -> Handler RepHtmlJson
+testLogged v = do
+  currentUserId <- maybeAuthId
+  case currentUserId of
+    Nothing -> errorPageJson "You're not logged"
+    _ -> v
+
 postEntryR :: EntryId -> Handler RepHtmlJson
-postEntryR = undefined
+postEntryR entry = do
+  testLogged $ do
+    req <- runRequestBody
+    let  yeah = lookup "yeah" (fst req)
+         neah = lookup "neah" (fst req)
+    case yeah of
+      Nothing ->
+        case neah of
+          Nothing -> errorPageJson $ "Neither Yeah nor Neah!"
+          _       -> errorPageJson $ "NEAH!"
+      _ -> errorPageJson $ "YEAH!"
+
 putEntryR :: EntryId -> Handler RepHtmlJson
 putEntryR = undefined
 deleteEntryR :: EntryId -> Handler RepHtmlJson

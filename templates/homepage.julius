@@ -27,13 +27,13 @@ function clicked() {
                 }
                 log("color = "+color);
                 $(this).css({backgroundColor: color});
-                // $.ajax({
-                //     url: urlFromParentId($parentId)
-                // ,   type: "POST"
-                // ,   datatype: "json"
-                // ,   data: {type: param}
-                // ,   success: function(data){ log(data); }
-                // });
+                $(this).text( parseInt($(this).text()) + 1);
+                var jsonparams={};
+                jsonparams[param]=1;
+                $.post( urlFromParentId(parentId)
+                      , jsonparams
+                      , function(data) {log(data)}
+                      , "json");
             };
 }
 
