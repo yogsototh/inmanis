@@ -100,8 +100,16 @@ postEntryR entry = do
       _ -> upvote userId entry
 
 downvote :: UserId -> EntryId -> Handler RepHtmlJson
-downvote user entry = 
+downvote user entry = do
+  vote <- runDB $ selectFirst [VoteEntry ==. entry,VoteCreator ==. user] []
   errorPageJson $ "NEAH!"
+  -- case vote of
+  --   Nothing -> do
+  --     newvote <- runBD $ insert $ Vote user entry (-1)
+  --     errorPageJson $ "NEAH!"
+  --   Just v <- do
+  --     runDB $ update v [VoteValue =. ((VoteValue v) - 1)]
+  --     errorPageJson $ "NEAH!"
 
 upvote :: UserId -> EntryId -> Handler RepHtmlJson
 upvote user entry = errorPageJson $ "YEAH!"
