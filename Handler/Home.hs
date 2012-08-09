@@ -14,12 +14,12 @@ import Handler.Helper
 import Yesod.Auth
 import Data.Maybe (isNothing)
 
-data PersonRequest = PersonRequest {
+data EntryRequest = EntryRequest {
                       title :: Text
                     , url   :: Text
                      }
-entryForm :: Form PersonRequest
-entryForm = renderDivs  $ PersonRequest
+entryForm :: Form EntryRequest
+entryForm = renderDivs  $ EntryRequest
   <$> areq textField "Title" Nothing
   <*> areq urlField  "Url"   Nothing
 
