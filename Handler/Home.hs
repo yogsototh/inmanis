@@ -12,7 +12,8 @@ where
 import Import
 import Handler.Helper
 import Yesod.Auth
-import Data.Maybe (isNothing)
+import Data.Maybe
+import Data.Text (pack)
 
 data EntryRequest = EntryRequest {
                       title :: Text
@@ -100,19 +101,57 @@ postEntryR entry = do
       _ -> upvote userId entry
 
 downvote :: UserId -> EntryId -> Handler RepHtmlJson
-downvote user entry = do
-  vote <- runDB $ selectFirst [VoteEntry ==. entry,VoteCreator ==. user] []
-  errorPageJson $ "NEAH!"
-  -- case vote of
-  --   Nothing -> do
-  --     newvote <- runBD $ insert $ Vote user entry (-1)
-  --     errorPageJson $ "NEAH!"
-  --   Just v <- do
-  --     runDB $ update v [VoteValue =. ((VoteValue v) - 1)]
-  --     errorPageJson $ "NEAH!"
+downvote = setVoteValue (-1)
 
 upvote :: UserId -> EntryId -> Handler RepHtmlJson
-upvote user entry = errorPageJson $ "YEAH!"
+upvote = setVoteValue 1
+
+setVoteValue :: Int -> UserId -> EntryId -> Handler RepHtmlJson
+setVoteValue value user entry = do 
+  votes  <- runDB $ selectList [VoteEntry ==. entry,VoteCreator ==. user] 
+                                [LimitTo 1]
+  insertOrUpdateVote votes
+  errorPageJson $ "inserted"
+  where
+
+    -- Depending of votes insert a new vote 
+    -- update the existing one.
+    -- Also must synchronize the total number of yeah/neah for the entry
+    --
+    -- Insert case
+    insertOrUpdateVote [] = do
+      _ <- runDB $ do
+        insert $ Vote user entry value
+        case value of
+           1    -> update entry [EntryYeah +=. 1]
+           (-1) -> update entry [EntryYeah +=. 1]
+      return ()
+
+    -- Update case
+    insertOrUpdateVote (vote:_) = 
+          runDB $ updateVote oldvalue value (entityKey vote)
+          where
+            oldvalue = (voteValue $ entityVal vote)
+
+    updateVote  1 1 key = do
+          update key [VoteValue =. 0]
+          update entry [EntryYeah -=. 1]
+
+    updateVote  1 (-1) key = do
+          update key [VoteValue =. (-1)]
+          update entry [EntryYeah -=. 1]
+          update entry [EntryNeah +=. 1]
+
+    updateVote  (-1) 1 key = do
+          update key [VoteValue =. 1]
+          update entry [EntryNeah -=. 1]
+          update entry [EntryYeah +=. 1]
+
+    updateVote (-1) (-1) key = do
+          update key [VoteValue =. 0]
+          update entry [EntryNeah -=. 1]
+
+
 
 putEntryR :: EntryId -> Handler RepHtmlJson
 putEntryR = undefined

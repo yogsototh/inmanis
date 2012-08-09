@@ -18,10 +18,11 @@ Vote
     creator UserId
     entry   EntryId
     value   Int
+    deriving Show
 Comment
     creator UserId
     entry   EntryId
     content Text
-
+    deriving Show
 
  -- By default this file is used in Model.hs (which is imported by Foundation.hs)
