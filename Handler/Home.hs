@@ -10,7 +10,6 @@ module Handler.Home
 where
 
 import Import
-import Data.Text (pack)
 import Handler.Helper
 import Yesod.Auth
 import Data.Maybe (isNothing)
@@ -57,10 +56,10 @@ getHomeR = do
 -- We create a new resource
 postHomeR :: Handler RepHtml
 postHomeR = do
-  currentUserId <- maybeAuthId
-  case currentUserId of
+  userId <- maybeAuthId
+  case userId of
     Nothing -> errorPage "You're not logged"
-    _ -> do -- errorPage "You're logged"
+    Just currentUserId -> do -- errorPage "You're logged"
       ((res,_),_) <- runFormPost entryForm
       case res of
         FormSuccess personRequest -> do
@@ -80,17 +79,16 @@ getEntryR entryId = do
   let titleEntry = maybe "" entryTitle maybeEntry
   errorPageJson titleEntry
 
-
-testLogged :: Handler RepHtmlJson -> Handler RepHtmlJson
+testLogged ::  (UserId -> Handler RepHtmlJson) -> Handler RepHtmlJson
 testLogged v = do
-  currentUserId <- maybeAuthId
-  case currentUserId of
+  maybeUserId <- maybeAuthId
+  case maybeUserId of
     Nothing -> errorPageJson "You're not logged"
-    _ -> v
+    Just currentUserId -> (v currentUserId)
 
 postEntryR :: EntryId -> Handler RepHtmlJson
 postEntryR entry = do
-  testLogged $ do
+  testLogged $ \userId -> do
     req <- runRequestBody
     let  yeah = lookup "yeah" (fst req)
          neah = lookup "neah" (fst req)
@@ -98,8 +96,15 @@ postEntryR entry = do
       Nothing ->
         case neah of
           Nothing -> errorPageJson $ "Neither Yeah nor Neah!"
-          _       -> errorPageJson $ "NEAH!"
-      _ -> errorPageJson $ "YEAH!"
+          _       -> downvote userId entry
+      _ -> upvote userId entry
+
+downvote :: UserId -> EntryId -> Handler RepHtmlJson
+downvote user entry = 
+  errorPageJson $ "NEAH!"
+
+upvote :: UserId -> EntryId -> Handler RepHtmlJson
+upvote user entry = errorPageJson $ "YEAH!"
 
 putEntryR :: EntryId -> Handler RepHtmlJson
 putEntryR = undefined

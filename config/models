@@ -8,14 +8,19 @@ Email
     verkey  Text Maybe
     UniqueEmail email
 Entry
-    creator UserId Maybe
+    creator UserId
     title   Text
     url     Text
     yeah    Int
     neah    Int
     UniqueEntry url
+Vote
+    creator UserId
+    entry   EntryId
+    value   Int
 Comment
-    entry   EntryId Maybe
+    creator UserId
+    entry   EntryId
     content Text
 
 
