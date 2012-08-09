@@ -110,8 +110,8 @@ setVoteValue :: Int -> UserId -> EntryId -> Handler RepHtmlJson
 setVoteValue value user entry = do 
   votes  <- runDB $ selectList [VoteEntry ==. entry,VoteCreator ==. user] 
                                 [LimitTo 1]
-  insertOrUpdateVote votes
-  errorPageJson $ "inserted"
+  msg <- insertOrUpdateVote votes
+  errorPageJson $ pack msg
   where
 
     -- Depending of votes insert a new vote 
@@ -125,18 +125,25 @@ setVoteValue value user entry = do
         case value of
            1    -> update entry [EntryYeah +=. 1]
            (-1) -> update entry [EntryYeah +=. 1]
-      return ()
+      return "inserted"
 
     -- Update case
-    insertOrUpdateVote (vote:_) = 
+    insertOrUpdateVote (vote:_) = do
           runDB $ updateVote oldvalue value (entityKey vote)
+          return "updated"
           where
             oldvalue = (voteValue $ entityVal vote)
+
+    updateVote  0 1 key = do
+          update key [VoteValue =. 1]
+          update entry [EntryYeah +=. 1]
+    updateVote 0 (-1) key = do
+          update key [VoteValue =. (-1)]
+          update entry [EntryNeah +=. 1]
 
     updateVote  1 1 key = do
           update key [VoteValue =. 0]
           update entry [EntryYeah -=. 1]
-
     updateVote  1 (-1) key = do
           update key [VoteValue =. (-1)]
           update entry [EntryYeah -=. 1]
@@ -146,10 +153,10 @@ setVoteValue value user entry = do
           update key [VoteValue =. 1]
           update entry [EntryNeah -=. 1]
           update entry [EntryYeah +=. 1]
-
     updateVote (-1) (-1) key = do
           update key [VoteValue =. 0]
           update entry [EntryNeah -=. 1]
+
 
 
 
