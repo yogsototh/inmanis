@@ -8,7 +8,7 @@ $else
                     <div .yeah>#{entryYeah entry}
                     <div .neah>#{entryNeah entry}
                 <a href=#{entryUrl entry}>#{entryTitle entry}</a>
-                \ [<a href=@{EntryR entryId}>comments</a>]
+                \ <a class="comment" href=@{EntryR entryId}>comments</a>
 <hr>
 $if isNothing currentUserId
     <div #login>

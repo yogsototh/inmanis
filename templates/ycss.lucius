@@ -146,3 +146,4 @@ form input[type="submit"]:active {
     color: #{cyan};
     border-color: #{cyan};
 }
+.comment { font-size: .87em; float: right;}
