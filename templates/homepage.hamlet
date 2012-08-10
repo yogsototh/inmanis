@@ -11,10 +11,12 @@ $else
                 \ [<a href=@{EntryR entryId}>comments</a>]
 <hr>
 $if isNothing currentUserId
-    <a href=@{AuthR LoginR}> Log in
+    <div #login>
+        <a href=@{AuthR LoginR}> Log in
 $else
-    <form method=post action=@{HomeR} enctype=#{enctype}>
-        ^{widget}
-        <input type=submit value="Post">
-    <hr>
+    <div #formEntry>
+        <form method=post action=@{HomeR} enctype=#{enctype}>
+            ^{widget}
+            <input type=submit value="Post">
+    <div #logout>
         <a href=@{AuthR LogoutR}>Log out

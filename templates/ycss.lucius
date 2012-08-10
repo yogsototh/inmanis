@@ -1,19 +1,50 @@
+@base03  : #002b36;
+@base02  : #073642;
+@base01  : #586e75;
+@base00  : #657b83;
+
+/* @background: #f3f4f5;  /* --- */
+/* @background: #eee8d5;    /* ------ */
+ @background: #fdf6e3;    /* ------ */
+@foreground: #93a1a1 ;   /* base1 */
+@altbackground: #586e75; /* base01 */
+@altforeground: #93a1a1; /* base1 */
+
+@base0   : #839496;
+@base1   : #93a1a1;
+@base2   : #eee8d5;
+@base3   : #fdf6e3;
+
+@yellow  : #b58900;
+@orange  : #cb4b16;
+@red     : #dc322f;
+@magenta : #d33682;
+@violet  : #6c71c4;
+@blue    : #268bd2;
+@cyan    : #2aa198;
+@green   : #859900;
+
+@lightred: rgba(220,50,47,0.2);
+@lightorange: rgba(203,75,22,0.2);
+@lightcyan: rgba(42,161,152,0.2);
+
+@shadoworange: rgba(101,37,11,0.5);
+
+@white: rgba(255,255,255,0.6);
+@black: rgba(0,43,54,0.6);
+
 body {
     font-family: Georgia, Palatino, Serif;
-    background-color: #B2C2CA ;
-    color: #58686B;
+    background-color: #{altbackground};
+    color: #{altforeground};
     font-size: 18px;
 }
-a, a:hover {
-  color: #3858AB;
-  text-decoration: none;
-}
-a:hover {
-  text-shadow: 0 0 1px #8DE;
-}
-a:visited {
-    color: #48588B;
-}
+
+a { color: #{base00}; text-decoration: none; }
+a:visited { color: #{base01}; }
+a:hover { color: #{orange}; text-shadow: 0 0 1px #{shadoworange}; }
+
+/* Layout */
 .content {
   width: 37em;
   margin: 0 auto;
@@ -26,39 +57,33 @@ ul, ol {
 }
 p { line-height: 1.5em; }
 header {
-    background-color: #B2C2CA ;
+    background: #{altbackground};
     /* background: url("@{StaticR img_skin_side_up_png}") repeat; */
     text-align: center;
     top: 0;
     margin: 0;
     padding: 1em 1em 2em 1em;
-    border-bottom: solid 1px #889;
-    h1 {
-        color: #78888B;
-        text-shadow: 1px 1px 1px #E4EEF2, -1px -1px 1px #000102;
+    border-bottom: solid 1px #{base03};
+    h1,h2 {
+        text-shadow: 1px 1px 0px #{white}, -1px -1px 0px #{black};
         font-weight: bold;
-        font-size: 8em;
         margin: 0;
     }
-    h2 {
-        font-size: 2em;
-        color: #78888B;
-        text-shadow: 0.5px 0.5px 0.5px #E4EEF2, -0.5px -0.5px 0.5px #000102;
-        margin: 0;
-    }
+    h1 { font-size: 8em; }
+    h2 { font-size: 2em; }
 }
+
 footer {
     .content > div {font-size: .9em}
-    background-color: #B2C2CA ;
     padding: 1em 1em 2em 1em;
     border-top: solid 1px #889;
-    /* background: url("@{StaticR img_skin_side_up_png}") repeat; */
     text-align: left;
 }
 #main {
-    background-color: #F2FAFF;
+    background-color: #{background};
+    color: #{foreground};
     margin-top: 0;
-    border-top: solid 1px #FFF;
+    border-top: solid 1px #{base3};
     padding: 2em 0;
 }
 
@@ -70,26 +95,31 @@ form label {
 }
 form div { margin: 1em auto; }
 form input { 
+    color: #{base02};
     border-radius: 3px; 
-    background: #E0E8EC;
-    box-shadow: 1px 1px 2px #000 inset;
+    background: #{base2};
+    box-shadow: 1px 1px 2px #{base03} inset;
     border: 0; padding: .3em; width: 30em; }
 form input[type="submit"] { 
+    color: #{base1};
     margin: 0 auto;
     display: block;
     width: 5em;
-    box-shadow: 1px 1px 2px #000;
+    box-shadow: 1px 1px 2px #{black};
     font-weight: bold;
-    text-shadow: 0 1px #FFF;
+    text-shadow: 0 1px #{white};
     border: solid 1px;}
 form input[type="submit"]:hover { 
-    color: #034;
-    background-color:#E3EBEE;
-    box-shadow: 1px 1px 4px #034;
+    color: #{base0};
+    border-color: #{base0};
+    background-color:#{base2};
+    box-shadow: 1px 1px 4px #{black};
     }
 form input[type="submit"]:active { 
-    box-shadow: 1px 1px 1px #000;
-    background-color: #F4FAFF;
+    box-shadow: -1px -1px 1px #{shadoworange};
+    background-color: #{lightorange};
+    border-color: #{orange};
+    color: #{orange};
     }
 .entryLine {
     display: block;
@@ -101,16 +131,18 @@ form input[type="submit"]:active {
     text-align: center;
     float:left; }
 .yeah, .neah {
-    border: solid 1px rgba(0,0,0,0.3);
-    background-color: rgba(0,0,0,0.1);
+    border: solid 1px #{base0};
+    background-color: #{base2};
     cursor: pointer;
     width: 3em;
     font-size: .75em; }
 .yeah_voted .yeah {
-    background-color: rgba(250,180,80,0.3);
-    border-color: rgba(125,90,40,0.3);
+    background-color: #{lightorange};
+    color: #{orange};
+    border-color: #{orange};
 }
 .neah_voted .neah {
-    background-color: rgba(20,100,155,0.3);
-    border-color: rgba(10,50,77,0.3);
+    background-color: #{lightcyan};
+    color: #{cyan};
+    border-color: #{cyan};
 }
