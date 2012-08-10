@@ -1,1 +1,3 @@
 <p> #{errorMessage}
+
+<a href="javascript:history.back();">← Go back
