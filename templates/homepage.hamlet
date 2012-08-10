@@ -4,7 +4,7 @@ $else
     <ul>
         $forall Entity entryId entry <- entries
             <li .entryLine> 
-                <div .vote #Entry#{showId entryId}>
+                <div class="vote" #Entry#{showId entryId}>
                     <div .yeah>#{entryYeah entry}
                     <div .neah>#{entryNeah entry}
                 <a href=#{entryUrl entry}>#{entryTitle entry}</a>

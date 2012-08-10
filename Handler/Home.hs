@@ -45,7 +45,12 @@ getHomeR = do
   (widget,enctype) <- generateFormPost entryForm
 
   -- We get the list of entries sorted by entry title
-  entries <- runDB $ selectList [] [Desc EntryTitle]
+  entries <- runDB $ do
+    entries <- selectList [] [Desc EntryTitle, LimitTo 25]
+    -- votes   <- case currentUserId of
+    --               Nothing   -> return []
+    --               Just user -> mapM_ (\entry -> runDB $ selectList [VoteEntry ==. entry,VoteCreator ==. user][LimitTo 1]) entries
+    return entries
 
   -- We return some HTML (not full)
   defaultLayout $ do
@@ -121,10 +126,11 @@ setVoteValue value user entry = do
     -- Insert case
     insertOrUpdateVote [] = do
       _ <- runDB $ do
-        insert $ Vote user entry value
+        _ <- insert $ Vote user entry value
         case value of
            1    -> update entry [EntryYeah +=. 1]
            (-1) -> update entry [EntryYeah +=. 1]
+           _ -> return ()
       return "inserted"
 
     -- Update case
@@ -156,6 +162,7 @@ setVoteValue value user entry = do
     updateVote (-1) (-1) key = do
           update key [VoteValue =. 0]
           update entry [EntryNeah -=. 1]
+    updateVote _ _ _ = return ()
 
 
 
