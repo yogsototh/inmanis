@@ -5,7 +5,7 @@
 
 /* @background: #f3f4f5;  /* --- */
 /* @background: #eee8d5;    /* ------ */
- @background: #fdf6e3;    /* ------ */
+@background: #fdf6e3;    /* ------ */
 @foreground: #93a1a1 ;   /* base1 */
 @altbackground: #586e75; /* base01 */
 @altforeground: #93a1a1; /* base1 */
@@ -147,3 +147,29 @@ form input[type="submit"]:active {
     border-color: #{cyan};
 }
 .comment { font-size: .8em; float: right;}
+#loginmessage { 
+    display: none;
+    position: fixed;
+    margin: 0;
+    padding: 0;
+    border: none;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    background-color: #{black};
+    }
+#loginmessage .insidebox { width: 37em;
+    margin: 0 auto;
+    padding: 1em;
+    position: relative;
+    top: 30%;
+    left: 0%;
+    background-color: #{background};
+    color: #{foreground};
+    box-shadow: 0 0 4px #{black}
+    }
+#loginmessage .close {
+    float: right;
+    cursor: pointer;
+    }
