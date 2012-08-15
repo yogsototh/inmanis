@@ -76,6 +76,7 @@ library
                  , http-conduit                  >= 1.4        && < 1.5
                  , directory                     >= 1.1        && < 1.2
                  , warp                          >= 1.2        && < 1.3
+                 , containers                    >= 0.4.2.1    && < 0.5
 
 executable         inmanis
     if flag(library-only)

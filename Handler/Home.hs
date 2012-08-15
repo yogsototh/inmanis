@@ -45,12 +45,12 @@ getHomeR = do
   (widget,enctype) <- generateFormPost entryForm
 
   -- We get the list of entries sorted by entry title
-  entries <- runDB $ do
+  (entries,votes) <- runDB $ do
     entries <- selectList [] [Desc EntryTitle, LimitTo 25]
-    -- votes   <- case currentUserId of
-    --               Nothing   -> return []
-    --               Just user -> mapM_ (\entry -> runDB $ selectList [VoteEntry ==. entry,VoteCreator ==. user][LimitTo 1]) entries
-    return entries
+    votes   <- case currentUserId of
+                  Nothing   -> return []
+                  Just user -> selectList [VoteCreator ==. user][]
+    return (entries,joinTables voteEntry votes entries)
 
   -- We return some HTML (not full)
   defaultLayout $ do
