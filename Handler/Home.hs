@@ -1,5 +1,5 @@
 {-# LANGUAGE TupleSections, OverloadedStrings #-}
-module Handler.Home 
+module Handler.Home
   ( getHomeR
   , postHomeR
   , getEntryR
@@ -32,6 +32,17 @@ entryForm = renderDivs  $ EntryRequest
 -- functions. You can spread them across multiple files if you are so
 -- inclined, or create a single monolithic file.
 
+cssClassVoteForEntry entryId votes =
+  case (filter voteForId votes) of
+    [] -> "" :: Text
+    (Entity voteId vote):vs -> case voteValue vote of
+                                  1    -> " yeah_voted"
+                                  (-1) -> " neah_voted"
+                                  _    -> ""
+  where
+    voteForId (Entity voteId vote) = voteEntry vote == entryId
+
+
 -- the name getHomeR is for
 -- handle the request GET on the resource HomeR
 getHomeR :: Handler RepHtml
@@ -47,10 +58,10 @@ getHomeR = do
   -- We get the list of entries sorted by entry title
   (entries,votes) <- runDB $ do
     entries <- selectList [] [Desc EntryTitle, LimitTo 25]
-    votes   <- case currentUserId of
+    allVotesOfCurrentUser   <- case currentUserId of
                   Nothing   -> return []
                   Just user -> selectList [VoteCreator ==. user][]
-    return (entries,joinTables voteEntry votes entries)
+    return (entries,map fst $ joinTables voteEntry allVotesOfCurrentUser entries)
 
   -- We return some HTML (not full)
   defaultLayout $ do
@@ -112,14 +123,14 @@ upvote :: UserId -> EntryId -> Handler RepHtmlJson
 upvote = setVoteValue 1
 
 setVoteValue :: Int -> UserId -> EntryId -> Handler RepHtmlJson
-setVoteValue value user entry = do 
-  votes  <- runDB $ selectList [VoteEntry ==. entry,VoteCreator ==. user] 
+setVoteValue value user entry = do
+  votes  <- runDB $ selectList [VoteEntry ==. entry,VoteCreator ==. user]
                                 [LimitTo 1]
   msg <- insertOrUpdateVote votes
   errorPageJson $ pack msg
   where
 
-    -- Depending of votes insert a new vote 
+    -- Depending of votes insert a new vote
     -- update the existing one.
     -- Also must synchronize the total number of yeah/neah for the entry
     --
