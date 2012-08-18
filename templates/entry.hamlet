@@ -1,5 +1,23 @@
-<h2> #{titleEntry}
+<h2> #{titleStr}
 
-$if isJust maybeEntry
-    <h3> Comments
-    Comment Tree
+<ul>
+    <li .entryLine>
+        <div class="vote#{cssClassVote votes}" #Entry#{showId entryId}>
+            <div .yeah>#{entryYeah entry}
+            <div .neah>#{entryNeah entry}
+        <a href=#{entryUrl entry}>#{entryTitle entry}</a>
+
+<h3> Comments
+Comment Tree
+
+<hr>
+$if isNothing currentUserId
+    <div #login>
+        <a href=@{AuthR LoginR}> Log in
+    <div #loginmessage>
+        <div .insidebox>
+            <a href=@{AuthR LoginR}> Log in
+            <div .close>close
+$else
+    <div #logout>
+        <a href=@{AuthR LogoutR}>Log out

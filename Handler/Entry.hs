@@ -12,6 +12,12 @@ import Yesod.Auth
 import Data.Maybe
 import Data.Text (pack)
 
+cssClassVote :: [Entity Vote] -> Text
+cssClassVote [] = ""
+cssClassVote ((Entity voteId vote):vs) = case voteValue vote of
+                                            1    -> " yeah_voted"
+                                            (-1) -> " neah_voted"
+                                            _    -> ""
 
 getEntryR :: EntryId -> Handler RepHtmlJson
 getEntryR entryId = do
@@ -23,11 +29,28 @@ getEntryR entryId = do
     -- errorPageJson titleEntry
   let
       titleEntry = maybe "This entry does not exist" entryTitle maybeEntry
-      jsonWidget = object ["msg" .= titleEntry]
-      htmlWidget = do
-        setTitle $ toHtml titleEntry
+  case maybeEntry of
+    Just entry -> do
+        case currentUserId of
+          Nothing -> do
+            votes <- return []
+            defaultLayoutJson
+                        (htmlWidget titleEntry entry currentUserId votes)
+                        (jsonWidget titleEntry entry currentUserId votes)
+          Just userId -> do
+            votes <- runDB $ selectList
+                                [VoteCreator ==. userId,
+                                 VoteEntry ==. entryId]
+                                [LimitTo 1]
+            defaultLayoutJson
+                        (htmlWidget titleEntry entry currentUserId votes)
+                        (jsonWidget titleEntry entry currentUserId votes)
+    Nothing    -> errorPageJson titleEntry
+  where
+      jsonWidget titleStr entry currentUserId votes = object ["msg" .= titleStr]
+      htmlWidget titleStr entry currentUserId votes = do
+        setTitle $ toHtml titleStr
         $(widgetFile "entry")
-  defaultLayoutJson htmlWidget jsonWidget
 
 
 testLogged ::  (UserId -> Handler RepHtmlJson) -> Handler RepHtmlJson
