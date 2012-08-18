@@ -1,0 +1,5 @@
+<h2> #{titleEntry}
+
+$if isJust maybeEntry
+    <h3> Comments
+    Comment Tree
