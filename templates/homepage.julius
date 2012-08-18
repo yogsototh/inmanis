@@ -80,5 +80,4 @@ $(document).ready(function(){
     $("#loginmessage").click(function(){
         $("#loginmessage").hide();
     });
-    $("#loginmessage .insidebox").click(function(){ return false; });
 });
