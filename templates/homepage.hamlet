@@ -7,8 +7,12 @@ $else
                 <div class="vote#{cssClassVoteForEntry entryId votes}" #Entry#{showId entryId}>
                     <div .yeah>#{entryYeah entry}
                     <div .neah>#{entryNeah entry}
-                <a href=#{entryUrl entry}>#{entryTitle entry}</a>
-                \ <a class="comment" href=@{EntryR entryId}>comments</a>
+                <div .firstline>
+                    <a href=#{entryUrl entry}>#{entryTitle entry}</a>
+                <div .secondline>
+                    Submitted #{humanReadableOld currentTime entry} by #TODO
+                <div .thirdline>
+                  <a class="comment" href=@{EntryR entryId}>comments</a>
 <hr>
 $if isNothing currentUserId
     <div #login>
