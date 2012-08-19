@@ -5,6 +5,7 @@ module Import
     , module Settings.StaticFiles
     , module Settings.Development
     , module Data.Monoid
+    , module Data.Time
     , module Control.Applicative
     , Text
 #if __GLASGOW_HASKELL__ < 704
@@ -18,6 +19,7 @@ import Foundation
 import Data.Monoid (Monoid (mappend, mempty, mconcat))
 import Control.Applicative ((<$>), (<*>), pure)
 import Data.Text (Text)
+import Data.Time hiding (parseTime)
 import Settings.StaticFiles
 import Settings.Development
 

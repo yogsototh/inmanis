@@ -13,15 +13,21 @@ Entry
     url     Text
     yeah    Int
     neah    Int
+    nbView  Int default=0
+    created UTCTime default=CURRENT_TIME
     UniqueEntry url
+
+-- nbView must be equal to nbVotes for entry
 Vote
     creator UserId
     entry   EntryId
     value   Int
     deriving Show
 Comment
-    creator UserId
     entry   EntryId
+    creator UserId
+    replyTo CommentId Maybe
+    created UTCTime default=CURRENT_TIME
     content Text
     deriving Show
 

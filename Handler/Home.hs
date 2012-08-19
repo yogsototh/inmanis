@@ -53,7 +53,7 @@ getHomeR = do
 
   -- We get the list of entries sorted by entry title
   (entries,votes) <- runDB $ do
-    entries <- selectList [] [Desc EntryTitle, LimitTo 25]
+    entries <- selectList [] [Desc EntryCreated, LimitTo 25]
     allVotesOfCurrentUser   <- case currentUserId of
                   Nothing   -> return []
                   Just user -> selectList [VoteCreator ==. user][]
@@ -76,7 +76,8 @@ postHomeR = do
       ((res,_),_) <- runFormPost entryForm
       case res of
         FormSuccess personRequest -> do
-          let newEntry = Entry currentUserId (title personRequest) (url personRequest) 0 0
+          time <- liftIO getCurrentTime
+          let newEntry = Entry currentUserId (title personRequest) (url personRequest) 0 0 0 time
           entryId <- runDB $ insert newEntry
           setMessage $ toHtml (title personRequest)
           redirect $ EntryR entryId
