@@ -14,6 +14,7 @@ import qualified Data.Map as M
 
 -- Show the id number from an entry
 -- Can be used inside HTML
+showId :: Key backend entity -> String
 showId k = showInt64 $ unKey k
   where showInt64 (PersistInt64 i) = show i
         showInt64 _ = "unknow"

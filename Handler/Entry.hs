@@ -14,7 +14,7 @@ import Data.Text (pack)
 
 cssClassVote :: [Entity Vote] -> Text
 cssClassVote [] = ""
-cssClassVote ((Entity voteId vote):vs) = case voteValue vote of
+cssClassVote ((Entity _ vote):_) = case voteValue vote of
                                             1    -> " yeah_voted"
                                             (-1) -> " neah_voted"
                                             _    -> ""
@@ -36,7 +36,7 @@ getEntryR entryId = do
             votes <- return []
             defaultLayoutJson
                         (htmlWidget titleEntry entry currentUserId votes)
-                        (jsonWidget titleEntry entry currentUserId votes)
+                        (jsonWidget titleEntry)
           Just userId -> do
             votes <- runDB $ selectList
                                 [VoteCreator ==. userId,
@@ -44,10 +44,10 @@ getEntryR entryId = do
                                 [LimitTo 1]
             defaultLayoutJson
                         (htmlWidget titleEntry entry currentUserId votes)
-                        (jsonWidget titleEntry entry currentUserId votes)
+                        (jsonWidget titleEntry)
     Nothing    -> errorPageJson titleEntry
   where
-      jsonWidget titleStr entry currentUserId votes = object ["msg" .= titleStr]
+      jsonWidget titleStr = object ["msg" .= titleStr]
       htmlWidget titleStr entry currentUserId votes = do
         setTitle $ toHtml titleStr
         $(widgetFile "entry")
