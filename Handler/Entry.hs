@@ -97,7 +97,7 @@ setVoteValue value user entry = do
         _ <- insert $ Vote user entry value
         case value of
            1    -> update entry [EntryYeah +=. 1]
-           (-1) -> update entry [EntryYeah +=. 1]
+           (-1) -> update entry [EntryNeah +=. 1]
            _ -> return ()
       return "inserted"
 
