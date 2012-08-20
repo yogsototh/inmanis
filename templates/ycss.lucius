@@ -24,9 +24,9 @@
 @cyan    : #2aa198;
 @green   : #859900;
 
-@lightred: rgba(220,50,47,0.2);
-@lightorange: rgba(203,75,22,0.2);
-@lightcyan: rgba(42,161,152,0.2);
+@lightred: rgba(220,50,47,0.1);
+@lightorange: rgba(203,75,22,0.1);
+@lightcyan: rgba(42,161,152,0.1);
 
 @shadoworange: rgba(101,37,11,0.5);
 
@@ -138,8 +138,12 @@ form input[type="submit"]:active {
     cursor: pointer;
     width: 3em;
     font-size: .75em; }
-.yeah:hover { box-shadow: 0px 0px 4px #{orange} inset; }
-.neah:hover { box-shadow: 0px 0px 4px #{cyan} inset; }
+.yeah:hover { 
+    box-shadow: 0px 0px 4px #{orange} inset;
+    background-color: #{lightorange}; }
+.neah:hover { 
+    box-shadow: 0px 0px 4px #{cyan} inset; 
+    background-color: #{lightcyan}; }
 .secondline { font-size: .6em; color: #{base1}; margin-top: 1em; }
 .yeah_voted .yeah {
     background-color: #{lightorange};
