@@ -5,7 +5,7 @@ function log(msg) {
 }
 
 // replace EntryN by N
-function urlFromParentId(parentId) {
+function urlFromId(parentId) {
     var id=parentId.substr(5);
     return "/y/"+id;
 }
@@ -63,17 +63,28 @@ function clicked() {
         }
         var jsonparams={};
         jsonparams[param]=1;
-        $.post( urlFromParentId(parentId)
+        $.post( urlFromId(parentId)
                 , jsonparams
                 , function(data) {log(data);}
                 , "json");
     };
 }
 
+function deleteEntry(e) {
+    e.preventDefault();
+    var id=$(this).attr('id');
+    log( $(this) );
+    log( id );
+    $.ajax({  type: "DELETE"
+            , url: urlFromId( id )
+            , success: function(data) {log(data);}
+            , dataType: "json"});
+}
 
 $(document).ready(function(){
     $(".yeah").click(clicked("yeah"));
     $(".neah").click(clicked("neah"));
+    $(".delete").click(deleteEntry);
     $("#loginmessage .close").click(function(){
         $("#loginmessage").hide();
     });

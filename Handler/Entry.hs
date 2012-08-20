@@ -132,10 +132,19 @@ setVoteValue value user entry = do
           update entry [EntryNeah -=. 1]
     updateVote _ _ _ = return ()
 
-
-
+deleteEntryR :: EntryId -> Handler RepHtmlJson
+deleteEntryR entryId = do
+  currentUserId <- maybeAuthId
+  case currentUserId of
+    Nothing -> errorPageJson "You're not logged"
+    Just user -> do
+      entries <- runDB $ selectList [EntryId ==. entryId,EntryCreator ==. user] [LimitTo 1]
+      case entries of 
+                  [] -> errorPageJson "Either entry doesn't exists or not yours"
+                  _  -> do
+                          _ <- runDB $ delete entryId
+                          errorPageJson "deleted"
 
 putEntryR :: EntryId -> Handler RepHtmlJson
 putEntryR = undefined
-deleteEntryR :: EntryId -> Handler RepHtmlJson
-deleteEntryR = undefined
+

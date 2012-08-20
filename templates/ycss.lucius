@@ -135,6 +135,8 @@ form input[type="submit"]:active {
 .yeah, .neah {
     background-color: #{base2};
     box-shadow: 0px 0px 2px #{base0} inset;
+    border-radius: 2px;
+    margin: 2px 0;
     cursor: pointer;
     width: 3em;
     font-size: .75em; }
@@ -159,7 +161,7 @@ form input[type="submit"]:active {
     line-height: 1em;
     height: 1em;
 }
-.comment { font-size: .8em;}
+.thirdline { font-size: .8em;}
 #loginmessage {
     display: none;
     position: fixed;
