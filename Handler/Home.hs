@@ -28,15 +28,18 @@ entryForm = renderDivs  $ EntryRequest
 -- functions. You can spread them across multiple files if you are so
 -- inclined, or create a single monolithic file.
 
+cssClassVoteForEntry :: Key backend (EntryGeneric backend)
+                        -> [Entity (VoteGeneric backend)]
+                        -> Text
 cssClassVoteForEntry entryId votes =
   case (filter voteForId votes) of
     [] -> "" :: Text
-    (Entity voteId vote):vs -> case voteValue vote of
+    (Entity _ vote):_ -> case voteValue vote of
                                   1    -> " yeah_voted"
                                   (-1) -> " neah_voted"
                                   _    -> ""
   where
-    voteForId (Entity voteId vote) = voteEntry vote == entryId
+    voteForId (Entity _ vote) = voteEntry vote == entryId
 
 
 humanReadableOld :: UTCTime -> Entry -> Text
@@ -46,25 +49,25 @@ humanReadableOld currentTime entry =
   where
   duration = diffUTCTime currentTime (entryCreated entry)
   second, minute, hour, day, year :: NominalDiffTime
-  second = fromIntegral 1
-  minute = (fromIntegral 60)  * second
-  hour   = (fromIntegral 60)  * minute
-  day    = (fromIntegral 24)  * hour
-  year   = (fromIntegral 365) * day
+  second = fromIntegral (1 :: Int)
+  minute = (fromIntegral ( 60 :: Int))  * second
+  hour   = (fromIntegral ( 60 :: Int))  * minute
+  day    = (fromIntegral ( 24 :: Int))  * hour
+  year   = (fromIntegral (365 :: Int)) * day
   seconds,minutes,hours,days,years :: NominalDiffTime -> NominalDiffTime
-  seconds duration = duration / second
-  minutes duration = duration / minute
-  hours   duration = duration / hour
-  days    duration = duration / day
-  years   duration = duration / year
-  showDuration duration
-    | duration < minute  = "1m"
-    | duration < hour = pack $ (show $ floor $ minutes duration) ++ " minutes ago"
-    | duration < day  = pack $ (show $ floor $ hours   duration) ++ " hours ago"
-    | duration < year = pack $ (show $ floor $ days    duration) ++ " days ago"
-    | otherwise       = pack $ (show $ (floor $ years   duration)) ++ " years and " ++ (show ((floor $ days duration) `mod` 365)) ++ " days ago"
-
-
+  seconds t = t / second
+  minutes t = t / minute
+  hours   t = t / hour
+  days    t = t / day
+  years   t = t / year
+  showTime t = show (floor t :: Integer)
+  showDuration t
+    | t < minute  = "1m"
+    | t < hour = pack $ (showTime $ minutes t) ++ " minutes ago"
+    | t < day  = pack $ (showTime $ hours   t) ++ " hours ago"
+    | t < year = pack $ (showTime $ days    t) ++ " days ago"
+    | otherwise       = pack $ (showTime $ years t) ++ " years and " 
+                            ++ (show ((floor $ days t) `mod` 365 :: Integer)) ++ " days ago"
 
 
 -- the name getHomeR is for
