@@ -130,23 +130,26 @@ form input[type="submit"]:active {
     line-height: 1.5em;
     margin-right: 1em;
     text-align: center;
+    border-radius: 3px;
     float:left; }
 .yeah, .neah {
-    border: solid 1px #{base0};
     background-color: #{base2};
+    box-shadow: 0px 0px 2px #{base0} inset;
     cursor: pointer;
     width: 3em;
     font-size: .75em; }
+.yeah:hover { box-shadow: 0px 0px 4px #{orange} inset; }
+.neah:hover { box-shadow: 0px 0px 4px #{cyan} inset; }
 .secondline { font-size: .6em; color: #{base1}; margin-top: 1em; }
 .yeah_voted .yeah {
     background-color: #{lightorange};
     color: #{orange};
-    border-color: #{orange};
+    box-shadow: 0px 0px 2px #{orange} inset;
 }
 .neah_voted .neah {
     background-color: #{lightcyan};
     color: #{cyan};
-    border-color: #{cyan};
+    box-shadow: 0px 0px 2px #{cyan} inset;
 }
 .firstline,.secondline,.thirdline {
     line-height: 1em;
