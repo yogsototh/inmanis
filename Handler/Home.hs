@@ -62,7 +62,8 @@ humanReadableOld currentTime entry =
   years   t = t / year
   showTime t = show (floor t :: Integer)
   showDuration t
-    | t < minute  = "1m"
+    | t < second  = "1s"
+    | t < minute  = pack $ (showTime $ seconds t) ++ " seconds ago"
     | t < hour = pack $ (showTime $ minutes t) ++ " minutes ago"
     | t < day  = pack $ (showTime $ hours   t) ++ " hours ago"
     | t < year = pack $ (showTime $ days    t) ++ " days ago"
