@@ -23,8 +23,10 @@ $if isNothing currentUserId
             <div .close>close
 $else
     <div #formEntry>
+        <h2>Add a new entry
         <form method=post action=@{HomeR} enctype=#{enctype}>
             ^{widget}
             <input type=submit value="Post">
+    <hr>
     <div #logout>
         <a href=@{AuthR LogoutR}>Log out
