@@ -68,7 +68,7 @@ humanReadableOld currentTime entry =
     | t < day  = pack $ (showTime $ hours   t) ++ " hours ago"
     | t < year = pack $ (showTime $ days    t) ++ " days ago"
     | otherwise       = pack $ (showTime $ years t) ++ " years and " 
-                            ++ (show ((floor $ days t) `mod` 365 :: Integer)) ++ " days ago"
+                            ++ (show ((floor $ days t) `rem` 365 :: Integer)) ++ " days ago"
 
 
 -- the name getHomeR is for
