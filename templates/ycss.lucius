@@ -42,10 +42,12 @@ header {
 }
 
 footer {
-    .content > div {font-size: .9em}
+    #{cssVerticalGradient base03 altbackground}
     padding: 1em 1em 2em 1em;
     border-top: solid 1px #889;
     text-align: left;
+    min-height: 4em;
+    .content > div {font-size: .9em;}
 }
 #main {
     background-color: #{background};

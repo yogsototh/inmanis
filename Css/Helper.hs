@@ -1,5 +1,6 @@
 module Css.Helper
   ( cssGradient
+  , cssVerticalGradient
   , background
   , foreground
   , altbackground
@@ -49,6 +50,21 @@ cssGradient from to =
   where
       rgbfrom = cssToRgb from
       rgbto   = cssToRgb to
+
+cssVerticalGradient from to =
+  pack $
+    "background: rgb("++rgbfrom++"); /* Old browsers */" ++
+    "background: -moz-linear-gradient(top,  rgba("++rgbfrom++",1) 0%, rgba("++rgbto++",1) 100%); /* FF3.6+ */" ++
+    "background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba("++rgbfrom++",1)), color-stop(100%,rgba("++rgbto++",1))); /* Chrome,Safari4+ */" ++
+    "background: -webkit-linear-gradient(top,  rgba("++rgbfrom++",1) 0%,rgba("++rgbto++",1) 100%); /* Chrome10+,Safari5.1+ */" ++
+    "background: -o-linear-gradient(top,  rgba("++rgbfrom++",1) 0%,rgba("++rgbto++",1) 100%); /* Opera 11.10+ */" ++
+    "background: -ms-linear-gradient(top,  rgba("++rgbfrom++",1) 0%,rgba("++rgbto++",1) 100%); /* IE10+ */" ++
+    "background: linear-gradient(to bottom,  rgba("++rgbfrom++",1) 0%,rgba("++rgbto++",1) 100%); /* W3C */" ++
+    "filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='"++from++"', endColorstr='"++to++"',GradientType=0 ); /* IE6-9 */"
+  where
+      rgbfrom = cssToRgb from
+      rgbto   = cssToRgb to
+
 
 
 
