@@ -78,4 +78,3 @@ lookupRelation f a bs = let k  = f $ entityVal a
 
 for ::  [a] -> (a -> b) -> [b]
 for xs f = map f xs
-
