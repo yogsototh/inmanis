@@ -23,7 +23,7 @@ ul, ol {
 }
 p { line-height: 1.5em; }
 header {
-    #{cssGradient altbackground base02}
+    #{headerbackground}
     /* background: #{altbackground}; */
     /* background: url("@{StaticR img_skin_side_up_png}") repeat; */
     text-align: center;
@@ -42,7 +42,6 @@ header {
 }
 
 footer {
-    #{cssVerticalGradient base03 altbackground}
     padding: 1em 1em 2em 1em;
     border-top: solid 1px #889;
     text-align: left;
@@ -55,6 +54,7 @@ footer {
     margin-top: 0;
     border-top: solid 1px #{base3};
     padding: 2em 0;
+    box-shadow: 0 16px 16px #{black};
 }
 
 form label {

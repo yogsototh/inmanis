@@ -29,17 +29,18 @@ module Css.Helper
   , shadoworange
   , white
   , black
+  , headerbackground
+  , footerbackground
   )
 where
 
 import Prelude
-import Data.Text (Text,pack)
 import Numeric (readHex)
 import Data.List (intercalate)
 
-cssGradient :: String -> String -> Text
+cssGradient :: String -> String -> String
 cssGradient from to = 
-  pack $ "background: rgb("++rgbfrom++");" ++
+  "background: rgb("++rgbfrom++");" ++
   "background: -moz-radial-gradient(center, ellipse cover,  rgba("++rgbfrom++",1) 0%, rgba("++rgbto++",1) 100%); /* FF3.6+ */" ++
   "background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,rgba("++rgbfrom++",1)), color-stop(100%,rgba("++rgbto++",1))); /* Chrome,Safari4+ */" ++
   "background: -webkit-radial-gradient(center, ellipse cover,  rgba("++rgbfrom++",1) 0%,rgba("++rgbto++",1) 100%); /* Chrome10+,Safari5.1+ */" ++
@@ -51,15 +52,15 @@ cssGradient from to =
       rgbfrom = cssToRgb from
       rgbto   = cssToRgb to
 
-cssVerticalGradient from to =
-  pack $
+cssVerticalGradient :: String -> String -> String -> String
+cssVerticalGradient height from to =
     "background: rgb("++rgbfrom++"); /* Old browsers */" ++
-    "background: -moz-linear-gradient(top,  rgba("++rgbfrom++",1) 0%, rgba("++rgbto++",1) 100%); /* FF3.6+ */" ++
-    "background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba("++rgbfrom++",1)), color-stop(100%,rgba("++rgbto++",1))); /* Chrome,Safari4+ */" ++
-    "background: -webkit-linear-gradient(top,  rgba("++rgbfrom++",1) 0%,rgba("++rgbto++",1) 100%); /* Chrome10+,Safari5.1+ */" ++
-    "background: -o-linear-gradient(top,  rgba("++rgbfrom++",1) 0%,rgba("++rgbto++",1) 100%); /* Opera 11.10+ */" ++
-    "background: -ms-linear-gradient(top,  rgba("++rgbfrom++",1) 0%,rgba("++rgbto++",1) 100%); /* IE10+ */" ++
-    "background: linear-gradient(to bottom,  rgba("++rgbfrom++",1) 0%,rgba("++rgbto++",1) 100%); /* W3C */" ++
+    "background: -moz-linear-gradient(top,  rgba("++rgbfrom++",1) 0%, rgba("++rgbto++",1) "++height++"); /* FF3.6+ */" ++
+    "background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba("++rgbfrom++",1)), color-stop("++height++",rgba("++rgbto++",1))); /* Chrome,Safari4+ */" ++
+    "background: -webkit-linear-gradient(top,  rgba("++rgbfrom++",1) 0%,rgba("++rgbto++",1) "++height++"); /* Chrome10+,Safari5.1+ */" ++
+    "background: -o-linear-gradient(top,  rgba("++rgbfrom++",1) 0%,rgba("++rgbto++",1) "++height++"); /* Opera 11.10+ */" ++
+    "background: -ms-linear-gradient(top,  rgba("++rgbfrom++",1) 0%,rgba("++rgbto++",1) "++height++"); /* IE10+ */" ++
+    "background: linear-gradient(to bottom,  rgba("++rgbfrom++",1) 0%,rgba("++rgbto++",1) "++height++"); /* W3C */" ++
     "filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='"++from++"', endColorstr='"++to++"',GradientType=0 ); /* IE6-9 */"
   where
       rgbfrom = cssToRgb from
@@ -74,6 +75,10 @@ background=base3
 foreground=base1 
 altbackground=base01
 altforeground=base1
+
+headerbackground, footerbackground :: String
+headerbackground=cssGradient altbackground base02
+footerbackground=cssVerticalGradient "3em" base02 altbackground 
 
 base03="#002b36"
 base02="#073642"
