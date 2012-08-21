@@ -142,7 +142,15 @@ deleteEntryR entryId = do
       case entries of 
                   [] -> errorPageJson "Either entry doesn't exists or not yours"
                   _  -> do
-                          _ <- runDB $ delete entryId
+                          _ <- runDB $ do
+                            -- delete the entry
+                            delete entryId
+                            -- delete all corresponding votes
+                            votes <- selectList [VoteEntry ==. entryId][]
+                            mapM_ (\(Entity voteId _) -> delete voteId) votes
+                            -- delete all corresponding comments
+                            comments <- selectList [CommentEntry ==. entryId][]
+                            mapM_ (\(Entity commentId _) -> delete commentId) comments
                           errorPageJson "deleted"
 
 putEntryR :: EntryId -> Handler RepHtmlJson
