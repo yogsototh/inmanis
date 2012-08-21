@@ -115,7 +115,7 @@ form input[type="submit"]:active {
 .neah:hover { 
     box-shadow: 0px 0px 4px #{cyan} inset; 
     background-color: #{lightcyan}; }
-.secondline { font-size: .6em; color: #{base1}; margin-top: 1em; }
+.secondline { font-size: .6em; color: #{base1}; margin: .7em 0 .3em; }
 .yeah_voted .yeah {
     background-color: #{lightorange};
     color: #{orange};
