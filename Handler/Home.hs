@@ -50,8 +50,8 @@ creatorOfEntry entryId creators =
       strOfVote [] = "" :: Text
       strOfVote ((Entity _ creator):_) = userIdent creator
 
-humanReadableOld :: UTCTime -> Entry -> Text
-humanReadableOld currentTime entry =
+humanReadableRelativeTime :: UTCTime -> Entry -> Text
+humanReadableRelativeTime currentTime entry =
   -- pack $ show $ entryCreated entry
   showDuration duration
   where
@@ -70,13 +70,14 @@ humanReadableOld currentTime entry =
   years   t = t / year
   showTime t = show (floor t :: Integer)
   showDuration t
-    | t < second  = "1s"
+    | t < second  = "Just now"
     | t < minute  = pack $ (showTime $ seconds t) ++ " seconds ago"
     | t < hour = pack $ (showTime $ minutes t) ++ " minutes ago"
     | t < day  = pack $ (showTime $ hours   t) ++ " hours ago"
     | t < year = pack $ (showTime $ days    t) ++ " days ago"
-    | otherwise       = pack $ (showTime $ years t) ++ " years and " 
+    | t < 2 * year = pack $ (showTime $ days    t) ++ " days ago"
                             ++ (show ((floor $ days t) `rem` 365 :: Integer)) ++ " days ago"
+    | otherwise       = pack $ (showTime $ years t) ++ " years ago" 
 
 
 -- the name getHomeR is for
