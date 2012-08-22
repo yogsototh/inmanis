@@ -82,12 +82,12 @@ for ::  [a] -> (a -> b) -> [b]
 for xs f = map f xs
 
 
-humanReadableRelativeTime :: UTCTime -> Entry -> Text
-humanReadableRelativeTime currentTime entry =
+humanReadableRelativeTime :: UTCTime -> UTCTime -> Text
+humanReadableRelativeTime currentTime createdTime =
   -- pack $ show $ entryCreated entry
   showDuration duration
   where
-  duration = diffUTCTime currentTime (entryCreated entry)
+  duration = diffUTCTime currentTime createdTime
   second, minute, hour, day, year :: NominalDiffTime
   second = fromIntegral (1 :: Int)
   minute = (fromIntegral ( 60 :: Int))  * second

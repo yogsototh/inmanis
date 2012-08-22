@@ -10,7 +10,7 @@ $else
                 <div .firstline>
                     <a href=#{entryUrl entry}>#{entryTitle entry}</a>
                 <div .secondline>
-                    Submitted #{humanReadableRelativeTime currentTime entry} by #{creatorOfEntry entryId creators}
+                    Submitted #{humanReadableRelativeTime currentTime (entryCreated entry)} by #{creatorOfEntry entryId creators}
                 <div .thirdline>
                   <a class="comment" href=@{EntryR entryId}>comments</a>
                   $maybe userId <- currentUserId

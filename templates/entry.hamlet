@@ -6,18 +6,26 @@
         <div .firstline>
             <a href=#{entryUrl entry}>#{entryTitle entry}</a>
         <div .secondline>
-            Submitted #{humanReadableRelativeTime currentTime entry} by #{creator}
+            Submitted #{humanReadableRelativeTime currentTime (entryCreated entry)} by #{creator}
         <div .thirdline>
-          <a class="comment" href=@{EntryR entryId}>comments</a>
           $if isEntryOwned
-              \ - #
               <a class="edit" href=@{EntryR entryId}>edit</a>
+              \ - #
           $else
-          \ - #
           <a class="delete" href=@{EntryR entryId} id="Deltr#{showId entryId}">delete</a>
 
 <h3> Comments
-Comment Tree
+
+$if null comments
+    <p> Be the first to comment
+$else
+    <ul>
+        $forall Entity commentId comment <- comments
+            <li>
+                <div .author> #TODO author
+                <div .father> #TODO father
+                <div .date> #{humanReadableRelativeTime currentTime (commentCreated comment)}
+                <div .content> #{commentContent comment}
 
 <hr>
 $if isNothing currentUserId
