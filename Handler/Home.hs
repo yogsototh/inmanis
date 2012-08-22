@@ -28,19 +28,27 @@ entryForm = renderDivs  $ EntryRequest
 -- functions. You can spread them across multiple files if you are so
 -- inclined, or create a single monolithic file.
 
-cssClassVoteForEntry :: Key backend (EntryGeneric backend)
-                        -> [Entity (VoteGeneric backend)]
+cssClassVoteForEntry :: (Eq a) => a
+                        -> [(a, [Entity (VoteGeneric backend)])]
                         -> Text
 cssClassVoteForEntry entryId votes =
-  case (filter voteForId votes) of
-    [] -> "" :: Text
-    (Entity _ vote):_ -> case voteValue vote of
-                                  1    -> " yeah_voted"
-                                  (-1) -> " neah_voted"
-                                  _    -> ""
-  where
-    voteForId (Entity _ vote) = voteEntry vote == entryId
+  maybe "" strOfVote (lookup entryId votes)
+    where 
+      strOfVote [] = "" :: Text
+      strOfVote ((Entity _ vote):_) = 
+        case voteValue vote of
+             1    -> " yeah_voted"
+             (-1) -> " neah_voted"
+             _    -> ""
 
+creatorOfEntry  :: (Eq a) => a
+                   -> [(a, [Entity (UserGeneric backend)])]
+                   -> Text
+creatorOfEntry entryId creators =
+  maybe "" strOfVote (lookup entryId creators)
+    where 
+      strOfVote [] = "" :: Text
+      strOfVote ((Entity _ creator):_) = userIdent creator
 
 humanReadableOld :: UTCTime -> Entry -> Text
 humanReadableOld currentTime entry =
@@ -85,13 +93,21 @@ getHomeR = do
   (widget,enctype) <- generateFormPost entryForm
 
   -- We get the list of entries sorted by entry title
-  (entries,votes) <- runDB $ do
+  (entries,votes,creators) <- runDB $ do
     entries <- selectList [] [Desc EntryCreated, LimitTo 25]
-    allVotesOfCurrentUser   <- case currentUserId of
-                  Nothing   -> return []
-                  Just user -> selectList [VoteCreator ==. user][]
-    return ( entries
-           , map fst $ joinTables voteEntry allVotesOfCurrentUser entries)
+    votes <- case currentUserId of
+                 Just user -> do
+                   let getVoteForUserEntry (Entity entryId _) = do
+                            votes <- selectList [VoteCreator ==. user, VoteEntry ==. entryId] [LimitTo 1]
+                            return (entryId,votes)
+                   mapM getVoteForUserEntry entries
+                 Nothing -> return []
+    creators <- do
+        let getCreatorOfEntry (Entity entryId entry) = do
+              creators <- selectList [UserId ==. entryCreator entry] [LimitTo 1]
+              return (entryId,creators)
+        mapM getCreatorOfEntry entries
+    return (entries, votes, creators)
 
   -- We return some HTML (not full)
   defaultLayout $ do
