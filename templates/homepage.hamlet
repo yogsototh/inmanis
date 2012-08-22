@@ -12,7 +12,14 @@ $else
                 <div .secondline>
                     Submitted #{humanReadableRelativeTime currentTime entry} by #{creatorOfEntry entryId creators}
                 <div .thirdline>
-                  <a class="comment" href=@{EntryR entryId}>comments</a> - #
+                  <a class="comment" href=@{EntryR entryId}>comments</a>
+                  $maybe userId <- currentUserId
+                    $if currentCreator entry userId
+                        \ - #
+                        <a class="edit" href=@{EntryR entryId}>edit</a>
+                    $else
+                  $nothing
+                  \ - #
                   <a class="delete" href=@{EntryR entryId} id="Deltr#{showId entryId}">delete</a>
 <hr>
 $if isNothing currentUserId

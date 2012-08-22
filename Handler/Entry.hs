@@ -23,34 +23,37 @@ getEntryR :: EntryId -> Handler RepHtmlJson
 getEntryR entryId = do
   currentUserId <- maybeAuthId
   maybeEntry <- runDB $ get entryId
+  currentTime <- liftIO getCurrentTime
     -- maybe "" entryTitle maybeEntry
     --    if maybeEntry is Nothing returns ""
     --    else returns (entryTitle maybeEntry)
     -- errorPageJson titleEntry
-  let
-      titleEntry = maybe "This entry does not exist" entryTitle maybeEntry
-  case maybeEntry of
-    Just entry -> do
-        case currentUserId of
-          Nothing -> do
-            votes <- return []
-            defaultLayoutJson
-                        (htmlWidget titleEntry entry currentUserId votes)
-                        (jsonWidget titleEntry)
-          Just userId -> do
-            votes <- runDB $ selectList
-                                [VoteCreator ==. userId,
-                                 VoteEntry ==. entryId]
-                                [LimitTo 1]
-            defaultLayoutJson
-                        (htmlWidget titleEntry entry currentUserId votes)
-                        (jsonWidget titleEntry)
-    Nothing    -> errorPageJson titleEntry
-  where
-      jsonWidget titleStr = object ["msg" .= titleStr]
-      htmlWidget titleStr entry currentUserId votes = do
-        setTitle $ toHtml titleStr
-        $(widgetFile "entry")
+  -- (entry,comments,creators) <- runDB $ do
+  --     entry <- get404 entryId
+  --     comments <- selectList [CommentEntry ==. entryId][LimitTo 100]
+  --     creators <- selectList [UserId == entryId][LimitTo 1]
+  --     return (entry,comments,creators)
+  (entry,comments,maybeCreator) <- runDB $ do
+    entry <- get404 entryId
+    comments <- selectList [CommentEntry ==. entryId][LimitTo 100]
+    maybeCreator <- get (entryCreator entry)
+    return (entry, comments, maybeCreator)
+
+  votes <- runDB $ maybe 
+                    (return []) 
+                    (\userId -> selectList [VoteEntry ==. entryId, 
+                                            VoteCreator ==. userId] [LimitTo 1]) 
+                    currentUserId
+  let creator = maybe "Unknown" userIdent maybeCreator
+      isEntryOwned = if isNothing currentUserId
+                        then False
+                        else entryCreator entry == fromJust currentUserId
+
+
+  defaultLayoutJson (do
+          setTitle $ toHtml $ entryTitle entry
+          $(widgetFile "entry")) 
+          (object ["msg" .= entryTitle entry])
 
 
 testLogged ::  (UserId -> Handler RepHtmlJson) -> Handler RepHtmlJson

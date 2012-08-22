@@ -1,11 +1,20 @@
-<h2> #{titleStr}
-
 <ul>
     <li .entryLine>
         <div class="vote#{cssClassVote votes}" #Entry#{showId entryId}>
             <div .yeah>#{entryYeah entry}
             <div .neah>#{entryNeah entry}
-        <a href=#{entryUrl entry}>#{entryTitle entry}</a>
+        <div .firstline>
+            <a href=#{entryUrl entry}>#{entryTitle entry}</a>
+        <div .secondline>
+            Submitted #{humanReadableRelativeTime currentTime entry} by #{creator}
+        <div .thirdline>
+          <a class="comment" href=@{EntryR entryId}>comments</a>
+          $if isEntryOwned
+              \ - #
+              <a class="edit" href=@{EntryR entryId}>edit</a>
+          $else
+          \ - #
+          <a class="delete" href=@{EntryR entryId} id="Deltr#{showId entryId}">delete</a>
 
 <h3> Comments
 Comment Tree

@@ -50,35 +50,7 @@ creatorOfEntry entryId creators =
       strOfVote [] = "" :: Text
       strOfVote ((Entity _ creator):_) = userIdent creator
 
-humanReadableRelativeTime :: UTCTime -> Entry -> Text
-humanReadableRelativeTime currentTime entry =
-  -- pack $ show $ entryCreated entry
-  showDuration duration
-  where
-  duration = diffUTCTime currentTime (entryCreated entry)
-  second, minute, hour, day, year :: NominalDiffTime
-  second = fromIntegral (1 :: Int)
-  minute = (fromIntegral ( 60 :: Int))  * second
-  hour   = (fromIntegral ( 60 :: Int))  * minute
-  day    = (fromIntegral ( 24 :: Int))  * hour
-  year   = (fromIntegral (365 :: Int)) * day
-  seconds,minutes,hours,days,years :: NominalDiffTime -> NominalDiffTime
-  seconds t = t / second
-  minutes t = t / minute
-  hours   t = t / hour
-  days    t = t / day
-  years   t = t / year
-  showTime t = show (floor t :: Integer)
-  showDuration t
-    | t < second  = "Just now"
-    | t < minute  = pack $ (showTime $ seconds t) ++ " seconds ago"
-    | t < hour = pack $ (showTime $ minutes t) ++ " minutes ago"
-    | t < day  = pack $ (showTime $ hours   t) ++ " hours ago"
-    | t < year = pack $ (showTime $ days    t) ++ " days ago"
-    | t < 2 * year = pack $ (showTime $ days    t) ++ " days ago"
-                            ++ (show ((floor $ days t) `rem` 365 :: Integer)) ++ " days ago"
-    | otherwise       = pack $ (showTime $ years t) ++ " years ago" 
-
+currentCreator entry userId = entryCreator entry == userId
 
 -- the name getHomeR is for
 -- handle the request GET on the resource HomeR
