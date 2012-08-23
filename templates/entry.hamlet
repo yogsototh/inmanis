@@ -36,5 +36,11 @@ $if isNothing currentUserId
             <a href=@{AuthR LoginR}> Log in
             <div .close>close
 $else
+    <div #formEntry>
+        <h2>Add a new comment
+        <form method=post action=@{EntryR entryId} enctype=#{enctype}>
+            ^{widget}
+            <input type=submit value="Post">
+    <hr>
     <div #logout>
         <a href=@{AuthR LogoutR}>Log out

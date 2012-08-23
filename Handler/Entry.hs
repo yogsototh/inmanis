@@ -12,6 +12,10 @@ import Yesod.Auth
 import Data.Maybe
 import Data.Text (pack)
 
+data CommentRequest = CommentRequest { text   :: Text }
+commentForm :: Form CommentRequest
+commentForm = renderDivs  $ CommentRequest <$> areq textField "Text" Nothing
+
 cssClassVote :: [Entity Vote] -> Text
 cssClassVote [] = ""
 cssClassVote ((Entity _ vote):_) = case voteValue vote of
@@ -24,8 +28,10 @@ getEntryR entryId = do
   currentUserId <- maybeAuthId
   maybeEntry <- runDB $ get entryId
   currentTime <- liftIO getCurrentTime
+  (widget,enctype) <- generateFormPost commentForm
   (entry,comments,maybeCreator) <- runDB $ do
       entry <- get404 entryId
+      -- # TODO sort by score
       comments <- selectList [CommentEntry ==. entryId][LimitTo 100]
       maybeCreator <- get (entryCreator entry)
       return (entry, comments, maybeCreator)
