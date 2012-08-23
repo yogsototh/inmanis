@@ -9,7 +9,6 @@ import Import
 import Handler.Helper
 import Yesod.Auth
 import Data.Maybe
-import Data.Text (pack)
 
 data EntryRequest = EntryRequest {
                       title :: Text
@@ -50,6 +49,10 @@ creatorOfEntry entryId creators =
       strOfVote [] = "" :: Text
       strOfVote ((Entity _ creator):_) = userIdent creator
 
+
+currentCreator :: EntryGeneric backend 
+                  -> Key backend (UserGeneric backend) 
+                  -> Bool
 currentCreator entry userId = entryCreator entry == userId
 
 -- the name getHomeR is for
