@@ -16,6 +16,7 @@ a:hover { color: #{orange}; text-shadow: 0 0 1px #{shadoworange}; }
   margin: 0 auto;
 }
 ul, ol {
+  padding: 0;
   li {
     margin-bottom: 1em;
   }
@@ -167,3 +168,5 @@ form input[type="submit"]:active {
     float: right;
     cursor: pointer;
     }
+
+.comments .meta { font-size: .6em; }

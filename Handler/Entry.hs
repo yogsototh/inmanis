@@ -3,6 +3,7 @@ module Handler.Entry (
   , postEntryR
   , putEntryR
   , deleteEntryR
+  , postPushCommentR
   )
 where
 
@@ -15,6 +16,22 @@ import Data.Text (pack)
 data CommentRequest = CommentRequest { text   :: Text }
 commentForm :: Form CommentRequest
 commentForm = renderDivs  $ CommentRequest <$> areq textField "Text" Nothing
+
+postPushCommentR :: EntryId -> Handler RepHtml
+postPushCommentR entryId = do
+  maybeUserId <- maybeAuthId
+  case maybeUserId of
+    Nothing -> errorPage "You're not logged"
+    Just userId -> do
+      ((res,_),_) <- runFormPost commentForm
+      case res of
+        FormSuccess commentRequest -> do
+          time <- liftIO getCurrentTime
+          let newComment = Comment entryId userId Nothing time (text commentRequest)
+          commentId <- runDB $ insert newComment
+          redirect $ EntryR entryId
+        _ -> errorPage "Please correct your entry form"
+
 
 cssClassVote :: [Entity Vote] -> Text
 cssClassVote [] = ""

@@ -19,12 +19,15 @@
 $if null comments
     <p> Be the first to comment
 $else
-    <ul>
+    <ul .comments>
         $forall Entity commentId comment <- comments
             <li>
-                <div .author> #TODO author
-                <div .father> #TODO father
-                <div .date> #{humanReadableRelativeTime currentTime (commentCreated comment)}
+                <div .meta>
+                    <span .author> #TODO author
+                    \ - #
+                    <span .father> #TODO father
+                    \ - #
+                    <span .date> #{humanReadableRelativeTime currentTime (commentCreated comment)}
                 <div .content> #{commentContent comment}
 
 <hr>
