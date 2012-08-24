@@ -7,7 +7,7 @@ function log(msg) {
 // replace EntryN by N
 function urlFromId(parentId) {
     var id=parentId.substr(5);
-    return "/y/"+id;
+    return "@{PushEntryR}/"+id;
 }
 
 function logged() {

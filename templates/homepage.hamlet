@@ -32,7 +32,7 @@ $if isNothing currentUserId
 $else
     <div #formEntry>
         <h2>Add a new entry
-        <form method=post action=@{HomeR} enctype=#{enctype}>
+        <form method=post action=@{PushEntryR} enctype=#{enctype}>
             ^{widget}
             <input type=submit value="Post">
     <hr>

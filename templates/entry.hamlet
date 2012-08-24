@@ -38,7 +38,7 @@ $if isNothing currentUserId
 $else
     <div #formEntry>
         <h2>Add a new comment
-        <form method=post action=@{EntryR entryId} enctype=#{enctype}>
+        <form method=post action=@{PushCommentR entryId} enctype=#{enctype}>
             ^{widget}
             <input type=submit value="Post">
     <hr>
