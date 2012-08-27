@@ -12,6 +12,7 @@ import Handler.Helper
 import Yesod.Auth
 import Data.Maybe
 import Data.Text (pack)
+import Data.Tree
 
 data CommentRequest = CommentRequest { text   :: Text }
 commentForm :: Form CommentRequest
@@ -40,6 +41,14 @@ cssClassVote ((Entity _ vote):_) = case voteValue vote of
                                             (-1) -> " neah_voted"
                                             _    -> ""
 
+-- getCommentSons :: [a]              -> b              -> (a,[b])
+getCommentSons :: [Entity Comment] -> 
+                  Entity Comment -> (Entity Comment, [Entity Comment])
+getCommentSons comments father@(Entity commentId _) =
+  (father, 
+   filter (\(Entity _ c) -> commentReplyTo c == Just commentId)  comments)
+    
+
 getEntryR :: EntryId -> Handler RepHtmlJson
 getEntryR entryId = do
   currentUserId <- maybeAuthId
@@ -61,6 +70,8 @@ getEntryR entryId = do
       isEntryOwned = if isNothing currentUserId
                         then False
                         else entryCreator entry == fromJust currentUserId
+      rootComments = filter (\(Entity _ c) -> commentReplyTo c == Nothing) comments
+      commentTree = unfoldForest (getCommentSons comments) rootComments
   defaultLayoutJson (do
           setTitle $ toHtml $ entryTitle entry
           $(widgetFile "entry"))
