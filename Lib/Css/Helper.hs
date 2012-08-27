@@ -1,4 +1,4 @@
-module Css.Helper
+module Lib.Css.Helper
   ( cssGradient
   , cssVerticalGradient
   , background
