@@ -19,7 +19,8 @@
 $if null comments
     <p> Be the first to comment
 $else
-    ^{showCommentForest commentForest}
+    <div #comments>
+        ^{showCommentForest commentForest creators}
 
 <hr>
 $if isNothing currentUserId

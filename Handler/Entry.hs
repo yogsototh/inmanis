@@ -49,20 +49,36 @@ getCommentSons comments father@(Entity commentId _) =
    filter (\(Entity _ c) -> commentReplyTo c == Just commentId)  comments)
 
 -- showCommentForest :: [Tree (Entity Comment)] -> Hamlet
-showCommentForest [] = [hamlet||]
-showCommentForest trees =
+showCommentForest [] _ = [hamlet||]
+showCommentForest trees creators =
   [hamlet|<ul> 
             $forall tree <- trees
-               ^{showCommentTree tree}|] 
+               ^{showCommentTree tree creators}|] 
 
 -- showCommentTree :: Tree (Entity Comment) -> Hamlet
-showCommentTree tree = 
+showCommentTree tree creators = 
   [hamlet|<li>
+            <div .creator>by #{creatorOfEntity commentId creators}
             #{commentContent comment}
-            ^{showCommentForest (subForest tree)}|]
+            <div .actions> 
+              <span .edit>edit
+              \ - #
+              <span .delete>delete
+              \ - #
+              <span .reply>reply
+            ^{showCommentForest (subForest tree) creators}|]
    where 
      comment = commentFromEntity (rootLabel tree)
      commentFromEntity (Entity _ c) = c
+     commentId = commentIdFromEntity (rootLabel tree)
+     commentIdFromEntity (Entity i _) = i
+
+creatorOfEntity :: CommentId -> [(CommentId,[Entity User])] -> Text
+creatorOfEntity entityId creators =
+  maybe "Anonymous Coward" entUserIdent (lookup entityId creators)
+    where
+      entUserIdent [] = "No name"
+      entUserIdent ((Entity _ creator):_) = userIdent creator
 
 getEntryR :: EntryId -> Handler RepHtmlJson
 getEntryR entryId = do
@@ -70,17 +86,23 @@ getEntryR entryId = do
   maybeEntry <- runDB $ get entryId
   currentTime <- liftIO getCurrentTime
   (widget,enctype) <- generateFormPost commentForm
-  (entry,comments,maybeCreator) <- runDB $ do
+  (entry,comments,maybeCreator,creators) <- runDB $ do
       entry <- get404 entryId
       -- # TODO sort by score
       comments <- selectList [CommentEntry ==. entryId][LimitTo 100]
       maybeCreator <- get (entryCreator entry)
-      return (entry, comments, maybeCreator)
+      creators <- do
+            let getUserCreatorIdent (Entity commentId comment) = do
+                  creators <- selectList [UserId ==. commentCreator comment][LimitTo 1]
+                  return (commentId, creators)
+            mapM getUserCreatorIdent comments
+      return (entry, comments, maybeCreator,creators)
   votes <- runDB $ maybe
                     (return [])
                     (\userId -> selectList [VoteEntry ==. entryId,
                                             VoteCreator ==. userId] [LimitTo 1])
                     currentUserId
+
   let creator = maybe "Unknown" userIdent maybeCreator
       isEntryOwned = if isNothing currentUserId
                         then False
