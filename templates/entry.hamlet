@@ -19,16 +19,7 @@
 $if null comments
     <p> Be the first to comment
 $else
-    <ul .comments>
-        $forall Entity commentId comment <- comments
-            <li>
-                <div .meta>
-                    <span .author> #TODO author
-                    \ - #
-                    <span .father> #TODO father
-                    \ - #
-                    <span .date> #{humanReadableRelativeTime currentTime (commentCreated comment)}
-                <div .content> #{commentContent comment}
+    ^{showCommentForest commentForest}
 
 <hr>
 $if isNothing currentUserId

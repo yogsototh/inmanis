@@ -29,7 +29,7 @@ postPushCommentR entryId = do
         FormSuccess commentRequest -> do
           time <- liftIO getCurrentTime
           let newComment = Comment entryId userId Nothing time (text commentRequest)
-          commentId <- runDB $ insert newComment
+          _ <- runDB $ insert newComment
           redirect $ EntryR entryId
         _ -> errorPage "Please correct your entry form"
 
@@ -47,7 +47,22 @@ getCommentSons :: [Entity Comment] ->
 getCommentSons comments father@(Entity commentId _) =
   (father, 
    filter (\(Entity _ c) -> commentReplyTo c == Just commentId)  comments)
-    
+
+-- showCommentForest :: [Tree (Entity Comment)] -> Hamlet
+showCommentForest [] = [hamlet||]
+showCommentForest trees =
+  [hamlet|<ul> 
+            $forall tree <- trees
+               ^{showCommentTree tree}|] 
+
+-- showCommentTree :: Tree (Entity Comment) -> Hamlet
+showCommentTree tree = 
+  [hamlet|<li>
+            #{commentContent comment}
+            ^{showCommentForest (subForest tree)}|]
+   where 
+     comment = commentFromEntity (rootLabel tree)
+     commentFromEntity (Entity _ c) = c
 
 getEntryR :: EntryId -> Handler RepHtmlJson
 getEntryR entryId = do
@@ -71,10 +86,11 @@ getEntryR entryId = do
                         then False
                         else entryCreator entry == fromJust currentUserId
       rootComments = filter (\(Entity _ c) -> commentReplyTo c == Nothing) comments
-      commentTree = unfoldForest (getCommentSons comments) rootComments
+      commentForest = unfoldForest (getCommentSons comments) rootComments
   defaultLayoutJson (do
           setTitle $ toHtml $ entryTitle entry
-          $(widgetFile "entry"))
+          $(widgetFile "entry")
+          )
           (object ["msg" .= entryTitle entry])
 
 
