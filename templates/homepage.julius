@@ -4,12 +4,6 @@ function log(msg) {
     }
 }
 
-// replace EntryN by N
-function urlFromId(parentId) {
-    var id=parentId.substr(5);
-    return "@{EntriesR}/"+id;
-}
-
 function logged() {
     return $('#login').length == 0;
 }
@@ -25,8 +19,6 @@ function clicked() {
         log("entryLine = " + entryLine);
         var param=$(this).attr("class");
         log("param = "+param);
-        var parentId = entryLine.attr('id');
-        log("parentId = " +parentId);
 
         var oldValue=parseInt($(this).text());
         var yeahdiv = entryLine.children(".yeah");
@@ -63,7 +55,7 @@ function clicked() {
         }
         var jsonparams={};
         jsonparams[param]=1;
-        $.post( urlFromId(parentId)
+        $.post( entryLine.attr('url')
                 , jsonparams
                 , function(data) {log(data);}
                 , "json");
@@ -92,14 +84,14 @@ function ask(msg,f) {
 
 function askDeleteEntry(e) {
     e.preventDefault();
-    var id=$(this).attr('id');
+    var url=$(this).attr('url');
     ask("Are you sure you want to delete this entry?",
-        function(){deleteEntry(id);}); 
+        function(){deleteEntry(url);}); 
 }
 
-function deleteEntry(id) {
+function deleteEntry(url) {
     $.ajax({  type: "DELETE"
-            , url: urlFromId( id )
+            , url: url
             , success: function(data) {log(data);}
             , dataType: "json"});
     $("#Entry"+id).parent().hide();
