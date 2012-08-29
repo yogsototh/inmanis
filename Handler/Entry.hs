@@ -3,7 +3,7 @@ module Handler.Entry (
   , postEntryR
   , putEntryR
   , deleteEntryR
-  , postPushCommentR
+  , postCommentsR
   )
 where
 
@@ -18,8 +18,8 @@ data CommentRequest = CommentRequest { text   :: Text }
 commentForm :: Form CommentRequest
 commentForm = renderDivs  $ CommentRequest <$> areq textField "Text" Nothing
 
-postPushCommentR :: EntryId -> Handler RepHtml
-postPushCommentR entryId = do
+postCommentsR :: EntryId -> Handler RepHtml
+postCommentsR entryId = do
   maybeUserId <- maybeAuthId
   case maybeUserId of
     Nothing -> errorPage "You're not logged"
@@ -55,12 +55,20 @@ showCommentForest trees creators =
             $forall tree <- trees
                ^{showCommentTree tree creators}|] 
 
+yeahForComment _ = "X" :: Text 
+neahForComment _ = "X" :: Text
+
 -- showCommentTree :: Tree (Entity Comment) -> Hamlet
 showCommentTree tree creators = 
   [hamlet|<li>
-            <div .creator>by #{creatorOfEntity commentId creators}
-            #{commentContent comment}
-            <div .actions> 
+            <div .meta> 
+              <div .vote>
+                <div .yeah>#{yeahForComment commentId}
+                <div .neah>#{neahForComment commentId}
+              <span .creator>by #{creatorOfEntity commentId creators}
+            <div .content>
+              #{commentContent comment}
+            <div .actions>
               <span .edit>edit
               \ - #
               <span .delete>delete

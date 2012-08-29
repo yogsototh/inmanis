@@ -1,7 +1,7 @@
 {-# LANGUAGE TupleSections, OverloadedStrings #-}
 module Handler.Home
   ( getHomeR
-  , postPushEntryR
+  , postEntriesR
   )
 where
 
@@ -94,8 +94,8 @@ getHomeR = do
 
 -- When we receive a post request on HomeR resource (/ path)
 -- We create a new resource
-postPushEntryR :: Handler RepHtml
-postPushEntryR = do
+postEntriesR :: Handler RepHtml
+postEntriesR = do
   userId <- maybeAuthId
   case userId of
     Nothing -> errorPage "You're not logged"

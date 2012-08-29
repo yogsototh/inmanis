@@ -5,7 +5,7 @@
 /robots.txt             RobotsR         GET
 
 /                       HomeR           GET
-/entry                  PushEntryR      POST
+/entry                  EntriesR        POST
 /entry/#EntryId         EntryR          GET POST DELETE
-/entry/#EntryId/comment PushCommentR    POST
+/entry/#EntryId/comment CommentsR       POST
 /comment/#CommentId     CommentR        GET POST DELETE

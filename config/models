@@ -23,6 +23,11 @@ Vote
     entry   EntryId
     value   Int
     deriving Show
+VoteComment
+    creator UserId
+    comment CommentId
+    value   Int
+    deriving Show
 Comment
     entry   EntryId
     creator UserId
