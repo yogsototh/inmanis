@@ -14,18 +14,10 @@
           $else
           <a class="delete" href=@{EntryR entryId} id="Deltr#{showId entryId}">delete</a>
 
-<h3> Comments
-
-$if null comments
-    <p> Be the first to comment
-$else
-    <div #comments>
-        ^{showCommentForest commentForest creators}
-
 <hr>
 $if isNothing currentUserId
     <div #login>
-        <a href=@{AuthR LoginR}> Log in
+        <a href=@{AuthR LoginR}> Log in to comment
     <div #loginmessage>
         <div .insidebox>
             <a href=@{AuthR LoginR}> Log in
@@ -39,3 +31,12 @@ $else
     <hr>
     <div #logout>
         <a href=@{AuthR LogoutR}>Log out
+
+<h3> Comments
+
+$if null comments
+    <p> Be the first to comment
+$else
+    <div #comments>
+        ^{showCommentForest commentForest creators}
+

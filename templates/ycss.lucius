@@ -177,7 +177,7 @@ form input[type="submit"]:active {
          border-radius: 2px; }
     .meta { font-size: .7em; height: 1.7em;}
     .actions { font-size: .7em; }
-    .content { min-height: 1.5em; }
+    .content { min-height: 1.5em; color: #{base01} }
     .actions > span:hover {
         color: #{orange};
         text-shadow: 0 0 1px #{shadoworange};

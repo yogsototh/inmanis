@@ -60,7 +60,7 @@ neahForComment _ = "X" :: Text
 
 -- showCommentTree :: Tree (Entity Comment) -> Hamlet
 showCommentTree tree creators = 
-  [hamlet|<li>
+  [hamlet|<li #Comment#{showId commentId}>
             <div .meta> 
               <div .vote>
                 <div .yeah>#{yeahForComment commentId}
