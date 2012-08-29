@@ -1,6 +1,6 @@
 <ul>
     <li .entryLine>
-        <div class="vote#{cssClassVote votes}" #Entry#{showId entryId}>
+        <div class="vote#{cssClassVote votes}" url=@{EntryR entryId}>
             <div .yeah>#{entryYeah entry}
             <div .neah>#{entryNeah entry}
         <div .firstline>
@@ -12,7 +12,7 @@
               <a class="edit" href=@{EntryR entryId}>edit</a>
               \ - #
           $else
-          <a class="delete" href=@{EntryR entryId} id="Deltr#{showId entryId}">delete</a>
+          <a class="delete" href=@{EntryR entryId} url=@{EntryR entryId}>delete</a>
 
 <hr>
 $if isNothing currentUserId

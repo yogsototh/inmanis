@@ -55,8 +55,9 @@ showCommentForest trees creators =
             $forall tree <- trees
                ^{showCommentTree tree creators}|] 
 
-yeahForComment _ = "X" :: Text 
-neahForComment _ = "X" :: Text
+yeahForComment, neahForComment :: CommentId -> Text
+yeahForComment _ = "X"
+neahForComment _ = "X"
 
 -- showCommentTree :: Tree (Entity Comment) -> Hamlet
 showCommentTree tree creators = 

@@ -4,12 +4,6 @@ function log(msg) {
     }
 }
 
-// replace EntryN by N
-function urlFromParentId(parentId) {
-    var id=parentId.substr(5);
-    return "/@{EntriesR}/"+id;
-}
-
 function logged() {
     return $('#login').length == 0;
 }
@@ -25,8 +19,6 @@ function clicked() {
         log("entryLine = " + entryLine);
         var param=$(this).attr("class");
         log("param = "+param);
-        var parentId = entryLine.attr('id');
-        log("parentId = " +parentId);
 
         var oldValue=parseInt($(this).text());
         var yeahdiv = entryLine.children(".yeah");
@@ -63,7 +55,7 @@ function clicked() {
         }
         var jsonparams={};
         jsonparams[param]=1;
-        $.post( urlFromParentId(parentId)
+        $.post( entryLine.attr('url')
                 , jsonparams
                 , function(data) {log(data);}
                 , "json");
