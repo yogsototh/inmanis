@@ -15,6 +15,7 @@
           <a class="delete" href=@{EntryR entryId} url=@{EntryR entryId}>delete</a>
     $if isNothing $ entryText entry
     $else
+        <h2>#{entryTitle entry}
         <div>#{fromJust $ entryText entry}
 
 <hr>
