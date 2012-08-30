@@ -13,6 +13,9 @@
               \ - #
           $else
           <a class="delete" href=@{EntryR entryId} url=@{EntryR entryId}>delete</a>
+    $if isNothing $ entryText entry
+    $else
+        <div>#{fromJust $ entryText entry}
 
 <hr>
 $if isNothing currentUserId

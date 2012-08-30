@@ -14,9 +14,9 @@ import Data.Maybe
 import Data.Text (pack)
 import Data.Tree
 
-data CommentRequest = CommentRequest { text   :: Text }
+data CommentRequest = CommentRequest { text   :: Textarea }
 commentForm :: Form CommentRequest
-commentForm = renderDivs  $ CommentRequest <$> areq textField "Text" Nothing
+commentForm = renderDivs  $ CommentRequest <$> areq textareaField "Text" Nothing
 
 postCommentsR :: EntryId -> Handler RepHtml
 postCommentsR entryId = do
@@ -33,7 +33,6 @@ postCommentsR entryId = do
           redirect $ EntryR entryId
         _ -> errorPage "Please correct your entry form"
 
-
 cssClassVote :: [Entity Vote] -> Text
 cssClassVote [] = ""
 cssClassVote ((Entity _ vote):_) = case voteValue vote of
@@ -42,27 +41,27 @@ cssClassVote ((Entity _ vote):_) = case voteValue vote of
                                             _    -> ""
 
 -- getCommentSons :: [a]              -> b              -> (a,[b])
-getCommentSons :: [Entity Comment] -> 
+getCommentSons :: [Entity Comment] ->
                   Entity Comment -> (Entity Comment, [Entity Comment])
 getCommentSons comments father@(Entity commentId _) =
-  (father, 
+  (father,
    filter (\(Entity _ c) -> commentReplyTo c == Just commentId)  comments)
 
 -- showCommentForest :: [Tree (Entity Comment)] -> Hamlet
 showCommentForest [] _ = [hamlet||]
 showCommentForest trees creators =
-  [hamlet|<ul> 
+  [hamlet|<ul>
             $forall tree <- trees
-               ^{showCommentTree tree creators}|] 
+               ^{showCommentTree tree creators}|]
 
 yeahForComment, neahForComment :: CommentId -> Text
 yeahForComment _ = "X"
 neahForComment _ = "X"
 
 -- showCommentTree :: Tree (Entity Comment) -> Hamlet
-showCommentTree tree creators = 
+showCommentTree tree creators =
   [hamlet|<li #Comment#{showId commentId}>
-            <div .meta> 
+            <div .meta>
               <div .vote>
                 <div .yeah>#{yeahForComment commentId}
                 <div .neah>#{neahForComment commentId}
@@ -76,7 +75,7 @@ showCommentTree tree creators =
               \ - #
               <span .reply>reply
             ^{showCommentForest (subForest tree) creators}|]
-   where 
+   where
      comment = commentFromEntity (rootLabel tree)
      commentFromEntity (Entity _ c) = c
      commentId = commentIdFromEntity (rootLabel tree)

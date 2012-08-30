@@ -13,11 +13,13 @@ import Data.Maybe
 data EntryRequest = EntryRequest {
                       title :: Text
                     , url   :: Text
+                    , text  :: Maybe Textarea
                      }
 entryForm :: Form EntryRequest
 entryForm = renderDivs  $ EntryRequest
   <$> areq textField "Title" Nothing
   <*> areq urlField  "Url"   Nothing
+  <*> aopt textareaField  "Text"   Nothing
 
 -- This is a handler function for the GET request method on the HomeR
 -- resource pattern. All of your resource patterns are defined in
@@ -32,9 +34,9 @@ cssClassVoteForEntry :: (Eq a) => a
                         -> Text
 cssClassVoteForEntry entryId votes =
   maybe "" strOfVote (lookup entryId votes)
-    where 
+    where
       strOfVote [] = "" :: Text
-      strOfVote ((Entity _ vote):_) = 
+      strOfVote ((Entity _ vote):_) =
         case voteValue vote of
              1    -> " yeah_voted"
              (-1) -> " neah_voted"
@@ -45,13 +47,13 @@ creatorOfEntry  :: (Eq a) => a
                    -> Text
 creatorOfEntry entryId creators =
   maybe "" strOfVote (lookup entryId creators)
-    where 
+    where
       strOfVote [] = "" :: Text
       strOfVote ((Entity _ creator):_) = userIdent creator
 
 
-currentCreator :: EntryGeneric backend 
-                  -> Key backend (UserGeneric backend) 
+currentCreator :: EntryGeneric backend
+                  -> Key backend (UserGeneric backend)
                   -> Bool
 currentCreator entry userId = entryCreator entry == userId
 
@@ -104,7 +106,7 @@ postEntriesR = do
       case res of
         FormSuccess personRequest -> do
           time <- liftIO getCurrentTime
-          let newEntry = Entry currentUserId (title personRequest) (url personRequest) 0 0 0 time
+          let newEntry = Entry currentUserId (title personRequest) (url personRequest) (text personRequest) 0 0 0 time
           entryId <- runDB $ insert newEntry
           setMessage $ toHtml (title personRequest)
           redirect $ EntryR entryId
