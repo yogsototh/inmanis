@@ -53,34 +53,36 @@ library
                 EmptyDataDecls
                 NoMonomorphismRestriction
 
-    build-depends: base                          >= 4          
-                 -- , yesod-platform                >= 1.0     
-                 , yesod                         >= 1.0        
-                 , yesod-core                    >= 1.0        
-                 , yesod-auth                    >= 1.0        
-                 , yesod-static                  >= 1.0        
-                 , yesod-default                 >= 1.0        
-                 , yesod-form                    >= 1.0        
-                 , yesod-test                    >= 0.2        
-                 , clientsession                 >= 0.7.3      
-                 , bytestring                    >= 0.9        
-                 , text                          >= 0.11       
-                 , persistent                    >= 0.9        
-                 , persistent-sqlite             >= 0.9        
+    build-depends: base                          >= 4
+                 -- , yesod-platform                >= 1.0
+                 , yesod                         >= 1.0
+                 , yesod-core                    >= 1.0
+                 , yesod-auth                    >= 1.0
+                 , yesod-static                  >= 1.0
+                 , yesod-default                 >= 1.0
+                 , yesod-form                    >= 1.0
+                 , yesod-test                    >= 0.2
+                 , clientsession                 >= 0.7.3
+                 , bytestring                    >= 0.9
+                 , text                          >= 0.11
+                 , persistent                    >= 0.9
+                 , persistent-sqlite             >= 0.9
                  , template-haskell
-                 , hamlet                        >= 1.0        
-                 , shakespeare-css               >= 1.0        
-                 , shakespeare-js                >= 1.0        
-                 , shakespeare-text              >= 1.0        
-                 , hjsmin                        >= 0.1        
-                 , monad-control                 >= 0.3        
-                 , wai-extra                     >= 1.2        
-                 , yaml                          >= 0.7        
-                 , http-conduit                  >= 1.4        
-                 , directory                     >= 1.1        
-                 , warp                          >= 1.2        
-                 , containers                    >= 0.4.2.1    
+                 , hamlet                        >= 1.0
+                 , shakespeare-css               >= 1.0
+                 , shakespeare-js                >= 1.0
+                 , shakespeare-text              >= 1.0
+                 , hjsmin                        >= 0.1
+                 , monad-control                 >= 0.3
+                 , wai-extra                     >= 1.2
+                 , yaml                          >= 0.7
+                 , http-conduit                  >= 1.4
+                 , directory                     >= 1.1
+                 , warp                          >= 1.2
+                 , containers                    >= 0.4.2.1
                  , time                          >= 1.4
+                 , mime-mail                     >= 0.4.1.1
+                 , blaze-html                    >= 0.5.0.0
 
 executable         inmanis
     if flag(library-only)
