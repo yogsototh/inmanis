@@ -44,9 +44,12 @@ header {
     padding: 1em 1em 2em 1em;
     border-bottom: solid 1px #{base03};
     h1,h2 {
+        a, a:visited, a:hover {
+            text-shadow: 1px 1px 0px #{white}, -1px -1px 0px #{black};
+            font-weight: bold;
+            }
         a, a:visited { color: #{base1}; }
-        text-shadow: 1px 1px 0px #{white}, -1px -1px 0px #{black};
-        font-weight: bold;
+        a:hover { color: #{base2}; }
         margin: 0;
     }
     h1 { font-size: 5em; }
