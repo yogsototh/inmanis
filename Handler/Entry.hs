@@ -48,19 +48,19 @@ getCommentSons comments father@(Entity commentId _) =
    filter (\(Entity _ c) -> commentReplyTo c == Just commentId)  comments)
 
 -- showCommentForest :: [Tree (Entity Comment)] -> Hamlet
-showCommentForest [] _ = [hamlet||]
-showCommentForest trees creators =
-  [hamlet|<ul>
+showCommentForest [] _ _ _ = [whamlet||]
+showCommentForest trees creators wdg enc=
+  [whamlet|<ul>
             $forall tree <- trees
-               ^{showCommentTree tree creators}|]
+               ^{showCommentTree tree creators wdg enc}|]
 
 yeahForComment, neahForComment :: CommentId -> Text
 yeahForComment _ = "X"
 neahForComment _ = "X"
 
--- showCommentTree :: Tree (Entity Comment) -> Hamlet
-showCommentTree tree creators =
-  [hamlet|<li #Comment#{showId commentId}>
+-- showCommentTree :: Tree (Entity Comment) -> Metadata -> Hamlet
+showCommentTree tree creators widget enctype =
+  [whamlet|<li url=@{ReplyCommentR commentId}>
             <div .meta>
               <div .vote>
                 <div .yeah>#{yeahForComment commentId}
@@ -73,8 +73,12 @@ showCommentTree tree creators =
               \ - #
               <span .delete>delete
               \ - #
-              <span .reply>reply
-            ^{showCommentForest (subForest tree) creators}|]
+              <span .reply flipshow="##{showId commentId}">reply
+            <div .replyForm .hide ##{showId commentId}>
+              <form method=post action=@{ReplyCommentR commentId} enctype=#{enctype}>
+                ^{widget}
+                <input type=submit value="Post">
+            ^{showCommentForest (subForest tree) creators widget enctype}|]
    where
      comment = commentFromEntity (rootLabel tree)
      commentFromEntity (Entity _ c) = c

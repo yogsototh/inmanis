@@ -1,3 +1,14 @@
+/* Animate everything by default (0.3s) */
+* {
+  transition-property: all
+  transition-duration: 0.3s
+  -moz-transition-property: all
+  -moz-transition-duration: 0.3s
+  -webkit-transition-property: all
+  -webkit-transition-duration: 0.3s
+  -o-transition-property: all
+  -o-transition-duration: 0.3s
+}
 
 body {
     font-family: Georgia, Palatino, Serif;
@@ -71,7 +82,9 @@ form input {
     border-radius: 3px;
     background: #{base2};
     box-shadow: 1px 1px 2px #{base03} inset;
-    border: 0; padding: .3em; width: 30em; }
+    border: 0; padding: .3em;
+    max-width: 30em;
+    width: 30em; }
 
 /* Form Buttons */
 form input[type="submit"] {
@@ -190,3 +203,32 @@ form input[type="submit"]:active {
         cursor: pointer;
     }
 }
+
+.hide { display: none; }
+.button {
+    cursor: pointer;
+    font-size: 12px;
+    padding: 10px;
+    color: #{base1};
+    margin: 1em 0;
+    display: block;
+    text-align: center;
+    width: 100px;
+	max-width: 100px;
+    border-radius: 3px;
+    box-shadow: 1px 1px 2px #{black};
+    font-weight: bold;
+    text-shadow: 0 1px #{white};
+    border: solid 1px;}
+.button:hover {
+    color: #{base0};
+    border-color: #{base0};
+    background-color:#{base2};
+    box-shadow: 1px 1px 4px #{black};
+    }
+.button:active {
+    box-shadow: -1px -1px 1px #{shadoworange};
+    background-color: #{lightorange};
+    border-color: #{orange};
+    color: #{orange};
+    }

@@ -1,11 +1,12 @@
-/static                 StaticR         Static getStatic
-/auth                   AuthR           Auth   getAuth
+/static                     StaticR         Static getStatic
+/auth                       AuthR           Auth   getAuth
 
-/favicon.ico            FaviconR        GET
-/robots.txt             RobotsR         GET
+/favicon.ico                FaviconR        GET
+/robots.txt                 RobotsR         GET
 
-/                       HomeR           GET
-/entry                  EntriesR        POST
-/entry/#EntryId         EntryR          GET POST DELETE
-/entry/#EntryId/comment CommentsR       POST
-/comment/#CommentId     CommentR        GET POST DELETE
+/                           HomeR           GET
+/entry                      EntriesR        POST
+/entry/#EntryId             EntryR          GET POST DELETE
+/entry/#EntryId/comment     CommentsR       POST
+/comment/#CommentId         CommentR        GET POST DELETE
+/comment/#CommentId/reply   ReplyCommentR   POST

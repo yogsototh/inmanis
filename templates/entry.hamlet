@@ -27,8 +27,8 @@ $if isNothing currentUserId
             <a href=@{AuthR LoginR}> Log in
             <div .close>close
 $else
-    <div #formEntry>
-        <h2>Add a new comment
+    <div .button flipshow=".rootCommentForm">Add a comment
+    <div .rootCommentForm .hide>
         <form method=post action=@{CommentsR entryId} enctype=#{enctype}>
             ^{widget}
             <input type=submit value="Post">
@@ -42,5 +42,5 @@ $if null comments
     <p> Be the first to comment
 $else
     <div #comments>
-        ^{showCommentForest commentForest creators}
+        ^{showCommentForest commentForest creators widget enctype}
 
