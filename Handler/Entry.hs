@@ -4,6 +4,7 @@ module Handler.Entry (
   , putEntryR
   , deleteEntryR
   , postCommentsR
+  , postReplyCommentR
   )
 where
 
@@ -60,7 +61,7 @@ neahForComment _ = "X"
 
 -- showCommentTree :: Tree (Entity Comment) -> Metadata -> Hamlet
 showCommentTree tree creators widget enctype =
-  [whamlet|<li url=@{ReplyCommentR commentId}>
+  [whamlet|<li url=@{ReplyCommentR entryId commentId}>
             <div .meta>
               <div .vote>
                 <div .yeah>#{yeahForComment commentId}
@@ -75,7 +76,7 @@ showCommentTree tree creators widget enctype =
               \ - #
               <span .reply flipshow="##{showId commentId}">reply
             <div .replyForm .hide ##{showId commentId}>
-              <form method=post action=@{ReplyCommentR commentId} enctype=#{enctype}>
+              <form method=post action=@{ReplyCommentR entryId commentId} enctype=#{enctype}>
                 ^{widget}
                 <input type=submit value="Post">
             ^{showCommentForest (subForest tree) creators widget enctype}|]
@@ -84,6 +85,7 @@ showCommentTree tree creators widget enctype =
      commentFromEntity (Entity _ c) = c
      commentId = commentIdFromEntity (rootLabel tree)
      commentIdFromEntity (Entity i _) = i
+     entryId   = commentEntry comment
 
 creatorOfEntity :: CommentId -> [(CommentId,[Entity User])] -> Text
 creatorOfEntity entityId creators =
@@ -231,3 +233,17 @@ deleteEntryR entryId = do
 putEntryR :: EntryId -> Handler RepHtmlJson
 putEntryR = undefined
 
+postReplyCommentR :: EntryId -> CommentId -> Handler RepHtml
+postReplyCommentR entryId commentId = do
+  maybeUserId <- maybeAuthId
+  case maybeUserId of
+    Nothing -> errorPage "You're not logged"
+    Just userId -> do
+      ((res,_),_) <- runFormPost commentForm
+      case res of
+        FormSuccess commentRequest -> do
+          time <- liftIO getCurrentTime
+          let newComment = Comment entryId userId (Just commentId) time (text commentRequest)
+          _ <- runDB $ insert newComment
+          redirect $ EntryR entryId
+        _ -> errorPage "Please correct your entry form"

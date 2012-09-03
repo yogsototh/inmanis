@@ -14,5 +14,3 @@ putCommentR _ = error "Not yet implemented: putCommentR"
 deleteCommentR :: CommentId -> Handler RepHtml
 deleteCommentR _ = error "Not yet implemented: deleteCommentR"
 
-postReplyCommentR :: CommentId -> Handler RepHtml
-postReplyCommentR _ = error "Not yet implemented: postReplyCommentR"
