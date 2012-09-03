@@ -63,29 +63,29 @@ function clicked() {
 }
 
 
+function flipauto(initText,flippedText,elem) {
+    var target=elem.attr("flipshow");
+    if (elem.html() == initText) {
+        elem.html(flippedText);
+    } else {
+        elem.html(initText);
+    }
+    $(target).toggle();
+}
+
 $(document).ready(function(){
     $(".yeah").click(clicked("yeah"));
     $(".neah").click(clicked("neah"));
     $("#loginmessage .close").click(function(){
         $("#loginmessage").hide();
-    });
+        });
     $("#loginmessage").click(function(){
         $("#loginmessage").hide();
-    });
-    $(".button").click(function(){
-            var target=$(this).attr("flipshow");
-            console.log("Flip " + target);
-            $(target).toggle();
         });
-    $(".reply").click(function(){
-            var target=$(this).attr("flipshow");
-            console.log("Reply clicked");
-            console.log("toggle " + target);
-            if ($(this).html() == "reply") {
-                $(this).html("hide comment");
-            } else {
-                $(this).html("reply");
-            }
-            $(target).toggle();
+    $(".button").click(function(){
+        flipauto("Add a comment","Hide comment",$(this));
+        });
+    $(".reply").click(function() {
+        flipauto("reply","hide comment",$(this));
         });
 });

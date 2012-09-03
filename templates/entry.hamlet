@@ -16,9 +16,8 @@
     $if isNothing $ entryText entry
     $else
         <h2>#{entryTitle entry}
-        <div>#{fromJust $ entryText entry}
+        <div .entryText>#{fromJust $ entryText entry}
 
-<hr>
 $if isNothing currentUserId
     <div #login>
         <a href=@{AuthR LoginR}> Log in to comment

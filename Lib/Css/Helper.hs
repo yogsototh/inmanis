@@ -13,14 +13,14 @@ module Lib.Css.Helper
   , base1
   , base2
   , base3
-  , yellow  
-  , orange  
-  , red     
-  , magenta 
-  , violet  
-  , blue    
-  , cyan    
-  , green   
+  , yellow
+  , orange
+  , red
+  , magenta
+  , violet
+  , blue
+  , cyan
+  , green
   , light
   , lightred
   , lightorange
@@ -29,6 +29,8 @@ module Lib.Css.Helper
   , shadoworange
   , white
   , black
+  , slightlywhite
+  , slightlyblack
   , headerbackground
   , footerbackground
   )
@@ -39,7 +41,7 @@ import Numeric (readHex)
 import Data.List (intercalate)
 
 cssGradient :: String -> String -> String
-cssGradient from to = 
+cssGradient from to =
   "background: rgb("++rgbfrom++");" ++
   "background: -moz-radial-gradient(center, ellipse cover,  rgba("++rgbfrom++",1) 0%, rgba("++rgbto++",1) 100%); /* FF3.6+ */" ++
   "background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,rgba("++rgbfrom++",1)), color-stop(100%,rgba("++rgbto++",1))); /* Chrome,Safari4+ */" ++
@@ -69,16 +71,16 @@ cssVerticalGradient height from to =
 
 
 
-background , foreground , altbackground , altforeground , base03 , base02 , base01 , base00 , base0 , base1 , base2 , base3 , yellow  , orange  , red     , magenta , violet  , blue    , cyan    , green   , lightred , lightorange , lightcyan , shadoworange , white , black :: String
+background, foreground, altbackground, altforeground, base03, base02, base01, base00, base0, base1, base2, base3, yellow, orange, red, magenta, violet, blue, cyan, green, lightred, lightorange, lightcyan, shadoworange, white, black, slightlyblack, slightlywhite :: String
 
 background=base3
-foreground=base1 
+foreground=base1
 altbackground=base01
 altforeground=base1
 
 headerbackground, footerbackground :: String
 headerbackground=cssGradient altbackground base02
-footerbackground=cssVerticalGradient "3em" base02 altbackground 
+footerbackground=cssVerticalGradient "3em" base02 altbackground
 
 base03="#002b36"
 base02="#073642"
@@ -110,16 +112,17 @@ shadow color = "rgba("++(cssToRgb color)++",0.5)"
 shadoworange = shadow orange
 
 white="rgba(255,255,255,0.6)"
+slightlywhite="rgba(255,255,255,0.1)"
 black="rgba(0,43,54,0.6)"
+slightlyblack="rgba(0,43,54,0.1)"
 
-
--- Hexa style colors                                                            
+-- Hexa style colors
 scalarFromHex :: String ->  Int
 scalarFromHex = fst . head . readHex
-                                                                                
--- | Color from CSS style color string                                          
-cssToRgb :: String -> String                                                     
+
+-- | Color from CSS style color string
+cssToRgb :: String -> String
 cssToRgb ('#':rd:ru:gd:gu:bd:bu:[]) = intercalate "," $
   map (show . scalarFromHex) [[rd,ru],[gd,gu],[bd,bu]]
-cssToRgb ('#':r:g:b:[]) = cssToRgb ['#',r,r,g,g,b,b]                            
+cssToRgb ('#':r:g:b:[]) = cssToRgb ['#',r,r,g,g,b,b]
 cssToRgb _ = error "Bad color!!!!"
