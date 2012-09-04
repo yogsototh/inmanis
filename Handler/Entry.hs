@@ -29,7 +29,7 @@ postCommentsR entryId = do
       case res of
         FormSuccess commentRequest -> do
           time <- liftIO getCurrentTime
-          let newComment = Comment entryId userId Nothing time (text commentRequest)
+          let newComment = Comment entryId userId Nothing time (text commentRequest) 0 0
           _ <- runDB $ insert newComment
           redirect $ EntryR entryId
         _ -> errorPage "Please correct your entry form"
@@ -49,23 +49,32 @@ getCommentSons comments father@(Entity commentId _) =
    filter (\(Entity _ c) -> commentReplyTo c == Just commentId)  comments)
 
 -- showCommentForest :: [Tree (Entity Comment)] -> Hamlet
-showCommentForest [] _ _ _ = [whamlet||]
-showCommentForest trees creators wdg enc=
+showCommentForest [] _ _ _ _ = [whamlet||]
+showCommentForest trees creators wdg enc voteComments=
   [whamlet|<ul>
             $forall tree <- trees
-               ^{showCommentTree tree creators wdg enc}|]
+               ^{showCommentTree tree creators wdg enc voteComments}|]
 
-yeahForComment, neahForComment :: CommentId -> Text
-yeahForComment _ = "X"
-neahForComment _ = "X"
+cssClassVoteForVote :: (Eq a) => a
+                        -> [(a, [Entity (VoteCommentGeneric backend)])]
+                        -> Text
+cssClassVoteForVote commentId voteComments =
+  maybe "" strOfVote (lookup commentId voteComments)
+    where
+      strOfVote [] = "" :: Text
+      strOfVote ((Entity _ vote):_) =
+        case voteCommentValue vote of
+             1    -> " yeah_voted"
+             (-1) -> " neah_voted"
+             _    -> ""
 
 -- showCommentTree :: Tree (Entity Comment) -> Metadata -> Hamlet
-showCommentTree tree creators widget enctype =
+showCommentTree tree creators widget enctype voteComments=
   [whamlet|<li url=@{ReplyCommentR entryId commentId}>
             <div .meta>
-              <div .vote>
-                <div .yeah>#{yeahForComment commentId}
-                <div .neah>#{neahForComment commentId}
+              <div class="vote#{cssClassVoteForVote commentId voteComments}" url=@{CommentVoteR commentId}>
+                <div .yeah>#{commentYeah comment}
+                <div .neah>#{commentNeah comment}
               <span .creator>by #{creatorOfEntity commentId creators}
             <div .content>
               #{commentContent comment}
@@ -79,7 +88,7 @@ showCommentTree tree creators widget enctype =
               <form method=post action=@{ReplyCommentR entryId commentId} enctype=#{enctype}>
                 ^{widget}
                 <input type=submit value="Post">
-            ^{showCommentForest (subForest tree) creators widget enctype}|]
+            ^{showCommentForest (subForest tree) creators widget enctype voteComments}|]
    where
      comment = commentFromEntity (rootLabel tree)
      commentFromEntity (Entity _ c) = c
@@ -116,6 +125,17 @@ getEntryR entryId = do
                     (\userId -> selectList [VoteEntry ==. entryId,
                                             VoteCreator ==. userId] [LimitTo 1])
                     currentUserId
+  voteComments <- runDB $
+    case currentUserId of
+      Nothing -> return []
+      Just user -> do
+              let getVoteForUserVote (Entity commentId _) = do
+                      voteComments <- selectList
+                                        [VoteCommentCreator ==. user,
+                                         VoteCommentComment ==. commentId]
+                                        [LimitTo 1]
+                      return (commentId,voteComments)
+              mapM getVoteForUserVote comments
 
   let creator = maybe "Unknown" userIdent maybeCreator
       isEntryOwned = if isNothing currentUserId
@@ -243,7 +263,7 @@ postReplyCommentR entryId commentId = do
       case res of
         FormSuccess commentRequest -> do
           time <- liftIO getCurrentTime
-          let newComment = Comment entryId userId (Just commentId) time (text commentRequest)
+          let newComment = Comment entryId userId (Just commentId) time (text commentRequest) 0 0
           _ <- runDB $ insert newComment
           redirect $ EntryR entryId
         _ -> errorPage "Please correct your entry form"

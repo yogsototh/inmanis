@@ -11,3 +11,4 @@
 /entry/#EntryId/comment                     CommentsR           POST
 /comment/#CommentId                         CommentR        GET POST DELETE
 /entry/#EntryId/comment/#CommentId/reply    ReplyCommentR       POST
+/comment/#CommentId/vote                    CommentVoteR    GET POST

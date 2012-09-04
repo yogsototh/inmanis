@@ -41,5 +41,5 @@ $if null comments
     <p> Be the first to comment
 $else
     <div #comments>
-        ^{showCommentForest commentForest creators widget enctype}
+        ^{showCommentForest commentForest creators widget enctype voteComments}
 

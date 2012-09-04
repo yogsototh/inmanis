@@ -37,6 +37,8 @@ Comment
     replyTo CommentId Maybe
     created UTCTime default=CURRENT_TIME
     content Textarea
+    yeah    Int default=0
+    neah    Int default=0
     deriving Show
 
  -- By default this file is used in Model.hs (which is imported by Foundation.hs)
