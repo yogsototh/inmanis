@@ -30,6 +30,8 @@ ul, ol {
   padding: 0;
   li {
     margin-bottom: 1em;
+    border-bottom: solid 1px #{slightlyblack};
+    padding-bottom: 1em;
   }
   margin-bottom: 1em;
 }
@@ -81,7 +83,8 @@ form label {
 form div { margin: 1em auto; }
 form textarea,
 form input {
-    color: #{base02};
+    font-family: Georgia, Palatino, Serif;
+    color: #{base01};
     border-radius: 3px;
     background: #{base2};
     box-shadow: 1px 1px 2px #{base03} inset;
@@ -117,7 +120,7 @@ form input[type="submit"]:active {
 .entryLine {
     display: block;
     line-height: 3em;
-    height: 3em; }
+    height: 3.1em; }
 .vote { width: 2.1em;
     line-height: 1.5em;
     margin-right: 1em;
@@ -138,7 +141,7 @@ form input[type="submit"]:active {
 .neah:hover {
     box-shadow: 0px 0px 4px #{cyan} inset;
     background-color: #{lightcyan}; }
-.secondline { font-size: .6em; color: #{base1}; margin: .7em 0 .3em; }
+.secondline { font-size: .6em; color: #{base1}; margin: 0.8em 0 .2em; }
 .yeah_voted .yeah {
     background-color: #{lightorange};
     color: #{orange};
@@ -153,6 +156,7 @@ form input[type="submit"]:active {
     line-height: 1em;
     height: 1em;
 }
+.firstline { line-height: 1.3em; }
 .thirdline { font-size: .8em;}
 #loginmessage,#popin {
     display: none;
