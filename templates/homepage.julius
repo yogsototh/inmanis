@@ -97,6 +97,16 @@ function deleteEntry(url) {
     $("#Entry"+id).parent().hide();
 }
 
+function flipauto(initText,flippedText,elem) {
+    var target=elem.attr("flipshow");
+    if (elem.html() == initText) {
+        elem.html(flippedText);
+    } else {
+        elem.html(initText);
+    }
+    $(target).toggle();
+}
+
 $(document).ready(function(){
     $(".yeah").click(clicked("yeah"));
     $(".neah").click(clicked("neah"));
@@ -107,4 +117,7 @@ $(document).ready(function(){
     $("#loginmessage").click(function(){
         $("#loginmessage").hide();
     });
+    $(".button").click(function(){
+        flipauto("Add a new entry","Hide input form",$(this));
+        });
 });

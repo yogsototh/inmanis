@@ -1,3 +1,20 @@
+$if isNothing currentUserId
+    <div #login>
+        <a href=@{AuthR LoginR}> Log in
+    <div #loginmessage>
+        <div .insidebox>
+            <a href=@{AuthR LoginR}> Log in
+            <div .close>close
+$else
+    <div #logout>
+        <a href=@{AuthR LogoutR}>Log out
+    <div .button flipshow="#formEntry">Add a new entry
+    <div #formEntry .hide>
+        <h2>Add a new entry
+        <form method=post action=@{EntriesR} enctype=#{enctype}>
+            ^{widget}
+            <input type=submit value="Post">
+
 $if null entries
     <p> There is no entry. Sniff... I feel lonely.
 $else
@@ -21,20 +38,3 @@ $else
                   $nothing
                   \ - #
                   <a class="delete" href=@{EntryR entryId} url="@{EntryR entryId}">delete</a>
-<hr>
-$if isNothing currentUserId
-    <div #login>
-        <a href=@{AuthR LoginR}> Log in
-    <div #loginmessage>
-        <div .insidebox>
-            <a href=@{AuthR LoginR}> Log in
-            <div .close>close
-$else
-    <div #formEntry>
-        <h2>Add a new entry
-        <form method=post action=@{EntriesR} enctype=#{enctype}>
-            ^{widget}
-            <input type=submit value="Post">
-    <hr>
-    <div #logout>
-        <a href=@{AuthR LogoutR}>Log out
