@@ -14,6 +14,7 @@ import Yesod.Auth
 import Data.Maybe
 import Data.Text (pack)
 import Data.Tree
+import Yesod.Markdown
 
 data CommentRequest = CommentRequest { text   :: Textarea }
 commentForm :: Form CommentRequest

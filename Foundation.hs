@@ -10,6 +10,7 @@ module Foundation
     , requireAuth
     , module Settings
     , module Model
+    , getExtra
     ) where
 
 import Prelude
@@ -18,13 +19,12 @@ import Yesod.Static
 import Yesod.Auth
 import Yesod.Auth.BrowserId
 import Yesod.Auth.GoogleEmail
-import Yesod.Auth.Email
 import Yesod.Default.Config
 import Yesod.Default.Util (addStaticContentExternal)
-import Yesod.Logger (Logger, logMsg, formatLogText)
 import Network.HTTP.Conduit (Manager)
 import qualified Settings
 import qualified Database.Persist.Store
+import Settings.StaticFiles
 import Database.Persist.GenericSql
 import Settings (widgetFile, Extra (..))
 import Model
@@ -34,22 +34,12 @@ import Text.Hamlet (hamletFile)
 
 import Lib.Css.Helper
 
--- authEmail plugin
-import Network.Mail.Mime
-import qualified Data.Text.Lazy.Encoding
-import Text.Shakespeare.Text (stext)
-import Text.Blaze.Html.Renderer.Utf8 (renderHtml)
-import Text.Hamlet (shamlet)
-import Data.Maybe (isJust)
-import Control.Monad (join)
-
 -- | The site argument for your application. This can be a good place to
 -- keep settings and values requiring initialization before your application
 -- starts running, such as database connections. Every handler will have
 -- access to the data present here.
 data App = App
     { settings :: AppConfig DefaultEnv Extra
-    , getLogger :: Logger
     , getStatic :: Static -- ^ Settings for static file serving.
     , connPool :: Database.Persist.Store.PersistConfigPool Settings.PersistConfig -- ^ Database connection pool.
     , httpManager :: Manager
@@ -118,9 +108,6 @@ instance Yesod App where
     -- The page to be redirected to when authentication is required.
     authRoute _ = Just $ AuthR LoginR
 
-    messageLogger y loc level msg =
-      formatLogText (getLogger y) loc level msg >>= logMsg (getLogger y)
-
     -- This function creates static content files in the static folder
     -- and names them based on a hash of their content. This allows
     -- expiration dates to be set far in the future without worry of
@@ -156,75 +143,18 @@ instance YesodAuth App where
                 fmap Just $ insert $ User (credsIdent creds) Nothing Nothing False
 
     -- You can add other plugins like BrowserID, email or OAuth here
-    authPlugins _ = [authBrowserId, authGoogleEmail,authEmail]
+    authPlugins _ = [authBrowserId, authGoogleEmail]
 
     authHttpManager = httpManager
-
-instance YesodAuthEmail App where
-  type AuthEmailId App = UserId
-  addUnverified email verkey =
-    runDB $ insert $ User email Nothing (Just verkey) False
-  sendVerifyEmail email _ verurl =
-    liftIO $ renderSendMail (emptyMail $ Address Nothing "noreply")
-        { mailTo = [Address Nothing email]
-        , mailHeaders =
-            [ ("Subject", "Verify your email address")
-            ]
-        , mailParts = [[textPart, htmlPart]]
-        }
-    where
-      textPart = Part
-        { partType = "text/plain; charset=utf-8"
-        , partEncoding = None
-        , partFilename = Nothing
-        , partContent = Data.Text.Lazy.Encoding.encodeUtf8 [stext|
-                  Please confirm your email address by clicking on the link below.
-
-                  \#{verurl}
-
-                  Thank you.
-                    |]
-        , partHeaders = []
-        }
-      htmlPart = Part
-        { partType = "text/plain; charset=utf-8"
-        , partEncoding = None
-        , partFilename = Nothing
-        , partContent = renderHtml [shamlet|
-                  <p>Please confirm your email address by clicking on the link below.
-                  <p><a href=#{verurl}>#{verurl}
-                  <p>Thank you
-                    |]
-        , partHeaders = []
-        }
-
-  getVerifyKey = runDB . fmap (join . fmap userVerkey) . get
-  setVerifyKey uid key = runDB $ update uid [UserVerkey =. Just key]
-  verifyAccount uid = runDB $ do
-    mu <- get uid
-    case mu of
-      Nothing -> return Nothing
-      Just u -> do
-          update uid [UserVerified =. True]
-          return $ Just uid
-  getPassword = runDB . fmap (join . fmap userPassword) . get
-  setPassword uid pass = runDB $ update uid [UserPassword =. Just pass]
-  getEmailCreds email = runDB $ do
-    mu <- getBy $ UniqueUser email
-    case mu of
-      Nothing -> return Nothing
-      Just (Entity uid u) -> return $ Just EmailCreds
-        { emailCredsId = uid
-        , emailCredsAuthId = Just uid
-        , emailCredsStatus = isJust $ userPassword u
-        , emailCredsVerkey = userVerkey u
-        }
-  getEmail = runDB . fmap (fmap userIdent) . get
 
 -- This instance is required to use forms. You can modify renderMessage to
 -- achieve customized and internationalized form validation messages.
 instance RenderMessage App FormMessage where
     renderMessage _ _ = defaultFormMessage
+
+-- | Get the 'Extra' value, used to hold data from the settings.yml file.
+getExtra :: Handler Extra
+getExtra = fmap (appExtra . settings) getYesod
 
 -- Note: previous versions of the scaffolding included a deliver function to
 -- send emails. Unfortunately, there are too many different options for us to

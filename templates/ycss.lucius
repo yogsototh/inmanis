@@ -37,8 +37,8 @@ ul, ol {
 }
 p { line-height: 1.5em; }
 header {
-    #{headerbackground}
     /* background: #{altbackground}; */
+    #{headerbackground}
     /* background: url("@{StaticR img_skin_side_up_png}") repeat; */
     text-align: center;
     top: 0;
@@ -202,8 +202,8 @@ form input[type="submit"]:active {
          padding: 10px;
          border-radius: 2px; }
     .meta { font-size: .7em; height: 1.7em;}
-    .actions { font-size: .7em; }
-    .content { min-height: 1.5em; color: #{base01} }
+    .actions { font-size: .7em; margin-top: .5em; }
+    .content { min-height: 1.5em; color: #{base01}; }
     .actions > span:hover {
         color: #{orange};
         text-shadow: 0 0 1px #{shadoworange};
