@@ -15,11 +15,16 @@ import Data.Maybe
 import Data.Text (pack)
 import Data.Tree
 import Yesod.Markdown
+import Database.Persist.GenericSql.Raw
 
+-- |The comment data needed for creating a comment
 data CommentRequest = CommentRequest { text   :: Textarea }
+
+-- |The comment form data structure
 commentForm :: Form CommentRequest
 commentForm = renderDivs  $ CommentRequest <$> areq textareaField "Text" Nothing
 
+-- |add a comment
 postCommentsR :: EntryId -> Handler RepHtml
 postCommentsR entryId = do
   maybeUserId <- maybeAuthId
@@ -37,10 +42,11 @@ postCommentsR entryId = do
 
 cssClassVote :: [Entity Vote] -> Text
 cssClassVote [] = ""
-cssClassVote ((Entity _ vote):_) = case voteValue vote of
-                                            1    -> " yeah_voted"
-                                            (-1) -> " neah_voted"
-                                            _    -> ""
+cssClassVote ((Entity _ vote):_) =
+  case voteValue vote of
+    1    -> " yeah_voted"
+    (-1) -> " neah_voted"
+    _    -> ""
 
 -- getCommentSons :: [a]              -> b              -> (a,[b])
 getCommentSons :: [Entity Comment] ->
@@ -50,11 +56,13 @@ getCommentSons comments father@(Entity commentId _) =
    filter (\(Entity _ c) -> commentReplyTo c == Just commentId)  comments)
 
 -- showCommentForest :: [Tree (Entity Comment)] -> Hamlet
-showCommentForest [] _ _ _ _ = [whamlet||]
+showCommentForest [] _ _ _ _ = [whamlet|$newline never
+|]
 showCommentForest trees creators wdg enc voteComments=
-  [whamlet|<ul>
-            $forall tree <- trees
-               ^{showCommentTree tree creators wdg enc voteComments}|]
+  [whamlet|$newline always
+    <ul>
+      $forall tree <- trees
+         ^{showCommentTree tree creators wdg enc voteComments}|]
 
 cssClassVoteForVote :: (Eq a) => a
                         -> [(a, [Entity (VoteCommentGeneric backend)])]
@@ -69,27 +77,28 @@ cssClassVoteForVote commentId voteComments =
              (-1) -> " neah_voted"
              _    -> ""
 
--- showCommentTree :: Tree (Entity Comment) -> Metadata -> Hamlet
+-- showCommentTree :: Tree (Entity Comment) -> Metadatas -> Hamlet
 showCommentTree tree creators widget enctype voteComments=
-  [whamlet|<li url=@{ReplyCommentR entryId commentId}>
-            <div .meta>
-              <div class="vote#{cssClassVoteForVote commentId voteComments}" url=@{CommentVoteR commentId}>
-                <div .yeah>#{commentYeah comment}
-                <div .neah>#{commentNeah comment}
-              <span .creator>by #{creatorOfEntity commentId creators}
-            <div .content>
-              #{commentContent comment}
-            <div .actions>
-              <span .edit>edit
-              \ - #
-              <span .delete>delete
-              \ - #
-              <span .reply flipshow="##{showId commentId}">reply
-            <div .replyForm .hide ##{showId commentId}>
-              <form method=post action=@{ReplyCommentR entryId commentId} enctype=#{enctype}>
-                ^{widget}
-                <input type=submit value="Post">
-            ^{showCommentForest (subForest tree) creators widget enctype voteComments}|]
+  [whamlet|$newline always
+    <li url=@{ReplyCommentR entryId commentId}>
+      <div .meta>
+        <div class="vote#{cssClassVoteForVote commentId voteComments}" url=@{CommentVoteR commentId}>
+          <div .yeah>#{commentYeah comment}
+          <div .neah>#{commentNeah comment}
+        <span .creator>by #{creatorOfEntity commentId creators}
+      <div .content>
+        #{commentContent comment}
+      <div .actions>
+        <span .edit>edit
+        \ - #
+        <span .delete>delete
+        \ - #
+        <span .reply flipshow="##{showId commentId}">reply
+      <div .replyForm .hide ##{showId commentId}>
+        <form method=post action=@{ReplyCommentR entryId commentId} enctype=#{enctype}>
+          ^{widget}
+          <input type=submit value="Post">
+      ^{showCommentForest (subForest tree) creators widget enctype voteComments}|]
    where
      comment = commentFromEntity (rootLabel tree)
      commentFromEntity (Entity _ c) = c

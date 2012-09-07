@@ -26,7 +26,7 @@ $else
                     <div .neah>#{entryNeah entry}
                 <div .firstline>
                     $if isNothing $ entryUrl entry
-                        #{entryTitle entry}
+                        <a href=@{EntryR entryId}>#{entryTitle entry}</a>
                     $else
                         <a href=#{fromJust $ entryUrl entry}>#{entryTitle entry}</a>
                 <div .secondline>
