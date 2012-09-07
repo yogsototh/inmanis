@@ -66,6 +66,7 @@ setVoteValue value user commentId = do
            1    -> update commentId [CommentYeah +=. 1]
            (-1) -> update commentId [CommentNeah +=. 1]
            _ -> return ()
+        update commentId [CommentNbView +=. 1]
       return "inserted"
 
     -- Update case
