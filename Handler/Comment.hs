@@ -9,15 +9,7 @@ module Handler.Comment (
 
 import Import
 import Handler.Helper
-import Yesod.Auth
 import Data.Text (pack)
-
-testLogged ::  (UserId -> Handler RepHtmlJson) -> Handler RepHtmlJson
-testLogged v = do
-  maybeUserId <- maybeAuthId
-  case maybeUserId of
-    Nothing -> errorPageJson "You're not logged"
-    Just currentUserId -> (v currentUserId)
 
 getCommentR :: CommentId -> Handler RepHtml
 getCommentR _ = error "Not yet implemented: getCommentR"

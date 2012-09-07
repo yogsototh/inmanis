@@ -4,6 +4,7 @@ module Handler.Helper
   , showId
   , joinTables
   , humanReadableRelativeTime
+  , testLogged
   )
 where
 
@@ -13,6 +14,15 @@ import Database.Persist.Store
 import Data.Maybe (catMaybes)
 import Data.Text (pack)
 import qualified Data.Map as M
+import Yesod.Auth
+
+-- | test if the user is logged
+testLogged ::  (UserId -> Handler RepHtmlJson) -> Handler RepHtmlJson
+testLogged v = do
+  maybeUserId <- maybeAuthId
+  case maybeUserId of
+    Nothing -> errorPageJson "You're not logged"
+    Just currentUserId -> (v currentUserId)
 
 -- Show the id number from an entry
 -- Can be used inside HTML

@@ -99,12 +99,9 @@ getHomeR = do
 
 -- |When we receive a post request on HomeR resource (/ path)
 -- |We create a new resource
-postEntriesR :: Handler RepHtml
-postEntriesR = do
-  userId <- maybeAuthId
-  case userId of
-    Nothing -> errorPage "You're not logged"
-    Just currentUserId -> do
+postEntriesR :: Handler RepHtmlJson
+postEntriesR =
+  testLogged $ \currentUserId -> do
       ((res,_),_) <- runFormPost entryForm
       case res of
         FormSuccess personRequest -> do
@@ -117,11 +114,11 @@ postEntriesR = do
                   badEntry = isNothing (url personRequest)
                              && isNothing (text personRequest)
               case badEntry of
-                True -> errorPage "You must enter some text or some URL"
+                True -> errorPageJson "You must enter some text or some URL"
                 False -> do
                   entryId <- runDB $ insert newEntry
                   setMessage $ toHtml (title personRequest)
                   redirect $ EntryR entryId
-        _ -> errorPage "Please correct your entry form"
+        _ -> errorPageJson "Please correct your entry form"
 
 

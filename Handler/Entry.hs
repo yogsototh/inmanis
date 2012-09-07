@@ -10,11 +10,11 @@ where
 
 import Import
 import Handler.Helper
-import Yesod.Auth
 import Data.Maybe
 import Data.Text (pack)
 import Data.Tree
 import Yesod.Markdown
+import Yesod.Auth
 import Database.Persist.GenericSql.Raw
 
 -- |The comment data needed for creating a comment
@@ -25,12 +25,9 @@ commentForm :: Form CommentRequest
 commentForm = renderDivs  $ CommentRequest <$> areq textareaField "Text" Nothing
 
 -- |add a comment
-postCommentsR :: EntryId -> Handler RepHtml
-postCommentsR entryId = do
-  maybeUserId <- maybeAuthId
-  case maybeUserId of
-    Nothing -> errorPage "You're not logged"
-    Just userId -> do
+postCommentsR :: EntryId -> Handler RepHtmlJson
+postCommentsR entryId =
+  testLogged $ \userId -> do
       ((res,_),_) <- runFormPost commentForm
       case res of
         FormSuccess commentRequest -> do
@@ -38,7 +35,7 @@ postCommentsR entryId = do
           let newComment = Comment entryId userId Nothing time (text commentRequest) 0 0
           _ <- runDB $ insert newComment
           redirect $ EntryR entryId
-        _ -> errorPage "Please correct your entry form"
+        _ -> errorPageJson "Please correct your entry form"
 
 cssClassVote :: [Entity Vote] -> Text
 cssClassVote [] = ""
@@ -160,13 +157,6 @@ getEntryR entryId = do
           (object ["msg" .= entryTitle entry])
 
 
-testLogged ::  (UserId -> Handler RepHtmlJson) -> Handler RepHtmlJson
-testLogged v = do
-  maybeUserId <- maybeAuthId
-  case maybeUserId of
-    Nothing -> errorPageJson "You're not logged"
-    Just currentUserId -> (v currentUserId)
-
 postEntryR :: EntryId -> Handler RepHtmlJson
 postEntryR entry = do
   testLogged $ \userId -> do
@@ -263,17 +253,14 @@ deleteEntryR entryId = do
 putEntryR :: EntryId -> Handler RepHtmlJson
 putEntryR = undefined
 
-postReplyCommentR :: EntryId -> CommentId -> Handler RepHtml
-postReplyCommentR entryId commentId = do
-  maybeUserId <- maybeAuthId
-  case maybeUserId of
-    Nothing -> errorPage "You're not logged"
-    Just userId -> do
-      ((res,_),_) <- runFormPost commentForm
-      case res of
-        FormSuccess commentRequest -> do
-          time <- liftIO getCurrentTime
-          let newComment = Comment entryId userId (Just commentId) time (text commentRequest) 0 0
-          _ <- runDB $ insert newComment
-          redirect $ EntryR entryId
-        _ -> errorPage "Please correct your entry form"
+postReplyCommentR :: EntryId -> CommentId -> Handler RepHtmlJson
+postReplyCommentR entryId commentId =
+  testLogged $ \userId -> do
+    ((res,_),_) <- runFormPost commentForm
+    case res of
+      FormSuccess commentRequest -> do
+        time <- liftIO getCurrentTime
+        let newComment = Comment entryId userId (Just commentId) time (text commentRequest) 0 0
+        _ <- runDB $ insert newComment
+        redirect $ EntryR entryId
+      _ -> errorPageJson "Please correct your entry form"
