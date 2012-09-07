@@ -12,13 +12,12 @@ Email
 Entry
     creator UserId
     title   Text
-    url     Text
+    url     Text Maybe
     text    Textarea Maybe
     yeah    Int
     neah    Int
     nbView  Int default=0
     created UTCTime default=CURRENT_TIME
-    UniqueEntry url
 
 -- nbView must be equal to nbVotes for entry
 Vote

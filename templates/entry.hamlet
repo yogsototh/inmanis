@@ -11,7 +11,10 @@ $else
             <div .yeah>#{entryYeah entry}
             <div .neah>#{entryNeah entry}
         <div .firstline>
-            <a href=#{entryUrl entry}>#{entryTitle entry}</a>
+            $if isNothing $ entryUrl entry
+                #{entryTitle entry}
+            $else
+                <a href=#{fromJust $ entryUrl entry}>#{entryTitle entry}</a>
         <div .secondline>
             Submitted #{humanReadableRelativeTime currentTime (entryCreated entry)} by #{creator}
         <div .thirdline>

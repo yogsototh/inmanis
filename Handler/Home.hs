@@ -10,25 +10,22 @@ import Handler.Helper
 import Yesod.Auth
 import Data.Maybe
 
+-- |The `EntryRequest` correspond to the data needed
+-- to create a new entry.
 data EntryRequest = EntryRequest {
                       title :: Text
-                    , url   :: Text
+                    , url   :: Maybe Text
                     , text  :: Maybe Textarea
-                     }
+                    }
+
+-- |the form associated to the EntryRequest data type
 entryForm :: Form EntryRequest
 entryForm = renderDivs  $ EntryRequest
   <$> areq textField "Title" Nothing
-  <*> areq urlField  "Url"   Nothing
+  <*> aopt urlField  "Url"   Nothing
   <*> aopt textareaField  "Text"   Nothing
 
--- This is a handler function for the GET request method on the HomeR
--- resource pattern. All of your resource patterns are defined in
--- config/routes
---
--- The majority of the code you will write in Yesod lives in these handler
--- functions. You can spread them across multiple files if you are so
--- inclined, or create a single monolithic file.
-
+-- |This function write a CSS class if the object were voted
 cssClassVoteForEntry :: (Eq a) => a
                         -> [(a, [Entity (VoteGeneric backend)])]
                         -> Text
@@ -42,27 +39,29 @@ cssClassVoteForEntry entryId votes =
              (-1) -> " neah_voted"
              _    -> ""
 
-creatorOfEntry  :: (Eq a) => a
-                   -> [(a, [Entity (UserGeneric backend)])]
-                   -> Text
+-- |Return the creator of an Entry
+creatorOfEntry  :: (Eq a) => a               -- ^ The object id
+    -> [(a, [Entity (UserGeneric backend)])] -- ^ the lookup table (id, user)
+    -> Text -- ^ the creator name
 creatorOfEntry entryId creators =
   maybe "" strOfVote (lookup entryId creators)
     where
       strOfVote [] = "" :: Text
       strOfVote ((Entity _ creator):_) = userIdent creator
 
-
-currentCreator :: EntryGeneric backend
-                  -> Key backend (UserGeneric backend)
+-- |return True if the creator is the creator of the Entry
+currentCreator :: EntryGeneric backend                 -- ^ The entry
+                  -> Key backend (UserGeneric backend) -- ^ the user id
                   -> Bool
 currentCreator entry userId = entryCreator entry == userId
 
--- the name getHomeR is for
--- handle the request GET on the resource HomeR
+-- |the name `getHomeR` is for
+-- |handle the request `GET` on the resource HomeR
 getHomeR :: Handler RepHtml
 getHomeR = do
   -- We get the current user id (return Nothing if not logged in)
   currentUserId <- maybeAuthId
+  -- We get the current time
   currentTime <- liftIO getCurrentTime
 
   -- Generate a couple
@@ -71,12 +70,16 @@ getHomeR = do
   (widget,enctype) <- generateFormPost entryForm
 
   -- We get the list of entries sorted by entry title
+  -- the votes for the current user for all entries
+  -- the creators of all entries
   (entries,votes,creators) <- runDB $ do
     entries <- selectList [] [Desc EntryCreated, LimitTo 25]
     votes <- case currentUserId of
                  Just user -> do
                    let getVoteForUserEntry (Entity entryId _) = do
-                            votes <- selectList [VoteCreator ==. user, VoteEntry ==. entryId] [LimitTo 1]
+                            votes <- selectList [VoteCreator ==. user,
+                                                 VoteEntry ==. entryId]
+                                                [LimitTo 1]
                             return (entryId,votes)
                    mapM getVoteForUserEntry entries
                  Nothing -> return []
@@ -94,22 +97,31 @@ getHomeR = do
     $(widgetFile "homepage")
 
 
--- When we receive a post request on HomeR resource (/ path)
--- We create a new resource
+-- |When we receive a post request on HomeR resource (/ path)
+-- |We create a new resource
 postEntriesR :: Handler RepHtml
 postEntriesR = do
   userId <- maybeAuthId
   case userId of
     Nothing -> errorPage "You're not logged"
-    Just currentUserId -> do -- errorPage "You're logged"
+    Just currentUserId -> do
       ((res,_),_) <- runFormPost entryForm
       case res of
         FormSuccess personRequest -> do
-          time <- liftIO getCurrentTime
-          let newEntry = Entry currentUserId (title personRequest) (url personRequest) (text personRequest) 0 0 0 time
-          entryId <- runDB $ insert newEntry
-          setMessage $ toHtml (title personRequest)
-          redirect $ EntryR entryId
+              time <- liftIO getCurrentTime
+              let newEntry = Entry currentUserId
+                                  (title personRequest)
+                                  (url personRequest)
+                                  (text personRequest)
+                                  0 0 0 time
+                  badEntry = isNothing (url personRequest)
+                             && isNothing (text personRequest)
+              case badEntry of
+                True -> errorPage "You must enter some text or some URL"
+                False -> do
+                  entryId <- runDB $ insert newEntry
+                  setMessage $ toHtml (title personRequest)
+                  redirect $ EntryR entryId
         _ -> errorPage "Please correct your entry form"
 
 
