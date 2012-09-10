@@ -32,7 +32,7 @@ $else
 <h3> Comments
 
 $if isNothing currentUserId
-    <div .login.right>
+    <div .login>
         <a href=@{AuthR LoginR}> Log in to comment
 $else
     <div .button flipshow=".rootCommentForm">Add a comment
