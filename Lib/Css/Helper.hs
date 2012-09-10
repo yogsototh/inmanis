@@ -22,13 +22,18 @@ module Lib.Css.Helper
   , cyan
   , green
   , light
-  , lightred
+  , lightyellow
   , lightorange
+  , lightred
   , lightcyan
   , shadow
   , shadoworange
+  , shadowred
+  , shadowyellow
   , white
   , black
+  , fullwhite
+  , fullblack
   , slightlywhite
   , slightlyblack
   , headerbackground
@@ -71,7 +76,7 @@ cssVerticalGradient height from to =
 
 
 
-background, foreground, altbackground, altforeground, base03, base02, base01, base00, base0, base1, base2, base3, yellow, orange, red, magenta, violet, blue, cyan, green, lightred, lightorange, lightcyan, shadoworange, white, black, slightlyblack, slightlywhite :: String
+background, foreground, altbackground, altforeground, base03, base02, base01, base00, base0, base1, base2, base3, yellow, orange, red, magenta, violet, blue, cyan, green, lightyellow, lightorange, lightred, lightcyan, shadowyellow, shadoworange, shadowred, white, fullblack, fullwhite, black, slightlyblack, slightlywhite :: String
 
 background=base3
 foreground=base1
@@ -79,7 +84,7 @@ altbackground=base01
 altforeground=base1
 
 headerbackground, footerbackground :: String
-headerbackground=cssGradient altbackground base02
+headerbackground=cssVerticalGradient "100%" base02 altbackground
 footerbackground=cssVerticalGradient "3em" base02 altbackground
 
 base03="#002b36"
@@ -106,13 +111,18 @@ light color = "rgba("++(cssToRgb color)++",0.1)"
 lightred = light red
 lightorange = light orange
 lightcyan = light cyan
+lightyellow = light yellow
 
 shadow :: String -> String
 shadow color = "rgba("++(cssToRgb color)++",0.5)"
 shadoworange = shadow orange
+shadowred = shadow red
+shadowyellow = shadow yellow
 
+fullwhite="rgba(255,255,255,1)"
 white="rgba(255,255,255,0.6)"
 slightlywhite="rgba(255,255,255,0.1)"
+fullblack="rgba(0,43,54,1)"
 black="rgba(0,43,54,0.6)"
 slightlyblack="rgba(0,43,54,0.1)"
 

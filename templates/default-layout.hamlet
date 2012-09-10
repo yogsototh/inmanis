@@ -9,6 +9,8 @@
         ^{widget}
     <footer>
       <div class="content">
+        <div><a href="http://yannesposito.com">Yann Esposito</a>
+        <div><a href="http://twitter.com/yogsototh">@yogsototh</a>
         <div>#{extraCopyright $ appExtra $ settings master}
 
 $maybe analytics <- extraAnalytics $ appExtra $ settings master
