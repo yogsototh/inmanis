@@ -5,6 +5,11 @@ $else
     <div #logout>
         <a href=@{AuthR LogoutR}>Log out
 
+$if isNothing $ entryText entry
+$else
+    <h2>#{entryTitle entry}
+    <div .entryText>#{fromJust $ entryText entry}
+
 <ul>
     <li .entryLine>
         <div class="vote#{cssClassVote votes}" url=@{EntryR entryId}>
@@ -23,15 +28,11 @@ $else
               \ - #
           $else
           <a class="delete" href=@{EntryR entryId} url=@{EntryR entryId}>delete</a>
-    $if isNothing $ entryText entry
-    $else
-        <h2>#{entryTitle entry}
-        <div .entryText>#{fromJust $ entryText entry}
 
 <h3> Comments
 
 $if isNothing currentUserId
-    <div .login>
+    <div .login.right>
         <a href=@{AuthR LoginR}> Log in to comment
 $else
     <div .button flipshow=".rootCommentForm">Add a comment
@@ -39,6 +40,7 @@ $else
         <form method=post action=@{CommentsR entryId} enctype=#{enctype}>
             ^{widget}
             <input type=submit value="Post">
+
 
 $if null comments
     <p> Be the first to comment
