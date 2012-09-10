@@ -1,5 +1,5 @@
 $if isNothing currentUserId
-    <div .login>
+    <div #login>
         <a href=@{AuthR LoginR}> Log in
 $else
     <div #logout>
