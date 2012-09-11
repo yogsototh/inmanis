@@ -14,8 +14,29 @@ import Data.Text (pack)
 getCommentR :: CommentId -> Handler RepHtml
 getCommentR _ = error "Not yet implemented: getCommentR"
 
-postCommentR :: CommentId -> Handler RepHtml
-postCommentR _ = error "Not yet implemented: postCommentR"
+-- |The comment data needed for creating a comment
+data CommentRequest = CommentRequest { textComment   :: Textarea }
+
+-- |The comment form data structure
+commentForm :: Form CommentRequest
+commentForm = renderDivs  $ CommentRequest <$> areq textareaField "Text" Nothing
+
+postCommentR :: CommentId -> Handler RepHtmlJson
+postCommentR commentId = do
+  testLogged $ \userId -> do
+    maybeComment <- runDB $ get commentId
+    case maybeComment of
+      Nothing -> errorPageJson "The comment doesn't exists"
+      Just comment ->
+            case commentCreator comment == userId of
+              False -> errorPageJson "You are not the creator of this comment"
+              True -> do
+                ((res,_),_) <- runFormPost commentForm
+                case res of
+                  FormSuccess commentRequest -> do
+                    _ <- runDB $ update commentId [CommentContent =. textComment commentRequest]
+                    redirect $ EntryR (commentEntry comment)
+                  _ -> errorPageJson "Please correct your comment form"
 
 putCommentR :: CommentId -> Handler RepHtml
 putCommentR _ = error "Not yet implemented: putCommentR"
