@@ -82,7 +82,7 @@ function editComment(initText,flippedText,elem) {
     }
     if ($(target).find("textarea").html() == "" ) {
         $(target).find("textarea").html(
-            elem.parent().parent().find(".content").html() );
+            elem.parent().parent().find("> .content").text() );
     }
     $(target).toggle();
 }
