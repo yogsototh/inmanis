@@ -61,8 +61,8 @@ header {
             text-shadow: 1px 1px 0px #{white}, -1px -1px 0px #{black};
             font-weight: bold; }
         a, a:visited { color: #{base0}; }
-        a:hover { color: #{yellow}; 
-            text-shadow: 1px 1px 0px #{lightyellow}, -1px -1px 0px #{shadowyellow}; }
+        a:hover { color: #{alttextEmphColor};
+            text-shadow: 1px 1px 0px #{white}, -1px -1px 0px #{black}; }
     }
     h1 { font-size: 5em; }
     h2 { font-size: 2em; }

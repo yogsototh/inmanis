@@ -9,6 +9,7 @@ module Lib.Css.Helper
   , foreground
   , altbackground
   , altforeground
+  , alttextEmphColor
 
   -- specific (mixins)
   , headerbackground
