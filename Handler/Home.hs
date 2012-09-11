@@ -117,6 +117,7 @@ postEntriesR =
                 True -> errorPageJson "You must enter some text or some URL"
                 False -> do
                   entryId <- runDB $ insert newEntry
+                  voteId <- runDB $ insert $ Vote currentUserId entryId 1
                   setMessage $ toHtml (title personRequest)
                   redirect $ EntryR entryId
         _ -> errorPageJson "Please correct your entry form"
