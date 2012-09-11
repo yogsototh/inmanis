@@ -10,6 +10,8 @@ module Lib.Css.Helper
   , altbackground
   , altforeground
   , alttextEmphColor
+  , altbackHighlightColor
+  , alttextSecondaryColor
 
   -- specific (mixins)
   , headerbackground

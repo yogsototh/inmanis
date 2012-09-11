@@ -10,12 +10,18 @@
   -o-transition-duration: 0.3s;
 }
 
+body::selection { background: none repeat scroll 0 0 #{altbackHighlightColor} }
+body::-moz-selection { background: none repeat scroll 0 0 #{altbackHighlightColor} }
+#main::selection { background: none repeat scroll 0 0 #{backHighlightColor} }
+#main::-moz-selection { background: none repeat scroll 0 0 #{backHighlightColor} }
+
 /* the main style */
 body {
     font-family: Georgia, Palatino, Serif;
     background-color: #{base03};
     color: #{base0};
     font-size: 18px;
+    line-height: 1.5em;
 }
 
 a { color: #{base01}; text-decoration: none; }
@@ -55,6 +61,7 @@ header {
     padding: 1em 1em 2em 1em;
     border-bottom: solid 1px #{base03};
     h1,h2 {
+        line-height: 1em;
         margin: 0;
         a, a:visited, a:hover {
             color: #{base0};
@@ -230,7 +237,7 @@ form {
 .button {
     cursor: pointer;
     font-size: 12px;
-    padding: 10px;
+    padding: 0 10px;
     color: #{base1};
     margin: 1em 0;
     display: block;

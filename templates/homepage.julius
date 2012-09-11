@@ -85,7 +85,7 @@ function ask(msg,f,yes,no) {
 function askDeleteEntry(e) {
     e.preventDefault();
     var url=$(this).attr('url');
-    ask("<div>Delete <strong>"+$(this).parent().parent().find('> .firstline').html() + "</strong>?</div>"
+    ask("<div>Delete <strong>"+$(this).parent().parent().children('.firstline').html() + "</strong>?</div>"
     , function(){deleteEntry(url);}
     , "Yes"
     , "No");
