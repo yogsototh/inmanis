@@ -62,7 +62,7 @@ function clicked() {
     };
 }
 
-function ask(msg,f) {
+function ask(msg,f,yes,no) {
    if ($('#popin').length == 0) {
        $('<div/>',{  id: "popin" , click: function(){$("#popin").hide(); }
                   }).appendTo($('body'));
@@ -73,11 +73,11 @@ function ask(msg,f) {
    $('<div/>', { "class": "buttons"}).appendTo($("#popin .insidebox"));
    $('<div/>', { click: function(){f();$("#popin").hide();}
                , "class": "button"
-               , text: "Yes"
+               , text: yes
                }).appendTo("#popin .insidebox .buttons");
    $('<div/>', { click: function(){ $("#popin").hide();}
                , "class": "button"
-               , text: "No"
+               , text: no
                }).appendTo("#popin .insidebox .buttons");
    $('<div class="flush"></div>').appendTo("#popin .insidebox .buttons");
 }
@@ -85,8 +85,10 @@ function ask(msg,f) {
 function askDeleteEntry(e) {
     e.preventDefault();
     var url=$(this).attr('url');
-    ask("Are you sure you want to delete this entry?",
-        function(){deleteEntry(url);});
+    ask("<div>Delete <strong>"+$(this).parent().parent().find('> .firstline').html() + "</strong>?</div>"
+    , function(){deleteEntry(url);}
+    , "Yes"
+    , "No");
 }
 
 function deleteEntry(url) {
