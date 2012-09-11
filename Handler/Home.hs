@@ -110,7 +110,7 @@ postEntriesR =
                                   (title personRequest)
                                   (url personRequest)
                                   (text personRequest)
-                                  0 0 0 time
+                                  1 0 1 time
                   badEntry = isNothing (url personRequest)
                              && isNothing (text personRequest)
               case badEntry of

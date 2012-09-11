@@ -31,7 +31,7 @@ postCommentsR entryId =
       case res of
         FormSuccess commentRequest -> do
           time <- liftIO getCurrentTime
-          let newComment = Comment entryId userId Nothing time (textComment commentRequest) 0 0 0
+          let newComment = Comment entryId userId Nothing time (textComment commentRequest) 1 0 1
           _ <- runDB $ insert newComment
           redirect $ EntryR entryId
         _ -> errorPageJson "Please correct your entry form"
@@ -303,7 +303,7 @@ postReplyCommentR entryId commentId =
     case res of
       FormSuccess commentRequest -> do
         time <- liftIO getCurrentTime
-        let newComment = Comment entryId userId (Just commentId) time (textComment commentRequest) 0 0 0
+        let newComment = Comment entryId userId (Just commentId) time (textComment commentRequest) 1 0 1
         _ <- runDB $ insert newComment
         redirect $ EntryR entryId
       _ -> errorPageJson "Please correct your entry form"
