@@ -10,16 +10,19 @@
   -o-transition-duration: 0.3s;
 }
 
+/* the main style */
 body {
     font-family: Georgia, Palatino, Serif;
-    background-color: #{altbackground};
-    color: #{altforeground};
+    background-color: #{base03};
+    color: #{base0};
     font-size: 18px;
 }
 
-a { color: #{base00}; text-decoration: none; }
-a:visited { color: #{base01}; }
-a:hover { color: #{yellow}; text-shadow: 0 0 1px #{shadowyellow}; }
+a { color: #{base01}; text-decoration: none; }
+a:visited { color: #{base1}; }
+a:hover { color: #{yellow}; text-shadow: 0 0 1px #{shadowred}; }
+
+hr { border: solid #{slightlyblack} 1px; }
 
 /* Layout */
 .content {
@@ -36,38 +39,46 @@ ul, ol {
   margin-bottom: 1em;
 }
 p { line-height: 1.5em; }
+
+/* Utils */
+.flush { clear: both; }
+.left  { float: left; }
+.right { float: right; }
+
+/* Dark background header and footer */
 header {
-    /* background: #{altbackground}; */
-    #{headerbackground}
-    /* background: url("@{StaticR img_skin_side_up_png}") repeat; */
+    color: #{base0};
+    background-color: #{base03};
     text-align: center;
     top: 0;
     margin: 0;
     padding: 1em 1em 2em 1em;
     border-bottom: solid 1px #{base03};
     h1,h2 {
-        a, a:visited, a:hover {
-            text-shadow: 1px 1px 0px #{white}, -1px -1px 0px #{black};
-            font-weight: bold;
-            }
-        a, a:visited { color: #{base1}; }
-        a:hover { color: #{base2}; }
         margin: 0;
+        a, a:visited, a:hover {
+            color: #{base0};
+            text-shadow: 1px 1px 0px #{white}, -1px -1px 0px #{black};
+            font-weight: bold; }
+        a, a:visited { color: #{base0}; }
+        a:hover { color: #{yellow}; 
+            text-shadow: 1px 1px 0px #{lightyellow}, -1px -1px 0px #{shadowyellow}; }
     }
     h1 { font-size: 5em; }
     h2 { font-size: 2em; }
 }
-
 footer {
+    color: #{base0};
+    background-color: #{base03};
     line-height: 2em;
     padding: 1em 1em 2em 1em;
     border-top: solid 1px #889;
     text-align: left;
     min-height: 4em;
     .content > div {font-size: .9em;}
-    a { color: #{base2};}
-    a:visited { color: #{base1}; }
 }
+
+/* Light background main view */
 #main {
     background-color: #{background};
     color: #{foreground};
@@ -77,47 +88,47 @@ footer {
     box-shadow: 0 16px 16px #{black};
 }
 
-form label {
-    width: 5em;
-    display: inline-block;
-    text-align: right;
-    margin-right: 1em;
+/* Forms */
+form {
+    div { margin: 1em auto; }
+    label {
+        width: 5em;
+        display: inline-block;
+        text-align: right;
+        margin-right: 1em; }
+    textarea
+    , input {
+        font-family: Georgia, Palatino, Serif;
+        color: #{base01};
+        border-radius: 3px;
+        background: #{base2};
+        box-shadow: 1px 1px 2px #{base03} inset;
+        border: 0; padding: .3em;
+        max-width: 30em;
+        width: 30em; }
+    input[type="submit"] {
+        color: #{base1};
+        margin: 0 auto;
+        display: block;
+        width: 5em;
+    	max-width: 5em;
+        box-shadow: 1px 1px 2px #{black};
+        font-weight: bold;
+        text-shadow: 0 1px #{white};
+        border: solid 1px;}
+    input[type="submit"]:hover {
+        color: #{base0};
+        border-color: #{base0};
+        background-color:#{base2};
+        box-shadow: 1px 1px 4px #{black};
+        }
+    input[type="submit"]:active {
+        box-shadow: -1px -1px 1px #{shadowyellow};
+        background-color: #{lightyellow};
+        border-color: #{yellow};
+        color: #{yellow};
+        }
 }
-form div { margin: 1em auto; }
-form textarea,
-form input {
-    font-family: Georgia, Palatino, Serif;
-    color: #{base01};
-    border-radius: 3px;
-    background: #{base2};
-    box-shadow: 1px 1px 2px #{base03} inset;
-    border: 0; padding: .3em;
-    max-width: 30em;
-    width: 30em; }
-
-/* Form Buttons */
-form input[type="submit"] {
-    color: #{base1};
-    margin: 0 auto;
-    display: block;
-    width: 5em;
-	max-width: 5em;
-    box-shadow: 1px 1px 2px #{black};
-    font-weight: bold;
-    text-shadow: 0 1px #{white};
-    border: solid 1px;}
-form input[type="submit"]:hover {
-    color: #{base0};
-    border-color: #{base0};
-    background-color:#{base2};
-    box-shadow: 1px 1px 4px #{black};
-    }
-form input[type="submit"]:active {
-    box-shadow: -1px -1px 1px #{shadowyellow};
-    background-color: #{lightyellow};
-    border-color: #{yellow};
-    color: #{yellow};
-    }
 
 /* URL Entry */
 .entryLine {
@@ -150,17 +161,14 @@ form input[type="submit"]:active {
 .yeah_voted .yeah {
     background-color: #{lightred};
     color: #{red};
-    box-shadow: 0px 0px 2px #{red} inset;
-}
+    box-shadow: 0px 0px 2px #{red} inset; }
 .neah_voted .neah {
     background-color: #{lightcyan};
     color: #{cyan};
-    box-shadow: 0px 0px 2px #{cyan} inset;
-}
+    box-shadow: 0px 0px 2px #{cyan} inset; }
 .firstline,.secondline,.thirdline {
     line-height: 1em;
-    height: 1em;
-}
+    height: 1em; }
 .firstline { line-height: 1.3em; }
 .thirdline { font-size: .8em;}
 
@@ -175,32 +183,28 @@ form input[type="submit"]:active {
     left: 0;
     top: 0;
     background-color: #{black};
-    }
-#popin .insidebox,
-#loginmessage .insidebox {
-    width: 37em;
-    margin: 0 auto;
-    padding: 1em;
-    position: relative;
-    top: 30%;
-    left: 0%;
-    background-color: #{background};
-    color: #{foreground};
-    border-radius: 3px;
-    box-shadow: 0 0 10px #{fullblack};
+    .insidebox {
+        width: 37em;
+        margin: 0 auto;
+        padding: 1em;
+        position: relative;
+        top: 30%;
+        left: 0%;
+        background-color: #{background};
+        color: #{foreground};
+        border-radius: 3px;
+        box-shadow: 0 0 10px #{fullblack};
+        }
+    .buttons { margin: 0 auto; }
+    .button {
+        font-size: 1.1em;
+        float: left;
+        margin: 1em 1em 0 0;
+        border: solid 1px;
+        padding: 0.6em;
+        cursor: pointer;}
     }
 
-#popin .buttons{
-    margin: 0 auto;
-}
-#popin .button{
-    font-size: 1.1em;
-    float: left;
-    margin: 1em 1em 0 0;
-    border: solid 1px;
-    padding: 0.6em;
-    cursor: pointer;}
-.flush { clear: both; }
 #loginmessage .close {
     float: right;
     cursor: pointer;
@@ -250,14 +254,18 @@ form input[type="submit"]:active {
     border-color: #{yellow};
     color: #{yellow};
     }
-.entryText { margin-bottom: 1em; padding-bottom: 1em; border-bottom: solid #{slightlyblack} 1px;  }
-hr { border: solid #{slightlyblack} 1px; }
-.left { float: left; }
-.right { float: right; }
-#login, #logout { position: absolute; top: 10px; right: 20px; }
+.entryText {
+    margin-bottom: 1em;
+    padding-bottom: 1em;
+    border-bottom: solid #{slightlyblack} 1px;
+    }
+#login, #logout {
+    position: absolute;
+    top: 10px;
+    right: 20px; }
 .actions > span { color: #{base00}; }
 .actions > span:hover {
     color: #{yellow};
     text-shadow: 0 0 1px #{shadowyellow};
     cursor: pointer;
-}
+    }
