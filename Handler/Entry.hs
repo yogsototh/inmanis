@@ -85,12 +85,17 @@ showCommentTree tree creators widget enctype voteComments=
       <div .content>
         #{commentContent comment}
       <div .actions>
-        <span .edit>edit
+        <span .edit flipshow="#edit#{showId commentId}">edit
         \ - #
         <span .delete>delete
         \ - #
         <span .reply flipshow="##{showId commentId}">reply
+      <div .hide #edit#{showId commentId}>
+        <form method=post action=@{CommentR commentId} enctype=#{enctype}>
+          ^{widget}
+          <input type=submit value="Post">
       <div .replyForm .hide ##{showId commentId}>
+        <h4>Reply
         <form method=post action=@{ReplyCommentR entryId commentId} enctype=#{enctype}>
           ^{widget}
           <input type=submit value="Post">

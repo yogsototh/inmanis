@@ -24,7 +24,7 @@ $else
             Submitted #{humanReadableRelativeTime currentTime (entryCreated entry)} by #{creator}
         <div .thirdline.actions>
           $if isEntryOwned
-              <span .edit
+              <span .editentry
                     flipshow="#editentry"
                     url=@{EntryR entryId}>edit</a>
               \ - #

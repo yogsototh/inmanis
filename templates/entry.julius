@@ -73,6 +73,20 @@ function flipauto(initText,flippedText,elem) {
     $(target).toggle();
 }
 
+function editComment(initText,flippedText,elem) {
+    var target=elem.attr("flipshow");
+    if (elem.html() == initText) {
+        elem.html(flippedText);
+    } else {
+        elem.html(initText);
+    }
+    if ($(target).find("textarea").html() == "" ) {
+        $(target).find("textarea").html(
+            elem.parent().parent().find(".content").html() );
+    }
+    $(target).toggle();
+}
+
 $(document).ready(function(){
     $(".yeah").click(clicked("yeah"));
     $(".neah").click(clicked("neah"));
@@ -88,7 +102,10 @@ $(document).ready(function(){
     $(".reply").click(function() {
         flipauto("reply","hide comment",$(this));
         });
-    $(".edit").click(function() {
+    $(".editentry").click(function() {
         flipauto("edit","hide edit form",$(this));
+        });
+    $("#comments .edit").click(function() {
+        editComment("edit","hide edit form",$(this));
         });
 });
