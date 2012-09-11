@@ -1,18 +1,20 @@
 module Lib.Css.Helper
-  ( cssGradient
-  , cssVerticalGradient
+  (
+  -- Meta description
+    textEmphColor
+  , textColor
+  , textSecondaryColor
+  , backHighlightColor
   , background
   , foreground
   , altbackground
   , altforeground
-  , base03
-  , base02
-  , base01
-  , base00
-  , base0
-  , base1
-  , base2
-  , base3
+
+  -- specific (mixins)
+  , headerbackground
+  , footerbackground
+
+  -- colors
   , yellow
   , orange
   , red
@@ -21,12 +23,28 @@ module Lib.Css.Helper
   , blue
   , cyan
   , green
+
+  -- functions
+  , cssGradient
+  , cssVerticalGradient
   , light
+  , shadow
+
+  -- bases
+  , base03
+  , base02
+  , base01
+  , base00
+  , base0
+  , base1
+  , base2
+  , base3
+
+  -- variant colors
   , lightyellow
   , lightorange
   , lightred
   , lightcyan
-  , shadow
   , shadoworange
   , shadowred
   , shadowyellow
@@ -36,14 +54,105 @@ module Lib.Css.Helper
   , fullblack
   , slightlywhite
   , slightlyblack
-  , headerbackground
-  , footerbackground
+
   )
 where
 
 import Prelude
 import Numeric (readHex)
 import Data.List (intercalate)
+
+
+headerbackground, footerbackground :: String
+
+headerbackground=cssVerticalGradient "100%" base02 altbackground
+footerbackground=cssVerticalGradient "3em" base02 altbackground
+
+background, backHighlightColor, foreground :: String
+textColor, textSecondaryColor, textEmphColor :: String
+
+background=base3
+backHighlightColor=base2
+foreground=base00
+textColor=foreground
+textSecondaryColor=base1
+textEmphColor=base01
+
+altbackground, altbackHighlightColor, altforeground, alttextcolor :: String
+alttextSecondaryColor, alttextEmphColor :: String
+
+altbackground=base01
+altbackHighlightColor=base02
+altforeground=base0
+alttextcolor=altforeground
+alttextSecondaryColor=base01
+alttextEmphColor=base1
+
+base03, base02, base01, base00, base0, base1, base2, base3 :: String
+
+base03="#002b36"
+base02="#073642"
+base01="#586e75"
+base00="#657b83"
+base0="#839496"
+base1="#93a1a1"
+base2="#eee8d5"
+base3="#fdf6e3"
+
+yellow , orange , red , magenta , violet , blue , cyan , green :: String
+
+yellow  = "#b58900"
+orange  = "#cb4b16"
+red     = "#dc322f"
+magenta = "#d33682"
+violet  = "#6c71c4"
+blue    = "#268bd2"
+cyan    = "#2aa198"
+green   = "#859900"
+
+light :: String -> String
+light color = "rgba("++(cssToRgb color)++",0.1)"
+
+lightred , lightorange , lightcyan , lightyellow :: String
+
+lightred    = light red
+lightorange = light orange
+lightcyan   = light cyan
+lightyellow = light yellow
+
+shadow :: String -> String
+shadow color = "rgba("++(cssToRgb color)++",0.5)"
+
+shadoworange, shadowred, shadowyellow :: String
+
+shadoworange  = shadow orange
+shadowred     = shadow red
+shadowyellow  = shadow yellow
+
+-- Transparent colors
+
+fullwhite, white, slightlywhite :: String
+
+fullwhite     = "rgba(255,255,255,1)"
+white         = "rgba(255,255,255,0.6)"
+slightlywhite = "rgba(255,255,255,0.1)"
+
+fullblack, black, slightlyblack :: String
+
+fullblack     = "rgba(0,43,54,1)"
+black         = "rgba(0,43,54,0.6)"
+slightlyblack = "rgba(0,43,54,0.1)"
+
+-- Hexa style colors
+scalarFromHex :: String ->  Int
+scalarFromHex = fst . head . readHex
+
+-- | Color from CSS style color string
+cssToRgb :: String -> String
+cssToRgb ('#':rd:ru:gd:gu:bd:bu:[]) = intercalate "," $
+  map (show . scalarFromHex) [[rd,ru],[gd,gu],[bd,bu]]
+cssToRgb ('#':r:g:b:[]) = cssToRgb ['#',r,r,g,g,b,b]
+cssToRgb _ = error "Bad color!!!!"
 
 cssGradient :: String -> String -> String
 cssGradient from to =
@@ -72,67 +181,3 @@ cssVerticalGradient height from to =
   where
       rgbfrom = cssToRgb from
       rgbto   = cssToRgb to
-
-
-
-
-background, foreground, altbackground, altforeground, base03, base02, base01, base00, base0, base1, base2, base3, yellow, orange, red, magenta, violet, blue, cyan, green, lightyellow, lightorange, lightred, lightcyan, shadowyellow, shadoworange, shadowred, white, fullblack, fullwhite, black, slightlyblack, slightlywhite :: String
-
-background=base3
-foreground=base1
-altbackground=base01
-altforeground=base1
-
-headerbackground, footerbackground :: String
-headerbackground=cssVerticalGradient "100%" base02 altbackground
-footerbackground=cssVerticalGradient "3em" base02 altbackground
-
-base03="#002b36"
-base02="#073642"
-base01="#586e75"
-base00="#657b83"
-base0="#839496"
-base1="#93a1a1"
-base2="#eee8d5"
-base3="#fdf6e3"
-
-yellow  = "#b58900"
-orange  = "#cb4b16"
-red     = "#dc322f"
-magenta = "#d33682"
-violet  = "#6c71c4"
-blue    = "#268bd2"
-cyan    = "#2aa198"
-green   = "#859900"
-
-light :: String -> String
-light color = "rgba("++(cssToRgb color)++",0.1)"
-
-lightred = light red
-lightorange = light orange
-lightcyan = light cyan
-lightyellow = light yellow
-
-shadow :: String -> String
-shadow color = "rgba("++(cssToRgb color)++",0.5)"
-shadoworange = shadow orange
-shadowred = shadow red
-shadowyellow = shadow yellow
-
-fullwhite="rgba(255,255,255,1)"
-white="rgba(255,255,255,0.6)"
-slightlywhite="rgba(255,255,255,0.1)"
-fullblack="rgba(0,43,54,1)"
-black="rgba(0,43,54,0.6)"
-slightlyblack="rgba(0,43,54,0.1)"
-
--- Hexa style colors
-scalarFromHex :: String ->  Int
-scalarFromHex = fst . head . readHex
-
--- | Color from CSS style color string
-cssToRgb :: String -> String
-cssToRgb ('#':rd:ru:gd:gu:bd:bu:[]) = intercalate "," $
-  map (show . scalarFromHex) [[rd,ru],[gd,gu],[bd,bu]]
-cssToRgb ('#':r:g:b:[]) = cssToRgb ['#',r,r,g,g,b,b]
-cssToRgb _ = error "Bad color!!!!"
