@@ -253,5 +253,4 @@ form input[type="submit"]:active {
 hr { border: solid #{slightlyblack} 1px; }
 .left { float: left; }
 .right { float: right; }
-#logout { position: absolute; top: 10px; right: 20px; }
-#login { position: absolute; top: 10px; right: 20px; }
+#login, #logout { position: absolute; top: 10px; right: 20px; }
