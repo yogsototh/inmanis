@@ -68,14 +68,14 @@ function ask(msg,f) {
                   }).appendTo($('body'));
        $('<div/>',{"class": "insidebox"}).appendTo($("#popin"));
    }
-   $("#popin").show() 
+   $("#popin").show()
    $("#popin .insidebox").html(msg);
    $('<div/>', { "class": "buttons"}).appendTo($("#popin .insidebox"));
-   $('<div/>', { click: function(){f();$("#popin").hide();} 
+   $('<div/>', { click: function(){f();$("#popin").hide();}
                , "class": "button"
                , text: "Yes"
                }).appendTo("#popin .insidebox .buttons");
-   $('<div/>', { click: function(){ $("#popin").hide();} 
+   $('<div/>', { click: function(){ $("#popin").hide();}
                , "class": "button"
                , text: "No"
                }).appendTo("#popin .insidebox .buttons");
@@ -86,7 +86,7 @@ function askDeleteEntry(e) {
     e.preventDefault();
     var url=$(this).attr('url');
     ask("Are you sure you want to delete this entry?",
-        function(){deleteEntry(url);}); 
+        function(){deleteEntry(url);});
 }
 
 function deleteEntry(url) {
