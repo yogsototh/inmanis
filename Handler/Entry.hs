@@ -10,15 +10,14 @@ where
 
 import Import
 import Handler.Helper
+import Yesod.Auth
+import Yesod.Markdown
 import Data.Maybe
 import Data.Text (pack)
 import Data.Tree
-import Yesod.Markdown
-import Yesod.Auth
-import Database.Persist.GenericSql.Raw
 
 -- |The comment data needed for creating a comment
-data CommentRequest = CommentRequest { text   :: Textarea }
+data CommentRequest = CommentRequest { textComment   :: Textarea }
 
 -- |The comment form data structure
 commentForm :: Form CommentRequest
@@ -32,7 +31,7 @@ postCommentsR entryId =
       case res of
         FormSuccess commentRequest -> do
           time <- liftIO getCurrentTime
-          let newComment = Comment entryId userId Nothing time (text commentRequest) 0 0 0
+          let newComment = Comment entryId userId Nothing time (textComment commentRequest) 0 0 0
           _ <- runDB $ insert newComment
           redirect $ EntryR entryId
         _ -> errorPageJson "Please correct your entry form"
@@ -110,6 +109,28 @@ creatorOfEntity entityId creators =
       entUserIdent [] = "No name"
       entUserIdent ((Entity _ creator):_) = userIdent creator
 
+-- |The `EntryRequest` correspond to the data needed
+-- to create a new entry.
+data EntryRequest = EntryRequest {
+                      title :: Text
+                    , url   :: Maybe Text
+                    , text  :: Maybe Textarea
+                    }
+
+
+-- |the form associated to the EntryRequest data type
+entryForm :: Entry -> Form EntryRequest
+entryForm entry = renderDivs  $ EntryRequest
+  <$> areq textField      "Title" (Just (entryTitle entry))
+  <*> aopt urlField       "Url"   (Just (entryUrl entry))
+  <*> aopt textareaField  "Text"  (Just (entryText entry))
+
+emptyEntryForm :: Form EntryRequest
+emptyEntryForm = renderDivs  $ EntryRequest
+  <$> areq textField      "Title" Nothing
+  <*> aopt urlField       "Url"   Nothing
+  <*> aopt textareaField  "Text"  Nothing
+
 getEntryR :: EntryId -> Handler RepHtmlJson
 getEntryR entryId = do
   currentUserId <- maybeAuthId
@@ -127,6 +148,7 @@ getEntryR entryId = do
                   return (commentId, creators)
             mapM getUserCreatorIdent comments
       return (entry, comments, maybeCreator,creators)
+  (widgetEntry,enctypeEntry) <- generateFormPost (entryForm entry)
   votes <- runDB $ maybe
                     (return [])
                     (\userId -> selectList [VoteEntry ==. entryId,
@@ -158,7 +180,7 @@ getEntryR entryId = do
 
 
 postEntryR :: EntryId -> Handler RepHtmlJson
-postEntryR entry = do
+postEntryR entryId = do
   testLogged $ \userId -> do
     req <- runRequestBody
     let  yeah = lookup "yeah" (fst req)
@@ -166,9 +188,24 @@ postEntryR entry = do
     case yeah of
       Nothing ->
         case neah of
-          Nothing -> errorPageJson $ "Neither Yeah nor Neah!"
-          _       -> downvote userId entry
-      _ -> upvote userId entry
+          Nothing -> updateEntry
+          _       -> downvote userId entryId
+      _ -> upvote userId entryId
+  where
+    updateEntry = do
+      maybeEntry <- runDB $ get entryId
+      case maybeEntry of
+        Nothing    -> errorPageJson "Bad entry id"
+        Just entry -> do
+          ((res,_),_) <- runFormPost emptyEntryForm
+          case res of
+              FormSuccess entryRequest -> do
+                _ <- runDB $ update entryId [ EntryTitle =. title entryRequest
+                                            , EntryUrl   =.   url entryRequest
+                                            , EntryText  =.  text entryRequest]
+                redirect $ EntryR entryId
+              _ -> errorPageJson "Please correct your entry form"
+
 
 downvote :: UserId -> EntryId -> Handler RepHtmlJson
 downvote = setVoteValue (-1)
@@ -261,7 +298,7 @@ postReplyCommentR entryId commentId =
     case res of
       FormSuccess commentRequest -> do
         time <- liftIO getCurrentTime
-        let newComment = Comment entryId userId (Just commentId) time (text commentRequest) 0 0 0
+        let newComment = Comment entryId userId (Just commentId) time (textComment commentRequest) 0 0 0
         _ <- runDB $ insert newComment
         redirect $ EntryR entryId
       _ -> errorPageJson "Please correct your entry form"

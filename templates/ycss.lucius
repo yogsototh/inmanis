@@ -163,6 +163,7 @@ form input[type="submit"]:active {
 }
 .firstline { line-height: 1.3em; }
 .thirdline { font-size: .8em;}
+
 #loginmessage,#popin {
     display: none;
     position: fixed;
@@ -254,3 +255,9 @@ hr { border: solid #{slightlyblack} 1px; }
 .left { float: left; }
 .right { float: right; }
 #login, #logout { position: absolute; top: 10px; right: 20px; }
+.actions > span { color: #{base00}; }
+.actions > span:hover {
+    color: #{yellow};
+    text-shadow: 0 0 1px #{shadowyellow};
+    cursor: pointer;
+}

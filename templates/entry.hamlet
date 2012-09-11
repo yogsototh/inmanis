@@ -22,12 +22,21 @@ $else
                 <a href=#{fromJust $ entryUrl entry}>#{entryTitle entry}</a>
         <div .secondline>
             Submitted #{humanReadableRelativeTime currentTime (entryCreated entry)} by #{creator}
-        <div .thirdline>
+        <div .thirdline.actions>
           $if isEntryOwned
-              <a class="edit" href=@{EntryR entryId}>edit</a>
+              <span .edit
+                    flipshow="#editentry"
+                    url=@{EntryR entryId}>edit</a>
               \ - #
           $else
-          <a class="delete" href=@{EntryR entryId} url=@{EntryR entryId}>delete</a>
+          <a class="delete"
+             href=@{EntryR entryId}
+             url=@{EntryR entryId}>delete</a>
+
+<div #editentry .hide>
+    <form method=post action=@{EntryR entryId} enctype=#{enctypeEntry}>
+        ^{widgetEntry}
+        <input type=submit value="Post">
 
 <h3> Comments
 
