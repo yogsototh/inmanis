@@ -7,7 +7,11 @@ $else
 
 $if isNothing $ entryText entry
 $else
-    <h2>#{entryTitle entry}
+    <h2>
+        $if isNothing $ entryUrl entry
+            #{entryTitle entry}
+        $else
+            <a href=#{fromJust $ entryUrl entry}>#{entryTitle entry} <span class="light">»</span></a>
     <div .entryText>#{fromJust $ entryText entry}
 
 <ul>

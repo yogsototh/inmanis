@@ -26,7 +26,7 @@ body {
 
 a { color: #{base01}; text-decoration: none; }
 a:visited { color: #{base1}; }
-a:hover { color: #{yellow}; text-shadow: 0 0 1px #{shadowred}; }
+a:hover { color: #{violet}; text-shadow: 0 0 1px #{shadowviolet}; }
 
 hr { border: solid #{slightlyblack} 1px; }
 
@@ -73,10 +73,12 @@ header {
     }
     h1 { font-size: 5em; }
     h2 { font-size: 2em; }
+    a:hover { color: #{yellow}; text-shadow: 0 0 1px #{shadowyellow}; }
 }
 footer {
     color: #{base0};
     background-color: #{base03};
+    a:hover { color: #{yellow}; text-shadow: 0 0 1px #{shadowyellow}; }
     line-height: 2em;
     padding: 1em 1em 2em 1em;
     border-top: solid 1px #889;
@@ -157,21 +159,21 @@ form {
     font-size: .75em; }
 .neah { margin: 2px 0; }
 .yeah:hover {
-    color: #{red};
-    box-shadow: 0px 0px 4px #{red} inset;
-    background-color: #{lightred}; }
+    color: #{violet};
+    box-shadow: 0px 0px 4px #{violet} inset;
+    background-color: #{lightviolet}; }
 .neah:hover {
-    color: #{cyan};
-    box-shadow: 0px 0px 4px #{cyan} inset;
-    background-color: #{lightcyan}; }
+    color: #{green};
+    box-shadow: 0px 0px 4px #{green} inset;
+    background-color: #{lightgreen}; }
 .yeah_voted .yeah {
-    background-color: #{lightred};
-    color: #{red};
-    box-shadow: 0px 0px 2px #{red} inset; }
+    background-color: #{lightviolet};
+    color: #{violet};
+    box-shadow: 0px 0px 2px #{violet} inset; }
 .neah_voted .neah {
-    background-color: #{lightcyan};
-    color: #{cyan};
-    box-shadow: 0px 0px 2px #{cyan} inset; }
+    background-color: #{lightgreen};
+    color: #{green};
+    box-shadow: 0px 0px 2px #{shadowgreen} inset; }
 .firstline,.secondline,.thirdline {
     overflow: hidden;
     line-height: 1em; }
@@ -216,6 +218,12 @@ form {
     float: right;
     cursor: pointer;
     }
+.action {
+    cursor: pointer; }
+.action:hover {
+    color: #{yellow};
+    text-shadow: 0 0 1px #{shadowyellow};
+    }
 
 #comments {
     font-size: .9em;
@@ -224,8 +232,8 @@ form {
          padding: 10px;
          border-radius: 2px; }
     .meta { font-size: .7em; height: 1.7em;}
-    .actions { font-size: .7em; margin-top: .5em; }
     .content { min-height: 1.5em; color: #{base01}; }
+    .actions { font-size: .8em; margin-top: .5em; }
     .actions > span:hover {
         color: #{yellow};
         text-shadow: 0 0 1px #{shadowyellow};
@@ -276,3 +284,9 @@ form {
     text-shadow: 0 0 1px #{shadowyellow};
     cursor: pointer;
     }
+.actions {
+    a:hover { color: #{yellow}; text-shadow: 0 0 1px #{shadowyellow}; }
+    }
+.light { opacity: 0.5; }
+
+.red { color: #{red}; }

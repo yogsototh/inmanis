@@ -91,12 +91,11 @@ function askDeleteEntry(e) {
     , "No");
 }
 
-function deleteEntry(url) {
+function deleteEntry(url,elem) {
     $.ajax({  type: "DELETE"
             , url: url
-            , success: function(data) {log(data);}
+            , success: function(data) {elem.remove();}
             , dataType: "json"});
-    $("#Entry"+id).parent().hide();
 }
 
 function flipauto(initText,flippedText,elem) {
@@ -112,7 +111,11 @@ function flipauto(initText,flippedText,elem) {
 $(document).ready(function(){
     $(".yeah").click(clicked("yeah"));
     $(".neah").click(clicked("neah"));
-    $(".delete").click(askDeleteEntry);
+    // $(".delete").click(askDeleteEntry);
+    $(".delete").click(function(){
+        flipauto("delete","cancel",$(this)); });
+    $(".destroy").click(function(){
+        deleteEntry($(this).attr('url'),$(this).parentsUntil('ul')); });
     $("#loginmessage .close").click(function(){
         $("#loginmessage").hide();
     });

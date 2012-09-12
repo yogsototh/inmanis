@@ -48,9 +48,13 @@ module Lib.Css.Helper
   , lightorange
   , lightred
   , lightcyan
+  , lightgreen
+  , lightviolet
   , shadoworange
   , shadowred
   , shadowyellow
+  , shadowgreen
+  , shadowviolet
   , white
   , black
   , fullwhite
@@ -116,21 +120,28 @@ green   = "#859900"
 light :: String -> String
 light color = "rgba("++(cssToRgb color)++",0.1)"
 
-lightred , lightorange , lightcyan , lightyellow :: String
+lightred, lightorange, lightcyan, lightyellow, lightviolet :: String
+lightgreen :: String
 
 lightred    = light red
 lightorange = light orange
 lightcyan   = light cyan
 lightyellow = light yellow
+lightgreen  = light green
+lightviolet = light violet
 
 shadow :: String -> String
 shadow color = "rgba("++(cssToRgb color)++",0.5)"
 
-shadoworange, shadowred, shadowyellow :: String
+shadoworange, shadowred, shadowyellow, shadowviolet :: String
+shadowgreen :: String
 
 shadoworange  = shadow orange
 shadowred     = shadow red
 shadowyellow  = shadow yellow
+shadowviolet  = shadow violet
+shadowgreen   = shadow green
+shadowcyan    = shadow cyan
 
 -- Transparent colors
 
