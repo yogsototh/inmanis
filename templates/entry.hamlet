@@ -21,9 +21,11 @@ $else
             <div .neah>#{entryNeah entry}
         <div .firstline>
             $if isNothing $ entryUrl entry
-                <a href=@{EntryR entryId}>#{entryTitle entry}</a>
+                <a href=@{EntryR entryId}>
+                    #{entryTitle entry}
             $else
-                <a href=#{fromJust $ entryUrl entry}>#{entryTitle entry}</a>
+                <a href=#{fromJust $ entryUrl entry}>
+                    #{entryTitle entry} <span class="light">»</span>
         <div .secondline>
             Submitted #{humanReadableRelativeTime currentTime (entryCreated entry)} by #{creator}
         <div .thirdline.actions>
