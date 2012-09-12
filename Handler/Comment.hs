@@ -41,8 +41,22 @@ postCommentR commentId = do
 putCommentR :: CommentId -> Handler RepHtml
 putCommentR _ = error "Not yet implemented: putCommentR"
 
-deleteCommentR :: CommentId -> Handler RepHtml
-deleteCommentR _ = error "Not yet implemented: deleteCommentR"
+deleteCommentR :: CommentId -> Handler RepHtmlJson
+deleteCommentR commentId = do
+  testLogged $ \userId -> do
+    maybeComment <- runDB $ get commentId
+    case maybeComment of
+      Nothing -> errorPageJson "Can't find the comment"
+      Just comment -> do
+        case commentCreator comment == userId of
+          False -> errorPageJson "You're not the author of this comment"
+          True  -> do
+            _ <- runDB $ do
+              delete commentId
+              -- delete all corresponding votes
+              voteComments <- selectList [VoteCommentComment ==. commentId][]
+              mapM_ (\(Entity voteCommentId _) -> delete voteCommentId) voteComments
+            errorPageJson "deleted"
 
 getCommentVoteR :: CommentId -> Handler RepHtmlJson
 getCommentVoteR _ = error "Not yet implemented: deleteCommentR"
