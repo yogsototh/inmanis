@@ -34,11 +34,11 @@ $else
                 <div .secondline>
                     Submitted #{humanReadableRelativeTime currentTime (entryCreated entry)} by #{creatorOfEntry entryId creators}
                 <div .thirdline .actions>
-                  <a class="comment" href=@{EntryR entryId}>comments</a>
+                  <a class="comment" href="@{EntryR entryId}?action=comment#commentbutton">comments</a>
                   $maybe userId <- currentUserId
                     $if currentCreator entry userId
                         \ - #
-                        <a class="edit" href=@{EntryR entryId}>edit</a>
+                        <a class="edit" href="@{EntryR entryId}?action=edit#editentry">edit</a>
                     $else
                   $nothing
                   \ - #

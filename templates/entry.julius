@@ -15,26 +15,34 @@ function editComment(initText,flippedText,elem) {
 $(document).ready(function(){
     $(".yeah").click(clicked("yeah"));
     $(".neah").click(clicked("neah"));
+    $("#editentry").click(function() {
+        flipauto("edit","hide edit form",$(this)); });
     $(".delete").click(function(){
         flipauto("delete","cancel",$(this)); });
     $(".destroy").click(function(){
         deleteEntry($(this).attr('url'),$(this).parentsUntil('ul')); });
+
     $("#loginmessage .close").click(function(){
         $("#loginmessage").hide();
         });
     $("#loginmessage").click(function(){
         $("#loginmessage").hide();
         });
+
     $(".button").click(function(){
         flipauto("Add a comment","hide comment",$(this));
         });
     $(".reply").click(function() {
         flipauto("reply","hide comment",$(this));
         });
-    $(".editentry").click(function() {
-        flipauto("edit","hide edit form",$(this));
-        });
     $("#comments .edit").click(function() {
         editComment("edit","hide edit form",$(this));
         });
+
+    if (getUrlParams().action == "edit") {
+        $("#editentry").trigger('click');
+    }
+    if (getUrlParams().action == "comment") {
+        $("#commentbutton").trigger('click');
+    }
 });

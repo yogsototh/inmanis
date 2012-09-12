@@ -30,8 +30,8 @@ $else
             Submitted #{humanReadableRelativeTime currentTime (entryCreated entry)} by #{creator}
         <div .thirdline.actions>
           $if isEntryOwned
-              <span .editentry
-                    flipshow="#editentry"
+              <span #editentry
+                    flipshow="#editentryform"
                     url=@{EntryR entryId}>edit</a>
               \ - #
           $else
@@ -42,7 +42,7 @@ $else
             <span .destroy .action .red url="@{EntryR entryId}">
                 destroy
 
-<div #editentry .hide>
+<div #editentryform .hide>
     <form method=post action=@{EntryR entryId} enctype=#{enctypeEntry}>
         ^{widgetEntry}
         <input type=submit value="Post">
@@ -53,7 +53,7 @@ $if isNothing currentUserId
     <div .login>
         <a href=@{AuthR LoginR}> Log in to comment
 $else
-    <div .button flipshow=".rootCommentForm">Add a comment
+    <div #commentbutton .button flipshow=".rootCommentForm">Add a comment
     <div .rootCommentForm .hide>
         <form method=post action=@{CommentsR entryId} enctype=#{enctype}>
             ^{widget}
