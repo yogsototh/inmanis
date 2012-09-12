@@ -35,9 +35,12 @@ $else
                     url=@{EntryR entryId}>edit</a>
               \ - #
           $else
-          <a class="delete"
-             href=@{EntryR entryId}
-             url=@{EntryR entryId}>delete</a>
+          <span class="delete action" flipshow="#destroy#{showId entryId}">
+            delete
+          <span #destroy#{showId entryId} .action .hide>
+            /
+            <span .destroy .action .red url="@{EntryR entryId}">
+                destroy
 
 <div #editentry .hide>
     <form method=post action=@{EntryR entryId} enctype=#{enctypeEntry}>

@@ -15,6 +15,10 @@ function editComment(initText,flippedText,elem) {
 $(document).ready(function(){
     $(".yeah").click(clicked("yeah"));
     $(".neah").click(clicked("neah"));
+    $(".delete").click(function(){
+        flipauto("delete","cancel",$(this)); });
+    $(".destroy").click(function(){
+        deleteEntry($(this).attr('url'),$(this).parentsUntil('ul')); });
     $("#loginmessage .close").click(function(){
         $("#loginmessage").hide();
         });

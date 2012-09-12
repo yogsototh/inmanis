@@ -1,7 +1,6 @@
 $(document).ready(function(){
     $(".yeah").click(clicked("yeah"));
     $(".neah").click(clicked("neah"));
-    // $(".delete").click(askDeleteEntry);
     $(".delete").click(function(){
         flipauto("delete","cancel",$(this)); });
     $(".destroy").click(function(){
