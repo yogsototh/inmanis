@@ -24,8 +24,7 @@ body {
     line-height: 1.5em;
 }
 
-a { color: #{base01}; text-decoration: none; }
-a:visited { color: #{base1}; }
+a, a:visited { color: #{base01}; text-decoration: none; }
 a:hover { color: #{violet}; text-shadow: 0 0 1px #{shadowviolet}; }
 
 hr { border: solid #{slightlyblack} 1px; }
@@ -278,7 +277,7 @@ form {
     position: absolute;
     top: 10px;
     right: 20px; }
-.actions > span { color: #{base00}; }
+.actions > span { color: #{base01}; }
 .actions > span:hover {
     color: #{yellow};
     text-shadow: 0 0 1px #{shadowyellow};
