@@ -88,6 +88,12 @@ function deleteEntry(url,elem) {
             , success: function(data) {elem.remove();}
             , dataType: "json"});
 }
+function deleteEntryGoHome(url,elem) {
+    $.ajax({  type: "DELETE"
+            , url: url
+            , success: function(data) {window.location='/';}
+            , dataType: "json"});
+}
 
 function flipauto(initText,flippedText,elem) {
     var target=elem.attr("flipshow");

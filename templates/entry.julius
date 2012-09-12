@@ -20,7 +20,8 @@ $(document).ready(function(){
     $(".delete").click(function(){
         flipauto("delete","cancel",$(this)); });
     $(".destroy").click(function(){
-        deleteEntry($(this).attr('url'),$(this).parentsUntil('ul')); });
+        deleteEntryGoHome($(this).attr('url'));
+        });
 
     $("#loginmessage .close").click(function(){
         $("#loginmessage").hide();
