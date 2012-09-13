@@ -11,7 +11,7 @@ where
 import Prelude
 import Import
 import Database.Persist.Store
-import Data.Maybe (catMaybes)
+import Data.Maybe
 import Data.Text (pack)
 import qualified Data.Map as M
 import Yesod.Auth
@@ -119,4 +119,4 @@ humanReadableRelativeTime currentTime createdTime =
     | t < year = pack $ (showTime $ days    t) ++ " days ago"
     | t < 2 * year = pack $ (showTime $ days    t) ++ " days ago"
                             ++ (show ((floor $ days t) `rem` 365 :: Integer)) ++ " days ago"
-    | otherwise       = pack $ (showTime $ years t) ++ " years ago" 
+    | otherwise       = pack $ (showTime $ years t) ++ " years ago"

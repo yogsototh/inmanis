@@ -1,9 +1,4 @@
-$if isNothing currentUserId
-    <div #login>
-        <a href=@{AuthR LoginR}> Log in
-$else
-    <div #logout>
-        <a href=@{AuthR LogoutR}>Log out
+^{logWidget}
 
 $if isNothing $ entryText entry
 $else

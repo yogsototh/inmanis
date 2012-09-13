@@ -135,6 +135,15 @@ emptyEntryForm = renderDivs  $ EntryRequest
   <*> aopt urlField       "Url"   Nothing
   <*> aopt textareaField  "Text"  Nothing
 
+loginWidget maybeUserId =
+  [whamlet|$newline always
+$if isNothing maybeUserId
+    <div #login>
+        <a href=@{AuthR LoginR}> Log in
+$else
+    <div #logout>
+        <a href=@{AuthR LogoutR}>Log out|]
+
 getEntryR :: EntryId -> Handler RepHtmlJson
 getEntryR entryId = do
   currentUserId <- maybeAuthId
@@ -176,6 +185,7 @@ getEntryR entryId = do
                         else entryCreator entry == fromJust currentUserId
       rootComments = filter (\(Entity _ c) -> commentReplyTo c == Nothing) comments
       commentForest = unfoldForest (getCommentSons comments) rootComments
+      logWidget = loginWidget currentUserId
   defaultLayoutJson (do
           setTitle $ toHtml $ entryTitle entry
           $(widgetFile "entry")
