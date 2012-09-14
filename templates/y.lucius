@@ -228,6 +228,9 @@ form {
     text-shadow: 0 0 1px #{shadowyellow};
     }
 
+#mainEntry { opacity: 0.3; }
+#mainEntry:hover, #mainEntry:focus { opacity: 1; }
+
 #comments {
     font-size: .9em;
     .meta, .actions {
@@ -242,9 +245,12 @@ form {
             padding: 10px;
             border-radius: 2px;
             }
-        li:hover > .meta
-        , li:hover > .actions {
-            opacity: 1;
+        li:focus, li:hover {
+            border: 1px solid #{base1};
+            > .meta
+            , > .actions {
+                    opacity: 1;
+                }
             }
         }
     .meta {
