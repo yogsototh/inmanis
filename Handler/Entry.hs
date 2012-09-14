@@ -82,7 +82,7 @@ showCommentTree tree creators widget enctype voteComments=
         <div class="vote#{cssClassVoteForVote commentId voteComments}" url=@{CommentVoteR commentId}>
           <div .yeah>#{commentYeah comment}
           <div .neah>#{commentNeah comment}
-        <span .creator>by #{creatorOfEntity commentId creators}
+        <div .creator>by #{creatorOfEntity commentId creators}
       <div .content>
         #{commentContent comment}
       <div .actions>

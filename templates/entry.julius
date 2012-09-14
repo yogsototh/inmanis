@@ -33,9 +33,13 @@ $(document).ready(function(){
     $(".button").click(function(){
         flipauto("Add a comment","hide comment",$(this));
         });
-    $(".reply").click(function() {
-        flipauto("reply","hide comment",$(this));
-        });
+    if (logged()) {
+        $(".reply").click(function() {
+            flipauto("reply","hide comment",$(this));
+            });
+    } else {
+        $(".reply").html('<a href="@{AuthR LoginR}">login to reply</a>');
+    }
     $("#comments .edit").click(function() {
         editComment("edit","hide edit form",$(this));
         });
@@ -43,7 +47,7 @@ $(document).ready(function(){
     if (getUrlParams().action == "edit") {
         $("#editentry").trigger('click');
     }
-    if (getUrlParams().action == "comment") {
-        $("#commentbutton").trigger('click');
-    }
+    // if (getUrlParams().action == "comment") {
+    //     $("#commentbutton").trigger('click');
+    // }
 });

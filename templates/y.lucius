@@ -104,6 +104,10 @@ form {
         display: inline-block;
         text-align: right;
         margin-right: 1em; }
+    textarea {
+            min-height: 1em;
+            height: 25ex;
+        }
     textarea
     , input {
         font-family: Georgia, Palatino, Serif;
@@ -226,13 +230,34 @@ form {
 
 #comments {
     font-size: .9em;
-    li { border: 1px solid #{base2};
-         list-style-type: none;
-         padding: 10px;
-         border-radius: 2px; }
-    .meta { font-size: .7em; height: 1.7em;}
+    ul {
+        margin: .5em 0;
+        li {
+            margin: .5em 0;
+            border: 1px solid #{base2};
+            list-style-type: none;
+            padding: 10px;
+            border-radius: 2px;
+            }
+        }
+    .meta {
+        color: #{textSecondaryColor};
+        font-size: .7em;
+        height: 1.2em;
+        .creator {
+            line-height: 1em
+            }
+        }
     .content { min-height: 1.5em; color: #{base01}; }
-    .actions { font-size: .8em; margin-top: .5em; }
+    .actions {
+        font-size: .8em;
+        margin-top: .5em;
+        height: 1em;
+        line-height: 1em;
+        > span {
+            color: #{textSecondaryColor};
+            }
+        }
     .actions > span:hover {
         color: #{yellow};
         text-shadow: 0 0 1px #{shadowyellow};
