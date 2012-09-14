@@ -1,6 +1,7 @@
 module Handler.Comment (
   getCommentR
 , postCommentR
+, deleteCommentR
 , putCommentR
 , getCommentVoteR
 , postCommentVoteR
@@ -12,6 +13,9 @@ import Data.Text (pack)
 
 getCommentR :: CommentId -> Handler RepHtml
 getCommentR _ = error "Not yet implemented: getCommentR"
+
+deleteCommentR :: CommentId -> Handler RepHtmlJson
+deleteCommentR _ = error "Not yet implemented: deleteCommentR"
 
 -- |The comment data needed for creating a comment
 data CommentRequest = CommentRequest { textComment   :: Textarea }
