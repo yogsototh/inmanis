@@ -63,6 +63,8 @@ getHomeR = do
   currentUserId <- maybeAuthId
   -- We get the current time
   currentTime <- liftIO getCurrentTime
+  -- If we login, we get back here
+  setUltDestCurrent
 
   -- Generate a couple
   -- widget => some HTML containing the form labels and input fields

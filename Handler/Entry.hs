@@ -149,6 +149,7 @@ getEntryR entryId = do
   currentUserId <- maybeAuthId
   maybeEntry <- runDB $ get entryId
   currentTime <- liftIO getCurrentTime
+  setUltDestCurrent
   (widget,enctype) <- generateFormPost commentForm
   (entry,comments,maybeCreator,creators) <- runDB $ do
       entry <- get404 entryId
