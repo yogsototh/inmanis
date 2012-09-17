@@ -53,13 +53,13 @@ getCommentSons comments father@(Entity commentId _) =
    filter (\(Entity _ c) -> commentReplyTo c == Just commentId)  comments)
 
 -- showCommentForest :: [Tree (Entity Comment)] -> Hamlet
-showCommentForest [] _ _ _ _ = [whamlet|$newline never
+showCommentForest [] _ _ _ _ _ = [whamlet|$newline never
 |]
-showCommentForest trees creators wdg enc voteComments=
+showCommentForest trees creators currentId wdg enc voteComments=
   [whamlet|$newline always
     <ul>
       $forall tree <- trees
-         ^{showCommentTree tree creators wdg enc voteComments}|]
+         ^{showCommentTree tree creators currentId wdg enc voteComments}|]
 
 cssClassVoteForVote :: (Eq a) => a
                         -> [(a, [Entity (VoteCommentGeneric backend)])]
@@ -75,7 +75,7 @@ cssClassVoteForVote commentId voteComments =
              _    -> ""
 
 -- showCommentTree :: Tree (Entity Comment) -> Metadatas -> Hamlet
-showCommentTree tree creators widget enctype voteComments=
+showCommentTree tree creators currentId widget enctype voteComments=
   [whamlet|$newline always
     <li url=@{ReplyCommentR entryId commentId}>
       <div .meta>
@@ -86,15 +86,17 @@ showCommentTree tree creators widget enctype voteComments=
       <div .content>
         #{commentContent comment}
       <div .actions>
-        <span .edit opened="edit" closed="hide form" flipshow="#edit#{showId commentId}">edit
-        \ - #
-        <span class="delete action" opened="delete" closed="cancel"  flipshow="#destroyComment#{showId commentId}">
-          delete
-        <span #destroyComment#{showId commentId} .action .hide>
-          /
-          <span .destroy .action .red url="@{CommentR commentId}">
-              destroy
-        \ - #
+        $if isCreator
+          <span .edit opened="edit" closed="hide form" flipshow="#edit#{showId commentId}">edit
+          \ - #
+          <span class="delete action" opened="delete" closed="cancel"  flipshow="#destroyComment#{showId commentId}">
+            delete
+          <span #destroyComment#{showId commentId} .action .hide>
+            /
+            <span .destroy .action .red url="@{CommentR commentId}">
+                destroy
+          \ - #
+        $else
         <span .reply flipshow="##{showId commentId}">reply
       <div .hide #edit#{showId commentId}>
         <form method=post action=@{CommentR commentId} enctype=#{enctype}>
@@ -105,13 +107,17 @@ showCommentTree tree creators widget enctype voteComments=
         <form method=post action=@{ReplyCommentR entryId commentId} enctype=#{enctype}>
           ^{widget}
           <input type=submit value="Post">
-      ^{showCommentForest (subForest tree) creators widget enctype voteComments}|]
+      ^{showCommentForest (subForest tree) creators currentId widget enctype voteComments}|]
    where
      comment = commentFromEntity (rootLabel tree)
      commentFromEntity (Entity _ c) = c
      commentId = commentIdFromEntity (rootLabel tree)
-     commentIdFromEntity (Entity i _) = i
-     entryId   = commentEntry comment
+                 where
+                  commentIdFromEntity (Entity i _) = i
+     entryId = commentEntry comment
+     maybeCreator = commentCreator comment
+     isCreator = isJust maybeCreator
+                 && currentId == maybeCreator
 
 creatorOfEntity :: CommentId -> [(CommentId,[Entity User])] -> Text
 creatorOfEntity entityId creators =

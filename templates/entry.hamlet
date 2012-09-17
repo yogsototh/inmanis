@@ -68,5 +68,5 @@ $if null comments
         No comment yet.
 $else
     <div #comments>
-        ^{showCommentForest commentForest creators widget enctype voteComments}
+        ^{showCommentForest commentForest creators currentUserId widget enctype voteComments}
 
