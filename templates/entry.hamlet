@@ -9,7 +9,7 @@ $else
             <a href=#{fromJust $ entryUrl entry}>#{entryTitle entry} <span class="light">»</span></a>
     <div .entryText>#{fromJust $ entryText entry}
 
-<ul #mainEntry>
+<ul id="#{mainEntryId}">
     <li .entryLine>
         <div class="vote#{cssClassVote votes}" url=@{EntryR entryId}>
             <div .yeah>#{entryYeah entry}

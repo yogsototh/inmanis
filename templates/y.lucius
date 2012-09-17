@@ -228,8 +228,8 @@ form {
     text-shadow: 0 0 1px #{shadowyellow};
     }
 
-#mainEntry { opacity: 0.3; }
-#mainEntry:hover, #mainEntry:focus { opacity: 1; }
+#autoHideMainEntry { opacity: 0.3; }
+#autoHideMainEntry:hover, #mainEntry:focus { opacity: 1; }
 
 #comments {
     font-size: .9em;

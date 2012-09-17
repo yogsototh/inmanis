@@ -181,6 +181,10 @@ getEntryR entryId = do
               mapM getVoteForUserVote comments
 
   let creator = maybe "Unknown" userIdent maybeCreator
+      mainEntryId :: Text
+      mainEntryId = if isNothing $ entryText entry
+                      then "mainEntry"
+                      else "autoHideMainEntry"
       isEntryOwned = if isNothing currentUserId
                         then False
                         else entryCreator entry == fromJust currentUserId
