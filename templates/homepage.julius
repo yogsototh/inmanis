@@ -6,12 +6,6 @@ $(document).ready(function(){
         deleteEntry($(this).attr('url'),
                     $(this).parentsUntil('ul')); });
 
-    $("#loginmessage .close").click(function(){
-        $("#loginmessage").hide();
-    });
-    $("#loginmessage").click(function(){
-        $("#loginmessage").hide();
-    });
     // auto flips
     $(".delete").click(function(){flipauto($(this)); });
     $(".button").click(function(){flipauto($(this)); });

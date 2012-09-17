@@ -61,6 +61,7 @@ getHomeR :: Handler RepHtml
 getHomeR = do
   -- We get the current user id (return Nothing if not logged in)
   currentUserId <- maybeAuthId
+  currentUser <- maybe (return Nothing) (\u -> runDB $ get u) currentUserId
   -- We get the current time
   currentTime <- liftIO getCurrentTime
   -- If we login, we get back here

@@ -1,13 +1,10 @@
 $if isNothing currentUserId
     <div #login>
         <a href=@{AuthR LoginR}> Log in
-    <div #loginmessage>
-        <div .insidebox>
-            <a href=@{AuthR LoginR}> Log in
-            <div .close>close
 $else
     <div #logout>
-        <a href=@{AuthR LogoutR}>Log out
+        <a href="@{UserR $ fromJust currentUserId}">#{ userIdent $ fromJust currentUser}</a>
+        <a href=@{AuthR LogoutR}> Log out</a>
     <div .button
         opened="Add new entry"
         closed="Hide input form"
@@ -43,15 +40,15 @@ $else
                     $if currentCreator entry userId
                         \ - #
                         <a class="edit" href="@{EntryR entryId}?action=edit#editentry">edit</a>
+                        \ - #
+                        <span .delete .action
+                          opened="delete"
+                          closed="cancel"
+                          flipshow="#destroy#{showId entryId}">
+                          delete
+                        <span #destroy#{showId entryId} .action .hide>
+                          <span .sep>/
+                          <span .destroy .action .red url="@{EntryR entryId}">
+                              destroy
                     $else
                   $nothing
-                  \ - #
-                  <span .delete .action
-                    opened="delete"
-                    closed="cancel"
-                    flipshow="#destroy#{showId entryId}">
-                    delete
-                  <span #destroy#{showId entryId} .action .hide>
-                    <span .sep>/
-                    <span .destroy .action .red url="@{EntryR entryId}">
-                        destroy
