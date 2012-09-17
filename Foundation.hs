@@ -17,6 +17,9 @@ import Prelude
 import Yesod
 import Yesod.Static
 import Yesod.Auth
+#if DEVELOPMENT
+import Yesod.Auth.Dummy
+#endif
 import Yesod.Auth.BrowserId
 import Yesod.Auth.GoogleEmail
 import Yesod.Default.Config
@@ -143,7 +146,11 @@ instance YesodAuth App where
                 fmap Just $ insert $ User (credsIdent creds) Nothing Nothing False
 
     -- You can add other plugins like BrowserID, email or OAuth here
-    authPlugins _ = [authBrowserId, authGoogleEmail]
+    authPlugins _ = [authBrowserId, authGoogleEmail
+#if DEVELOPMENT
+                    , authDummy
+#endif
+                    ]
 
     authHttpManager = httpManager
 
