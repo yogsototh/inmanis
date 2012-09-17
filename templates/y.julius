@@ -105,7 +105,7 @@ function deleteEntryGoHome(url,elem) {
             , dataType: "json"});
 }
 
-function flipauto(elem, f=null) {
+function flipauto(elem, f) {
     var target=elem.attr("flipshow");
     var closedText=elem.attr("closed");
     var openedText=elem.attr("opened");
@@ -114,7 +114,7 @@ function flipauto(elem, f=null) {
     } else {
         elem.html(closedText);
     }
-    if (f == null) {
+    if (typeof f === 'undefined') {
         $(target).toggle();
     } else {
         f($(target));
