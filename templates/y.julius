@@ -88,6 +88,16 @@ function deleteEntry(url,elem) {
             , success: function(data) {elem.remove();}
             , dataType: "json"});
 }
+function deleteComment(url,elem) {
+    $.ajax({  type: "DELETE"
+            , url: url
+            , success: function(data) {
+                    elem.addClass("deleted");
+                    elem.find(".creator").html("by Anonymous Coward");
+                    elem.find(".content").html("deleted");
+                }
+            , dataType: "json"});
+}
 function deleteEntryGoHome(url,elem) {
     $.ajax({  type: "DELETE"
             , url: url
@@ -95,14 +105,20 @@ function deleteEntryGoHome(url,elem) {
             , dataType: "json"});
 }
 
-function flipauto(initText,flippedText,elem) {
+function flipauto(elem, f=null) {
     var target=elem.attr("flipshow");
-    if (elem.html() == initText) {
-        elem.html(flippedText);
+    var closedText=elem.attr("closed");
+    var openedText=elem.attr("opened");
+    if (elem.html() == closedText) {
+        elem.html(openedText);
     } else {
-        elem.html(initText);
+        elem.html(closedText);
     }
-    $(target).toggle();
+    if (f == null) {
+        $(target).toggle();
+    } else {
+        f($(target));
+    }
 }
 
 function getUrlParams() {

@@ -27,10 +27,15 @@ $else
           $if isEntryOwned
               <span #editentry
                     flipshow="#editentryform"
+                    opened="cancel"
+                    closed="edit"
                     url=@{EntryR entryId}>edit</a>
               \ - #
           $else
-          <span class="delete action" flipshow="#destroy#{showId entryId}">
+          <span .delete .action
+            flipshow="#destroy#{showId entryId}"
+            opened="cancel"
+            closed="delete">
             delete
           <span #destroy#{showId entryId} .action .hide>
             /
@@ -48,7 +53,10 @@ $if isNothing currentUserId
     <div .login>
         <a href=@{AuthR LoginR}> Log in to comment
 $else
-    <div #commentbutton .button flipshow=".rootCommentForm">Add a comment
+    <div #commentbutton .button
+        flipshow=".rootCommentForm"
+        closed="Add a comment" opened="Hide comment">
+            Add a comment
     <div .rootCommentForm .hide>
         <form method=post action=@{CommentsR entryId} enctype=#{enctype}>
             ^{widget}
@@ -56,7 +64,8 @@ $else
 
 
 $if null comments
-    <p> Be the first to comment
+    <p>
+        No comment yet.
 $else
     <div #comments>
         ^{showCommentForest commentForest creators widget enctype voteComments}

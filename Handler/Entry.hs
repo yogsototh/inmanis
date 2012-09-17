@@ -86,9 +86,9 @@ showCommentTree tree creators widget enctype voteComments=
       <div .content>
         #{commentContent comment}
       <div .actions>
-        <span .edit flipshow="#edit#{showId commentId}">edit
+        <span .edit opened="edit" closed="hide form" flipshow="#edit#{showId commentId}">edit
         \ - #
-        <span class="delete action" flipshow="#destroyComment#{showId commentId}">
+        <span class="delete action" opened="delete" closed="cancel"  flipshow="#destroyComment#{showId commentId}">
           delete
         <span #destroyComment#{showId commentId} .action .hide>
           /

@@ -1,26 +1,25 @@
 function editComment(initText,flippedText,elem) {
-    var target=elem.attr("flipshow");
-    if (elem.html() == initText) {
-        elem.html(flippedText);
-    } else {
-        elem.html(initText);
-    }
-    if ($(target).find("textarea").html() == "" ) {
-        $(target).find("textarea").html(
-            elem.parent().parent().children(".content").text() );
-    }
-    $(target).toggle();
+    flipshow(elem, function(t){
+            if (t.find("textarea").html() == "" ) {
+                t.find("textarea").html(
+                    elem.parent().parent().children(".content").text() );
+            }
+            t.toggle();
+        });
 }
 
 $(document).ready(function(){
     $(".yeah").click(clicked("yeah"));
     $(".neah").click(clicked("neah"));
     $("#editentry").click(function() {
-        flipauto("edit","hide edit form",$(this)); });
+        flipauto($(this)); });
     $(".delete").click(function(){
-        flipauto("delete","cancel",$(this)); });
-    $(".destroy").click(function(){
+        flipauto($(this)); });
+    $(".destroyEntry").click(function(){
         deleteEntryGoHome($(this).attr('url'));
+        });
+    $(".destroy").click(function(){
+        deleteComment($(this).attr('url'), $(this).parentsUntil('ul'));
         });
 
     $("#loginmessage .close").click(function(){
@@ -31,11 +30,11 @@ $(document).ready(function(){
         });
 
     $(".button").click(function(){
-        flipauto("Add a comment","hide comment",$(this));
+        flipauto($(this));
         });
     if (logged()) {
         $(".reply").click(function() {
-            flipauto("reply","hide comment",$(this));
+            flipauto($(this));
             });
     } else {
         $(".reply").html('<a href="@{AuthR LoginR}">login to reply</a>');

@@ -275,6 +275,15 @@ form {
         color: #{yellow};
         text-shadow: 0 0 1px #{shadowyellow};
         cursor: pointer;
+        .sep:hover {
+            color: #{textSecondaryColor};
+            text-shadow: none;
+            cursor: default;
+            }
+    }
+    .action.red {
+        color: #{red};
+        text-shadow: 0 0 1px #{shadowred};
     }
 }
 

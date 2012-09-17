@@ -8,7 +8,11 @@ $if isNothing currentUserId
 $else
     <div #logout>
         <a href=@{AuthR LogoutR}>Log out
-    <div .button flipshow="#formEntry">Add a new entry
+    <div .button
+        opened="Add new entry"
+        closed="Hide input form"
+        flipshow="#formEntry">
+        Add a new entry
     <div #formEntry .hide>
         <h2>Add a new entry
         <form method=post action=@{EntriesR} enctype=#{enctype}>
@@ -42,9 +46,12 @@ $else
                     $else
                   $nothing
                   \ - #
-                  <span class="delete action" flipshow="#destroy#{showId entryId}">
+                  <span .delete .action
+                    opened="delete"
+                    closed="cancel"
+                    flipshow="#destroy#{showId entryId}">
                     delete
                   <span #destroy#{showId entryId} .action .hide>
-                    /
+                    <span .sep>/
                     <span .destroy .action .red url="@{EntryR entryId}">
                         destroy

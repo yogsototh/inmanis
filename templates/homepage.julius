@@ -1,17 +1,18 @@
 $(document).ready(function(){
     $(".yeah").click(clicked("yeah"));
     $(".neah").click(clicked("neah"));
-    $(".delete").click(function(){
-        flipauto("delete","cancel",$(this)); });
+
     $(".destroy").click(function(){
-        deleteEntry($(this).attr('url'),$(this).parentsUntil('ul')); });
+        deleteEntry($(this).attr('url'),
+                    $(this).parentsUntil('ul')); });
+
     $("#loginmessage .close").click(function(){
         $("#loginmessage").hide();
     });
     $("#loginmessage").click(function(){
         $("#loginmessage").hide();
     });
-    $(".button").click(function(){
-        flipauto("Add a new entry","Hide input form",$(this));
-        });
+    // auto flips
+    $(".delete").click(function(){flipauto($(this)); });
+    $(".button").click(function(){flipauto($(this)); });
 });
