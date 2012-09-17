@@ -32,7 +32,7 @@ VoteComment
     deriving Show
 Comment
     entry   EntryId
-    creator UserId
+    creator UserId Maybe
     replyTo CommentId Maybe
     created UTCTime default=CURRENT_TIME
     content Textarea

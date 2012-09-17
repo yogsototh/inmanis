@@ -31,7 +31,7 @@ postCommentsR entryId =
       case res of
         FormSuccess commentRequest -> do
           time <- liftIO getCurrentTime
-          let newComment = Comment entryId userId Nothing time (textComment commentRequest) 1 0 1
+          let newComment = Comment entryId (Just userId) Nothing time (textComment commentRequest) 1 0 1
           commentId <- runDB $ insert newComment
           _ <- runDB $ insert $ VoteComment userId commentId 1
           redirect $ EntryR entryId
@@ -88,6 +88,13 @@ showCommentTree tree creators widget enctype voteComments=
       <div .actions>
         <span .edit flipshow="#edit#{showId commentId}">edit
         \ - #
+        <span class="delete action" flipshow="#destroyComment#{showId commentId}">
+          delete
+        <span #destroyComment#{showId commentId} .action .hide>
+          /
+          <span .destroy .action .red url="@{CommentR commentId}">
+              destroy
+        \ - #
         <span .reply flipshow="##{showId commentId}">reply
       <div .hide #edit#{showId commentId}>
         <form method=post action=@{CommentR commentId} enctype=#{enctype}>
@@ -110,7 +117,7 @@ creatorOfEntity :: CommentId -> [(CommentId,[Entity User])] -> Text
 creatorOfEntity entityId creators =
   maybe "Anonymous Coward" entUserIdent (lookup entityId creators)
     where
-      entUserIdent [] = "No name"
+      entUserIdent [] = "Anonymous Coward"
       entUserIdent ((Entity _ creator):_) = userIdent creator
 
 -- |The `EntryRequest` correspond to the data needed
@@ -158,7 +165,9 @@ getEntryR entryId = do
       maybeCreator <- get (entryCreator entry)
       creators <- do
             let getUserCreatorIdent (Entity commentId comment) = do
-                  creators <- selectList [UserId ==. commentCreator comment][LimitTo 1]
+                  creators <- case commentCreator comment of
+                                Nothing -> return []
+                                Just creator -> selectList [UserId ==. creator][LimitTo 1]
                   return (commentId, creators)
             mapM getUserCreatorIdent comments
       return (entry, comments, maybeCreator,creators)
@@ -317,7 +326,7 @@ postReplyCommentR entryId commentId =
     case res of
       FormSuccess commentRequest -> do
         time <- liftIO getCurrentTime
-        let newComment = Comment entryId userId (Just commentId) time (textComment commentRequest) 1 0 1
+        let newComment = Comment entryId (Just userId) (Just commentId) time (textComment commentRequest) 1 0 1
         commentId <- runDB $ insert newComment
         voteId <- runDB $ insert $ VoteComment userId commentId 1
         redirect $ EntryR entryId

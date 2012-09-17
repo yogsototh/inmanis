@@ -1,6 +1,7 @@
 module Handler.Comment (
   getCommentR
 , postCommentR
+, deleteCommentR
 , putCommentR
 , getCommentVoteR
 , postCommentVoteR
@@ -12,6 +13,28 @@ import Data.Text (pack)
 
 getCommentR :: CommentId -> Handler RepHtml
 getCommentR _ = error "Not yet implemented: getCommentR"
+
+isCommentCreator commentId f =
+  testLogged $ \userId -> do
+    maybeComment <- runDB $ get commentId
+    case maybeComment of
+      Nothing -> errorPageJson "The comment doesn't exists"
+      Just comment ->
+            case commentCreator comment of
+              Nothing -> errorPageJson "You are not the creator of this comment"
+              Just creatorOfComment -> do
+                case creatorOfComment == userId of
+                    False -> errorPageJson "You are not the creator of this comment"
+                    True -> f userId comment
+
+deleteCommentR :: CommentId -> Handler RepHtmlJson
+deleteCommentR commentId = isCommentCreator commentId $ \userId comment -> do
+  _ <- runDB $ update commentId [CommentCreator =. Nothing,
+                                 CommentContent =. deletedTextarea]
+  redirect $ EntryR (commentEntry comment)
+  where
+    deletedTextarea = Textarea { unTextarea = "deleted" }
+
 
 -- |The comment data needed for creating a comment
 data CommentRequest = CommentRequest { textComment   :: Textarea }
@@ -27,15 +50,18 @@ postCommentR commentId = do
     case maybeComment of
       Nothing -> errorPageJson "The comment doesn't exists"
       Just comment ->
-            case commentCreator comment == userId of
-              False -> errorPageJson "You are not the creator of this comment"
-              True -> do
-                ((res,_),_) <- runFormPost commentForm
-                case res of
-                  FormSuccess commentRequest -> do
-                    _ <- runDB $ update commentId [CommentContent =. textComment commentRequest]
-                    redirect $ EntryR (commentEntry comment)
-                  _ -> errorPageJson "Please correct your comment form"
+            case commentCreator comment of
+              Nothing -> errorPageJson "You are not the creator of this comment"
+              Just creatorOfComment -> do
+                case creatorOfComment == userId of
+                  False -> errorPageJson "You are not the creator of this comment"
+                  True -> do
+                    ((res,_),_) <- runFormPost commentForm
+                    case res of
+                      FormSuccess commentRequest -> do
+                        _ <- runDB $ update commentId [CommentContent =. textComment commentRequest]
+                        redirect $ EntryR (commentEntry comment)
+                      _ -> errorPageJson "Please correct your comment form"
 
 putCommentR :: CommentId -> Handler RepHtml
 putCommentR _ = error "Not yet implemented: putCommentR"
