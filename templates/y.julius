@@ -132,3 +132,11 @@ function getUrlParams() {
     }
     return vars;
 }
+
+$(document).ready(function(){
+    $('#message').click(function(){
+        $('#message').slideUp('slow')});
+    setTimeout(function(){
+        $('#message').slideUp('slow')}
+        , 10000);
+    });
