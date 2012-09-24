@@ -33,7 +33,8 @@ $else
                         <a href=#{fromJust $ entryUrl entry}>
                             #{entryTitle entry} <span .light>»</span>
                 <div .secondline>
-                    Submitted #{humanReadableRelativeTime currentTime (entryCreated entry)} by #{creatorOfEntry entryId creators}
+                    <span .score>score: #{show $ floor $ score currentTime entry}
+                    <span .age>submitted #{humanReadableRelativeTime currentTime (entryCreated entry)} by #{creatorOfEntry entryId creators}
                 <div .thirdline .actions>
                   <a class="comment" href="@{EntryR entryId}?action=comment#commentbutton">discuss</a>
                   $maybe userId <- currentUserId

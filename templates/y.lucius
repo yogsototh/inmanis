@@ -194,8 +194,8 @@ form {
     overflow: hidden;
     line-height: 1em; }
 .firstline { line-height: 1.3em; height: 1.3em; }
-.secondline { height: 1em; }
-.secondline { font-size: .6em; color: #{base1}; margin: 0.3em 0 .4em; }
+.secondline { height: 1.4em; }
+.secondline { font-size: .6em; color: #{base1}; margin: 0.3em 0 0; }
 .thirdline { font-size: .8em; height: 1em }
 
 #loginmessage,#popin {

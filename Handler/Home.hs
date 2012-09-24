@@ -9,6 +9,7 @@ import Import
 import Handler.Helper
 import Yesod.Auth
 import Data.Maybe
+import Data.List (sortBy)
 
 -- |The `EntryRequest` correspond to the data needed
 -- to create a new entry.
@@ -55,6 +56,23 @@ currentCreator :: EntryGeneric backend                 -- ^ The entry
                   -> Bool
 currentCreator entry userId = entryCreator entry == userId
 
+score :: UTCTime -> Entry -> Double
+score currentTime entry =
+  3600 * (log (max (abs votesdiff) 1)) / age
+    where
+      age :: Double
+      age = (realToFrac $ diffUTCTime currentTime (entryCreated entry))
+      votesdiff = fromIntegral (entryYeah entry - entryNeah entry)
+
+
+sortWith :: Ord b => (a -> b) -> [a] -> [a]
+sortWith f xs =
+  map fst $ sortBy  cmpByFst $ map (\x -> (x, f x)) xs
+    where
+      cmpByFst (_,v1) (_,v2) = compare v1 v2
+
+fromEntity (Entity _ x) = x
+
 -- |the name `getHomeR` is for
 -- |handle the request `GET` on the resource HomeR
 getHomeR :: Handler RepHtml
@@ -91,7 +109,8 @@ getHomeR = do
               creators <- selectList [UserId ==. entryCreator entry] [LimitTo 1]
               return (entryId,creators)
         mapM getCreatorOfEntry entries
-    return (entries, votes, creators)
+    return (reverse $ sortWith ((score currentTime).fromEntity) entries, votes, creators)
+
 
   -- We return some HTML (not full)
   defaultLayout $ do
