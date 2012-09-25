@@ -318,7 +318,7 @@ deleteEntryR entryId = do
                             votes <- selectList [VoteEntry ==. entryId][]
                             mapM_ (\(Entity voteId _) -> delete voteId) votes
                             -- delete all corresponding comments
-                            comments <- selectList [CommentEntry ==. entryId][]
+                            comments <- selectList [CommentEntry ==. entryId][Desc CommentCreated]
                             mapM_ (\(Entity commentId _) -> delete commentId) comments
                           errorPageJson "deleted"
 

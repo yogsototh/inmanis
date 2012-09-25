@@ -9,6 +9,7 @@ import Import
 import Handler.Helper
 import Yesod.Auth
 import Data.Maybe
+import Data.Text (pack)
 import Data.List (sortBy)
 
 -- |The `EntryRequest` correspond to the data needed
@@ -49,6 +50,14 @@ creatorOfEntry entryId creators =
     where
       strOfVote [] = "" :: Text
       strOfVote ((Entity _ creator):_) = userIdent creator
+
+nbCommentOfEntry :: (Eq a) => a -> [(a, Int)] -> Text
+nbCommentOfEntry entryId nbComments = pack $ maybe "be the first to comment" strForNbVote $ lookup entryId nbComments
+  where
+    strForNbVote :: Int -> String
+    strForNbVote 0 = "discuss"
+    strForNbVote 1 = "1 comment"
+    strForNbVote n = show n ++ " comments"
 
 -- |return True if the creator is the creator of the Entry
 currentCreator :: EntryGeneric backend                 -- ^ The entry
@@ -98,7 +107,7 @@ getHomeR = do
   -- We get the list of entries sorted by entry title
   -- the votes for the current user for all entries
   -- the creators of all entries
-  (entries,votes,creators) <- runDB $ do
+  (entries,votes,creators,nbComments) <- runDB $ do
     entries <- selectList [] [Desc EntryCreated, LimitTo 25]
     votes <- case currentUserId of
                  Just user -> do
@@ -114,7 +123,12 @@ getHomeR = do
               creators <- selectList [UserId ==. entryCreator entry] [LimitTo 1]
               return (entryId,creators)
         mapM getCreatorOfEntry entries
-    return (reverse $ sortWith (score.fromEntity) entries, votes, creators)
+    nbComments <- do
+      let getNbCommentOfEntry (Entity entryId _) = do
+          nbComment <- count [CommentEntry ==. entryId]
+          return (entryId,nbComment)
+      mapM getNbCommentOfEntry entries
+    return (reverse $ sortWith (score.fromEntity) entries, votes, creators, nbComments)
 
 
   -- We return some HTML (not full)
