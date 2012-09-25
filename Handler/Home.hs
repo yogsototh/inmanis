@@ -56,13 +56,18 @@ currentCreator :: EntryGeneric backend                 -- ^ The entry
                   -> Bool
 currentCreator entry userId = entryCreator entry == userId
 
-score :: UTCTime -> Entry -> Double
-score currentTime entry =
-  3600 * (log (max (abs votesdiff) 1)) / age
+
+score :: Entry -> Double
+score entry =
+ (log (max (abs votesdiff) 1)) + sig * (age / timeinfluence)
     where
+      timeinfluence = 36000
       age :: Double
-      age = (realToFrac $ diffUTCTime currentTime (entryCreated entry))
+      age = (realToFrac $ diffUTCTime (entryCreated entry) oldDay)
       votesdiff = fromIntegral (entryYeah entry - entryNeah entry)
+      sig = if votesdiff>0 then 1 else if votesdiff<0 then -1 else 0
+      oldDay = UTCTime { utctDay = ModifiedJulianDay { toModifiedJulianDay = 0 }
+                    , utctDayTime = 0 }
 
 
 sortWith :: Ord b => (a -> b) -> [a] -> [a]
@@ -109,7 +114,7 @@ getHomeR = do
               creators <- selectList [UserId ==. entryCreator entry] [LimitTo 1]
               return (entryId,creators)
         mapM getCreatorOfEntry entries
-    return (reverse $ sortWith ((score currentTime).fromEntity) entries, votes, creators)
+    return (reverse $ sortWith (score.fromEntity) entries, votes, creators)
 
 
   -- We return some HTML (not full)
