@@ -66,17 +66,11 @@ currentCreator :: EntryGeneric backend                 -- ^ The entry
 currentCreator entry userId = entryCreator entry == userId
 
 
-score :: Entry -> Double
-score entry =
- (log (max (abs votesdiff) 1)) + sig * (age / timeinfluence)
-    where
-      timeinfluence = 36000
-      age :: Double
-      age = (realToFrac $ diffUTCTime (entryCreated entry) oldDay)
-      votesdiff = fromIntegral (entryYeah entry - entryNeah entry)
-      sig = if votesdiff>0 then 1 else if votesdiff<0 then -1 else 0
-      oldDay = UTCTime { utctDay = ModifiedJulianDay { toModifiedJulianDay = 0 }
-                    , utctDayTime = 0 }
+
+scoreForEntry :: Entry -> Double
+scoreForEntry entry = score (entryYeah entry)
+                            (entryNeah entry)
+                            (entryCreated entry)
 
 
 sortWith :: Ord b => (a -> b) -> [a] -> [a]
@@ -128,7 +122,7 @@ getHomeR = do
           nbComment <- count [CommentEntry ==. entryId]
           return (entryId,nbComment)
       mapM getNbCommentOfEntry entries
-    return (reverse $ sortWith (score.fromEntity) entries, votes, creators, nbComments)
+    return (reverse $ sortWith (scoreForEntry.fromEntity) entries, votes, creators, nbComments)
 
 
   -- We return some HTML (not full)

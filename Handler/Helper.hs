@@ -5,6 +5,7 @@ module Handler.Helper
   , joinTables
   , humanReadableRelativeTime
   , testLogged
+  , score
   )
 where
 
@@ -120,3 +121,18 @@ humanReadableRelativeTime currentTime createdTime =
     | t < 2 * year = pack $ (showTime $ days    t) ++ " days ago"
                             ++ (show ((floor $ days t) `rem` 365 :: Integer)) ++ " days ago"
     | otherwise       = pack $ (showTime $ years t) ++ " years ago"
+
+score :: Int -> Int -> UTCTime -> Double
+score upvotes downvotes created =
+ (log (max (abs votesdiff) 1)) + sig * (age / timeinfluence)
+    where
+      hour = 3600
+      day = 24*hour
+      year = 365*day
+      timeinfluence = year
+      age :: Double
+      age = (realToFrac $ diffUTCTime created oldDay)
+      votesdiff = fromIntegral (upvotes - downvotes)
+      sig = if votesdiff>0 then 1 else if votesdiff<0 then -1 else 0
+      oldDay = UTCTime { utctDay = ModifiedJulianDay { toModifiedJulianDay = 0 }
+                    , utctDayTime = 0 }
