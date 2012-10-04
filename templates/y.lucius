@@ -350,3 +350,5 @@ form {
 .light { opacity: 0.5; }
 
 .red { color: #{red}; }
+
+.small { font-size: .8em; }

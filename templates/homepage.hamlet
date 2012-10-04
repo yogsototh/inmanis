@@ -28,10 +28,10 @@ $else
                 <div .firstline>
                     $if isNothing $ entryUrl entry
                         <a href=@{EntryR entryId}>
-                            #{entryTitle entry} <span .light>»</span>
+                            #{entryTitle entry} <span class="small light">&#x270E;</span>
                     $else
                         <a href=#{fromJust $ entryUrl entry}>
-                            #{entryTitle entry} <span .light>»</span>
+                            #{entryTitle entry} <span class="small light">&#x2767;</span>
                 <div .secondline>
                     <span .score>score: #{show $ floor $ scoreForEntry entry}
                     <span .age>submitted #{humanReadableRelativeTime currentTime (entryCreated entry)} by #{creatorOfEntry entryId creators}
