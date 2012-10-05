@@ -3,7 +3,11 @@ User
     password    Text Maybe
     verkey      Text Maybe
     verified    Bool
-    UniqueUser ident
+    nickname    Text
+    realName    Text Maybe
+    UniqueNickname nickname
+    UniqueIdent ident
+    deriving Show
 Email
     email   Text
     user    UserId Maybe

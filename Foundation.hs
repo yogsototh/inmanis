@@ -34,6 +34,8 @@ import Model
 import Text.Jasmine (minifym)
 import Web.ClientSession (getKey)
 import Text.Hamlet (hamletFile)
+import qualified Data.Text as T
+import Data.Text
 
 import Lib.Css.Helper
 
@@ -139,11 +141,11 @@ instance YesodAuth App where
     logoutDest _ = HomeR
 
     getAuthId creds = runDB $ do
-        x <- getBy $ UniqueUser $ credsIdent creds
+        x <- getBy $ UniqueIdent $ credsIdent creds
         case x of
             Just (Entity uid _) -> return $ Just uid
             Nothing -> do
-                fmap Just $ insert $ User (credsIdent creds) Nothing Nothing False
+                fmap Just $ insert $ User (credsIdent creds) Nothing Nothing False (T.takeWhile (/='@') (credsIdent creds)) Nothing
 
     -- You can add other plugins like BrowserID, email or OAuth here
     authPlugins _ = [authBrowserId, authGoogleEmail

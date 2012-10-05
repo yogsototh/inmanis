@@ -3,7 +3,7 @@ $if isNothing currentUserId
         <a href=@{AuthR LoginR}> Log in
 $else
     <div #logout>
-        <a href="@{UserR $ fromJust currentUserId}">#{ userIdent $ fromJust currentUser}</a>
+        <a href="@{UserR $ userNickname $ fromJust currentUser}">#{ userNickname $ fromJust currentUser}</a>
         <a href=@{AuthR LogoutR}> Log out</a>
     <div .button
         opened="Add new entry"
@@ -31,7 +31,7 @@ $else
                             #{entryTitle entry} <span class="small light">&#x270E;</span>
                     $else
                         <a href=#{fromJust $ entryUrl entry}>
-                            #{entryTitle entry} <span class="small light">&#x2767;</span>
+                            #{entryTitle entry} <span class="small light">»</span>
                 <div .secondline>
                     <span .score>score: #{show $ floor $ scoreForEntry entry}
                     <span .age>submitted #{humanReadableRelativeTime currentTime (entryCreated entry)} by #{creatorOfEntry entryId creators}

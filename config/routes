@@ -8,7 +8,7 @@
 /entry                                      EntriesR            POST
 /entry/#EntryId                             EntryR          GET POST DELETE
 
-/user/#UserId                               UserR           GET POST DELETE
+/user/#Text                                 UserR           GET POST DELETE
 
 /entry/#EntryId/comment                     CommentsR           POST
 /comment/#CommentId                         CommentR        GET POST DELETE

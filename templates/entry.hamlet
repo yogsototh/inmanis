@@ -6,7 +6,7 @@ $else
         $if isNothing $ entryUrl entry
             #{entryTitle entry}
         $else
-            <a href=#{fromJust $ entryUrl entry}>#{entryTitle entry} <span class="light">&#x2767;</span></a>
+            <a href=#{fromJust $ entryUrl entry}>#{entryTitle entry} <span class="light">»</span></a>
     <div .entryText>#{fromJust $ entryText entry}
 
 <ul id="#{mainEntryId}">
