@@ -21,6 +21,12 @@ $(document).ready(function(){
     $(".destroy").click(function(){
         deleteComment($(this).attr('url'), $(this).parentsUntil('ul'));
         });
+    $(".edit").click(function() {
+        flipauto($(this),function(target){
+			target.toggle();
+			target.children("textarea:first").val("init value");
+			});
+		});
 
     $("#loginmessage .close").click(function(){
         $("#loginmessage").hide();

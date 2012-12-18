@@ -30,16 +30,16 @@ $else
                     closed="edit"
                     url=@{EntryR entryId}>edit</a>
               \ - #
+              <span .delete .action
+                  flipshow="#destroy#{showId entryId}"
+                  opened="cancel"
+                  closed="delete">
+                  delete
+              <span #destroy#{showId entryId} .action .hide>
+                  /
+                  <span .destroy .action .red url="@{EntryR entryId}">
+                      destroy
           $else
-          <span .delete .action
-            flipshow="#destroy#{showId entryId}"
-            opened="cancel"
-            closed="delete">
-            delete
-          <span #destroy#{showId entryId} .action .hide>
-            /
-            <span .destroy .action .red url="@{EntryR entryId}">
-                destroy
 
 <div #editentryform .hide>
     <form method=post action=@{EntryR entryId} enctype=#{enctypeEntry}>

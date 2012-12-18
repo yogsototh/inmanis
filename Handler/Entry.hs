@@ -207,7 +207,7 @@ getEntryR entryId = do
       commentForest = unfoldForest (getCommentSons comments) rootComments
       logWidget = loginWidget currentUserId
   defaultLayoutJson (do
-          setTitle $ toHtml $ entryTitle entry
+          setTitle $ toHtml $ "inmanis - " <> (entryTitle entry)
           $(widgetFile "entry")
           )
           (object ["msg" .= entryTitle entry])
@@ -337,3 +337,4 @@ postReplyCommentR entryId commentId =
         voteId <- runDB $ insert $ VoteComment userId commentId 1
         redirect $ EntryR entryId
       _ -> errorPageJson "Please correct your entry form"
+

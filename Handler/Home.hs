@@ -65,13 +65,10 @@ currentCreator :: EntryGeneric backend                 -- ^ The entry
                   -> Bool
 currentCreator entry userId = entryCreator entry == userId
 
-
-
 scoreForEntry :: Entry -> Double
 scoreForEntry entry = score (entryYeah entry)
                             (entryNeah entry)
                             (entryCreated entry)
-
 
 sortWith :: Ord b => (a -> b) -> [a] -> [a]
 sortWith f xs =
@@ -130,7 +127,6 @@ getHomeR = do
     aDomId <- lift newIdent
     setTitle "Inmanis"
     $(widgetFile "homepage")
-
 
 -- |When we receive a post request on HomeR resource (/ path)
 -- |We create a new resource
