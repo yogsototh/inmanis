@@ -134,18 +134,22 @@ instance YesodPersist App where
 
 instance YesodAuth App where
     type AuthId App = UserId
-
-    -- Where to send a user after successful login
-    loginDest _ = HomeR
-    -- Where to send a user after logout
-    logoutDest _ = HomeR
-
+    loginDest _ = HomeR -- Where to send a user after successful login
+    logoutDest _ = HomeR -- Where to send a user after logout
+    -- Get credentials of user
     getAuthId creds = runDB $ do
         x <- getBy $ UniqueIdent $ credsIdent creds
         case x of
+            -- If user already exists we return its id
             Just (Entity uid _) -> return $ Just uid
+            -- If new user we create him an unverified account
             Nothing -> do
-                fmap Just $ insert $ User (credsIdent creds) Nothing Nothing False (T.takeWhile (/='@') (credsIdent creds)) Nothing
+                fmap Just . insert . cleanUser $ (credsIdent creds)
+        where
+          cleanUser ident = User ident
+                                 Nothing Nothing False -- no pass nor verif
+                                 (T.takeWhile (/='@') ident) -- nickname
+                                 Nothing             -- real name
 
     -- You can add other plugins like BrowserID, email or OAuth here
     authPlugins _ = [authBrowserId, authGoogleEmail

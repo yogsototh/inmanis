@@ -1,3 +1,8 @@
+/* Import fonts */
+body, form textarea , form input {
+    font-family: 'Source Sans Pro', helvetica, sans-serif;
+}
+
 /* Animate everything by default (0.3s) */
 * {
   transition-property: all;
@@ -15,9 +20,7 @@ body::-moz-selection { background: none repeat scroll 0 0 #{altbackHighlightColo
 #main::selection { background: none repeat scroll 0 0 #{backHighlightColor} }
 #main::-moz-selection { background: none repeat scroll 0 0 #{backHighlightColor} }
 
-/* the main style */
 body {
-    font-family: Georgia, Palatino, Serif;
     background-color: #{base03};
     color: #{base0};
     font-size: 18px;
@@ -65,12 +68,12 @@ header {
         a, a:visited, a:hover {
             color: #{base0};
             text-shadow: 1px 1px 0px #{white}, -1px -1px 0px #{black};
-            font-weight: bold; }
+            font-weight: 900; }
         a, a:visited { color: #{base0}; }
         a:hover { color: #{alttextEmphColor};
             text-shadow: 1px 1px 0px #{white}, -1px -1px 0px #{black}; }
     }
-    h1 { font-size: 5em; }
+    h1 { font-size: 5em; font-style: italic; }
     h2 { font-size: 2em; }
     a:hover { color: #{yellow}; text-shadow: 0 0 1px #{shadowyellow}; }
 }
@@ -123,7 +126,6 @@ form {
         }
     textarea
     , input {
-        font-family: Georgia, Palatino, Serif;
         color: #{base01};
         border-radius: 3px;
         background: #{base2};
@@ -309,8 +311,10 @@ form {
     margin: 1em 0;
     display: block;
     text-align: center;
-    width: 100px;
-	max-width: 100px;
+    line-height: 1em;
+    padding: .5em;
+    width: 9em;
+	max-width: 9em;
     border-radius: 3px;
     box-shadow: 1px 1px 2px #{black};
     font-weight: bold;
