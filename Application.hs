@@ -7,6 +7,7 @@ module Application
 
 import Import
 import Settings
+import Settings.Development
 import Yesod.Auth
 import Yesod.Default.Config
 import Yesod.Default.Main
@@ -45,7 +46,7 @@ makeFoundation :: AppConfig DefaultEnv Extra -> IO App
 makeFoundation conf = do
     manager <- newManager def
     s <- staticSite
-    dbconf <- withYamlEnvironment "config/postgresql.yml" (appEnv conf)
+    dbconf <- withYamlEnvironment (if development then "config/sqlite.yml" else "config/postgresql.yml") (appEnv conf)
               Database.Persist.Store.loadConfig >>=
               Database.Persist.Store.applyEnv
     p <- Database.Persist.Store.createPoolConfig (dbconf :: Settings.PersistConfig)
