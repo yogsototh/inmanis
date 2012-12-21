@@ -1,0 +1,29 @@
+Default: &defaults
+  user: yesod
+  password: abofv53.
+  host: localhost
+  port: 5432
+  database: inmanis
+  poolsize: 10
+
+Development:
+  <<: *defaults
+
+Testing:
+  database: inmanis_test
+  <<: *defaults
+
+Staging:
+  database: inmanis_staging
+  poolsize: 100
+  <<: *defaults
+
+Production:
+  <<: *defaults
+ database: ddvl03pmqsm5ls
+ user: bocilnfqriwudj
+ password: 0vGDzpcuDTsTQiGSHfm4ys8c4u 
+ host: ec2-54-243-248-219.compute-1.amazonaws.com
+ port: 5432
+ sslmode=require
+
