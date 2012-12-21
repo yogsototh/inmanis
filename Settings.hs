@@ -27,7 +27,7 @@ import Text.Hamlet
 #if DEVELOPMENT
 import Database.Persist.Sqlite (SqliteConf)
 #else
-import Database.Persist.Postgresql (PostgresqlConf)
+import Database.Persist.Postgresql (PostgresConf)
 #endif
 
 -- | Which Persistent backend this site is using.
@@ -35,7 +35,7 @@ type PersistConfig =
 #if DEVELOPMENT
   SqliteConf
 #else
-  PostgresqlConf
+  PostgresConf
 #endif
 
 -- Static setting below. Changing these requires a recompile
