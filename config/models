@@ -21,7 +21,7 @@ Entry
     yeah    Int default=0
     neah    Int default=0
     nbView  Int default=0
-    created UTCTime
+    created UTCTime default=now()
 Vote
     creator UserId
     entry   EntryId
@@ -31,7 +31,7 @@ Comment
     entry   EntryId
     creator UserId Maybe
     replyTo CommentId Maybe
-    created UTCTime
+    created UTCTime default=now()
     content Textarea
     yeah    Int default=0
     neah    Int default=0
