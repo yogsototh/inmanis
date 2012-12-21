@@ -21,28 +21,24 @@ Entry
     yeah    Int default=0
     neah    Int default=0
     nbView  Int default=0
-    created UTCTime default=CURRENT_TIME
-
--- nbView must be equal to nbVotes for entry
+    created UTCTime default=now()
 Vote
     creator UserId
     entry   EntryId
-    value   Int
-    deriving Show
-VoteComment
-    creator UserId
-    comment CommentId
     value   Int
     deriving Show
 Comment
     entry   EntryId
     creator UserId Maybe
     replyTo CommentId Maybe
-    created UTCTime default=CURRENT_TIME
+    created UTCTime default=now()
     content Textarea
     yeah    Int default=0
     neah    Int default=0
     nbView  Int default=0
     deriving Show
-
- -- By default this file is used in Model.hs (which is imported by Foundation.hs)
+VoteComment
+    creator UserId
+    comment CommentId
+    value   Int
+    deriving Show
