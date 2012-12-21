@@ -20,10 +20,10 @@ Staging:
 
 Production:
   <<: *defaults
- database: ddvl03pmqsm5ls
- user: bocilnfqriwudj
- password: 0vGDzpcuDTsTQiGSHfm4ys8c4u 
- host: ec2-54-243-248-219.compute-1.amazonaws.com
- port: 5432
- sslmode=require
-
+  database: ddvl03pmqsm5ls
+  user: bocilnfqriwudj
+  password: 0vGDzpcuDTsTQiGSHfm4ys8c4u 
+  host: ec2-54-243-248-219.compute-1.amazonaws.com
+  port: 5432
+  sslmode=require
+  
