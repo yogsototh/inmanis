@@ -15,5 +15,5 @@ Staging:
   <<: *defaults
 
 Production:
-  approot: "http://www.inmanis.com"
+  approot: "http://warm-plateau-8179.herokuapp.com"
   <<: *defaults
